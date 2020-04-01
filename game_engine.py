@@ -13,8 +13,8 @@ class GameEngine:
         self.piles = {c: 13 for c in card_types}
 
         self.piles[Copper] = copper_count - len(players) * 7
-        #self.piles[Silver] = silver_count
-        #self.piles[Gold] = silver_count
+        # self.piles[Silver] = silver_count
+        # self.piles[Gold] = silver_count
 
         self.piles[Estate] = 8 if len(players) == 2 else 12
         # self.piles[Duchy] = 8 if len(players) == 2 else 12
