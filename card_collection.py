@@ -1,8 +1,7 @@
-from typing import List
-from cards import BaseCard
+from cards import *
 
 
-class CardCollection:
+class CardStack:
     def __init__(self, cards=()):
         self.cards = list(cards)
 
@@ -14,15 +13,17 @@ class CardCollection:
     def draw_cards(self, n):
         """ """
 
-    def peak_cards(self, n):
-        """ """
+    def peek(self, n):
+        """Return a copy of the top n cards without removing them """
 
-    def add_on_top(self, cards):
-        """ """
+    def add_to_top(self, cards):
+        """Add the cards to the top of the stack """
 
     def add_to_bottom(self, cards):
-        """ """
+        """Add the cards to the bottom of the stack """
 
     @property
     def count(self):
         return len(self.cards)
+
+

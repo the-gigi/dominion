@@ -6,8 +6,7 @@ class BaseCard:
     Points = 0
     Reaction = False
 
-    def __init__(self,
-                 reaction=False):
+    def __init__(self):
         self.Name = self.__class__.__name__
         self.Image = f'images/{self.Name.lower()}.jpg'
 
@@ -25,7 +24,7 @@ class Estate(BaseCard):
 
 class Copper(BaseCard):
     Type = 'Treasure'
-    Text = "1 Copper"
+    Text = "One 💰"
     Coins = 1
 
 

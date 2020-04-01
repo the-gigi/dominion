@@ -14,15 +14,12 @@ class GameEngine:
         #self.piles[Gold] = silver_count
 
         self.piles[Estate] = 8 if len(players) == 2 else 12
-        # self.piles[Duchie] = 8 if len(players) == 2 else 12
+        # self.piles[Duchy] = 8 if len(players) == 2 else 12
         # self.piles[Province] = 8 if len(players) == 2 else 12
         # self.piles[Curse] = (len(players) - 1) * 10
 
     def is_game_over(self):
-        """Check if all provinces are gone or enough piles are empty
-
-        in a 2 player game if 3 piles are empty the game is over
-        in a 3/4 player if 2 piles are empty the game is over
+        """Check if all provinces are gone or 3 supply piles are empty
 
         return True if the game is over and False otherwise
         """
@@ -47,4 +44,8 @@ class GameEngine:
         In case of a tie the money is the tie breaker
 
         Return the name of the winning player
+        """
+
+    def is_pile_empty(self, card_type):
+        """Check if a card pile is empty
         """

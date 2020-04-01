@@ -1,5 +1,6 @@
-from card_collection import CardCollection
+from card_collection import CardStack
 from cards import *
+from typing import Set
 
 
 class Player:
@@ -8,10 +9,10 @@ class Player:
     """
 
     def __init__(self, name):
-        self.Name = name
-        self.hand = CardCollection()
-        self.draw_deck = CardCollection()
-        self.discard_pile = CardCollection()
+        self.name = name
+        self.hand = Set[BaseCard]
+        self.draw_deck = CardStack()
+        self.discard_pile = CardStack()
 
     def dump(self):
         print('Name:', self.name)

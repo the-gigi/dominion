@@ -1,7 +1,7 @@
-from card_collection import CardCollection
+from card_collection import CardStack
 from cards import Copper, Estate
 
 
-class Hand(CardCollection):
+class Hand(CardStack):
     def __init__(self):
-        CardCollection.__init__(self, 7 * [Copper] + 3 * [Estate])
+        CardStack.__init__(self, 7 * [Copper] + 3 * [Estate])
