@@ -1,4 +1,4 @@
-from card_collection import CardStack
+from card_stack import CardStack
 from cards import Copper, Estate
 
 

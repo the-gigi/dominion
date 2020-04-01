@@ -6,7 +6,7 @@ class CardStack:
         self.cards = list(cards)
 
     def shuffle(self):
-        """Shuffle the cards in the collection and return the collection"""
+        """Shuffle the cards in the stack and return the stack"""
 
         return self
 
