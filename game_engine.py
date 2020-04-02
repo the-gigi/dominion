@@ -1,4 +1,4 @@
-from cards import Copper, Estate
+from cards import *
 
 copper_count = 60
 silver_count = 40
@@ -14,13 +14,13 @@ class GameEngine:
         self.piles = {c: 13 for c in card_types}
 
         self.piles[Copper] = copper_count - len(players) * 7
-        # self.piles[Silver] = silver_count
-        # self.piles[Gold] = silver_count
+        self.piles[Silver] = silver_count
+        self.piles[Gold] = gold_count
 
         self.piles[Estate] = 8 if len(players) == 2 else 12
-        # self.piles[Duchy] = 8 if len(players) == 2 else 12
-        # self.piles[Province] = 8 if len(players) == 2 else 12
-        # self.piles[Curse] = (len(players) - 1) * 10
+        self.piles[Duchy] = 8 if len(players) == 2 else 12
+        self.piles[Province] = 8 if len(players) == 2 else 12
+        self.piles[Curse] = (len(players) - 1) * 10
 
     @property
     def game_over(self):

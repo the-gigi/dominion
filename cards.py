@@ -10,6 +10,9 @@ class BaseCard:
         self.Name = self.__class__.__name__
         self.Image = f'images/{self.Name.lower()}.jpg'
 
+    def __repr__(self):
+        return f'{type(self)}'
+
     def dump(self):
         for a in 'name type text cost coins points reaction'.split():
             print(f'{a.capitalize()}: {self.__getattribute__(a.capitalize())}')
@@ -19,13 +22,49 @@ class Estate(BaseCard):
     Type = 'Victory'
     Text = "1 VP"
     Cost = 2
-    VictoryPoints = 1
+    Points = 1
+
+
+class Duchy(BaseCard):
+    Type = 'Victory'
+    Text = "3 VP"
+    Cost = 5
+    Points = 3
+
+
+class Province(BaseCard):
+    Type = 'Victory'
+    Text = "6 VP"
+    Cost = 8
+    Points = 6
+
+
+class Curse(BaseCard):
+    Type = 'Curse'
+    Text = "-1 VP"
+    Cost = 0
+    Points = -1
 
 
 class Copper(BaseCard):
     Type = 'Treasure'
-    Text = "One 💰"
+    Text = "💰1"
     Coins = 1
+    Cost = 0
+
+
+class Silver(BaseCard):
+    Type = 'Treasure'
+    Text = "💰2"
+    Coins = 2
+    Cost = 3
+
+
+class Gold(BaseCard):
+    Type = 'Treasure'
+    Text = "💰3"
+    Coins = 3
+    Cost = 6
 
 
 class Moat(BaseCard):
