@@ -28,7 +28,15 @@ class GameEngine:
 
         return True if the game is over and False otherwise
         """
-        raise NotImplementedError
+        if self.piles[Province] == 0:
+            return True
+        empty_piles = 0
+        for card_type in self.piles.keys():
+            if self.piles[card_type] == 0:
+                empty_piles += 1
+                if empty_piles >= 3:
+                    return True
+        return False
 
     def count_player_points(self, player):
         """Count the total victory points in

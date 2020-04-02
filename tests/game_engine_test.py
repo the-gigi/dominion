@@ -38,7 +38,30 @@ class TestGameEngine(unittest.TestCase):
         self.assertEqual(expected_piles_2p, game_engine_2p.piles)
 
     def test_game_over(self):
-        self.fail()
+        names = ['Gus', 'Sara', 'Beaver', 'Igig']
+        players = [Player(name) for name in names]
+        card_types = [Copper, Silver, Gold, Estate, Duchy, Province, Curse]
+        game = None
+        game_engine = GameEngine(game, players, card_types)
+
+        game_over_false = game_engine.game_over
+
+        game_engine.piles[Province] = 0
+        game_over_true_province = game_engine.game_over
+
+        game_engine.piles[Province] = 1
+        game_engine.piles[Silver] = 0
+        game_engine.piles[Copper] = 0
+        game_over_false_other = game_engine.game_over
+
+        game_engine.piles[Curse] = 0
+        game_engine.piles[Gold] = 0
+        game_over_true_other = game_engine.game_over
+
+        self.assertEqual(game_over_false, False)
+        self.assertEqual(game_over_false_other, False)
+        self.assertEqual(game_over_true_province, True)
+        self.assertEqual(game_over_true_other, True)
 
     def test_count_player_points(self):
         self.fail()
