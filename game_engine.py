@@ -6,9 +6,10 @@ gold_count = 30
 
 
 class GameEngine:
-    def __init__(self, players, card_types):
+    def __init__(self, game, players, card_types):
+        self.game = game
         self.players = players
-        self.active_player = 0
+        self.active_player_index = 0
 
         self.piles = {c: 13 for c in card_types}
 
@@ -27,6 +28,7 @@ class GameEngine:
 
         return True if the game is over and False otherwise
         """
+        raise NotImplementedError
 
     def count_player_points(self, player):
         """Count the total victory points in
@@ -34,6 +36,7 @@ class GameEngine:
 
            return the number of victory points
         """
+        raise NotImplementedError
 
     def count_player_money(self, player):
         """Count the total amount of coins in
@@ -41,23 +44,21 @@ class GameEngine:
 
            return the sum of all the coins
         """
+        raise NotImplementedError
 
-    def find_winner(self, players):
+    def find_winner(self):
         """The winner is the player with the most victory points
 
         In case of a tie the money is the tie breaker
 
-        Return the name of the winning player
+        Returns the winning player
         """
+        raise NotImplementedError
 
     def is_pile_empty(self, card_type):
         """Check if a card pile is empty
         """
-
-    def get_active_player(self):
-        """Return the current active player based on the self.active_player index
-
-        """
+        raise NotImplementedError
 
     def finish_turn(self):
         """Perform this operation at the end of turn
@@ -65,9 +66,27 @@ class GameEngine:
         - call cleanup() on the active  player
         - update the active player index to the next player
         """
+        raise NotImplemented
+
+    @property
+    def active_player(self):
+        """Return the current active player based on the self.active_player index
+
+        """
+        return self.players[self.active_player_index]
+
+    def advance_player(self):
+        self.active_player_index = (self.active_player_index + 1) % len(self.players)
+        self.game.active_player_index = self.active_player_index
 
     def run(self):
-        """This is the main loop of the game"""
+        """This is the main loop of the game
+
+        """
         while not self.game_over:
-            player = self.active_player
-            action = player.play()
+            self.active_player.play(self.game)
+            self.game.end_turn()
+            self.advance_player()
+
+        winner = self.find_winner()
+        print(f'{winner.name} won dominion !!!!')
