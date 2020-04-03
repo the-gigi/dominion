@@ -42,26 +42,25 @@ class TestGameEngine(unittest.TestCase):
         players = [Player(name) for name in names]
         card_types = [Copper, Silver, Gold, Estate, Duchy, Province, Curse]
         game = None
+        # new game, game not over
         game_engine = GameEngine(game, players, card_types)
+        self.assertFalse(game_engine.game_over)
 
-        game_over_false = game_engine.game_over
-
+        # provinces are empty, game over
         game_engine.piles[Province] = 0
         game_over_true_province = game_engine.game_over
+        self.assertTrue(game_engine.game_over)
 
+        # 2 empty piles, game not over
         game_engine.piles[Province] = 1
         game_engine.piles[Silver] = 0
         game_engine.piles[Copper] = 0
-        game_over_false_other = game_engine.game_over
+        self.assertFalse(game_engine.game_over)
 
+        # 3 empty piles, game over
         game_engine.piles[Curse] = 0
-        game_engine.piles[Gold] = 0
         game_over_true_other = game_engine.game_over
-
-        self.assertEqual(game_over_false, False)
-        self.assertEqual(game_over_false_other, False)
-        self.assertEqual(game_over_true_province, True)
-        self.assertEqual(game_over_true_other, True)
+        self.assertTrue(game_engine.game_over)
 
     def test_count_player_points(self):
         self.fail()

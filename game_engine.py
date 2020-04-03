@@ -31,6 +31,7 @@ class GameEngine:
         if self.piles[Province] == 0:
             return True
         empty_piles = 0
+        # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
         for card_type in self.piles.keys():
             if self.piles[card_type] == 0:
                 empty_piles += 1
