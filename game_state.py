@@ -1,3 +1,24 @@
+from cards import *
+from player_state import PlayerState
+
+copper_count = 60
+silver_count = 40
+gold_count = 30
+
+
 class GameState:
-    def __init__(self):
+    def __init__(self, card_types, player_names):
         """ """
+        self.player_states = [PlayerState(name) for name in player_names]
+
+        num_players = len(player_names)
+        self.piles = {c: 13 for c in card_types}
+
+        self.piles[Copper] = copper_count - num_players * 7
+        self.piles[Silver] = silver_count
+        self.piles[Gold] = gold_count
+
+        self.piles[Estate] = 8 if num_players == 2 else 12
+        self.piles[Duchy] = 8 if num_players == 2 else 12
+        self.piles[Province] = 8 if num_players == 2 else 12
+        self.piles[Curse] = (num_players - 1) * 10

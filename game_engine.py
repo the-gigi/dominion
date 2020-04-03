@@ -1,43 +1,16 @@
 from cards import *
 
-copper_count = 60
-silver_count = 40
-gold_count = 30
-
 
 class GameEngine:
-    def __init__(self, game, players, card_types):
+    def __init__(self, game, players):
         self.game = game
         self.players = players
         self.active_player_index = 0
 
-        self.piles = {c: 13 for c in card_types}
-
-        self.piles[Copper] = copper_count - len(players) * 7
-        self.piles[Silver] = silver_count
-        self.piles[Gold] = gold_count
-
-        self.piles[Estate] = 8 if len(players) == 2 else 12
-        self.piles[Duchy] = 8 if len(players) == 2 else 12
-        self.piles[Province] = 8 if len(players) == 2 else 12
-        self.piles[Curse] = (len(players) - 1) * 10
-
     @property
     def game_over(self):
-        """Check if all provinces are gone or 3 supply piles are empty
-
-        return True if the game is over and False otherwise
-        """
-        if self.piles[Province] == 0:
-            return True
-        empty_piles = 0
-        # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
-        for card_type in self.piles.keys():
-            if self.piles[card_type] == 0:
-                empty_piles += 1
-                if empty_piles >= 3:
-                    return True
-        return False
+        """Returns the is_over property of the game object"""
+        return self.game.is_over
 
     def count_player_points(self, player):
         """Count the total victory points in
@@ -93,7 +66,7 @@ class GameEngine:
 
         """
         while not self.game_over:
-            self.active_player.play(self.game)
+            self.active_player.play(self.game, self.game.personal_player_state)
             self.game.end_turn()
             self.advance_player()
 

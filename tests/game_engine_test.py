@@ -1,6 +1,6 @@
 from game_engine import GameEngine
 from cards import *
-from player_state import Player
+from player_state import PlayerState
 
 import unittest
 
@@ -8,7 +8,7 @@ import unittest
 class TestGameEngine(unittest.TestCase):
     def test_init(self):
         names = ['Gus', 'Sara', 'Beaver', 'Igig']
-        players = [Player(name) for name in names]
+        players = [PlayerState(name) for name in names]
         card_types = [Copper, Silver, Gold, Estate, Duchy, Province, Curse]
         game = None
         game_engine_4p = GameEngine(game, players, card_types)
@@ -39,7 +39,7 @@ class TestGameEngine(unittest.TestCase):
 
     def test_game_over(self):
         names = ['Gus', 'Sara', 'Beaver', 'Igig']
-        players = [Player(name) for name in names]
+        players = [PlayerState(name) for name in names]
         card_types = [Copper, Silver, Gold, Estate, Duchy, Province, Curse]
         game = None
         # new game, game not over

@@ -1,9 +1,11 @@
+import copy
+
 from card_stack import CardStack
 from cards import *
 from typing import Set
 
 
-class Player:
+class PlayerState:
     """The Player is a base class for the HumanPlayer and ComputerPlayer classes
 
     """
@@ -41,4 +43,8 @@ class Player:
             - reset buys to 1
             - reset actions to 1
         """
-        raise NotImplementedError
+        print('end turn')
+
+    @property
+    def personal_state(self):
+        return dict(hand=copy.deepcopy(self.hand), discard_pile=copy.deepcopy(self.discard_pile))

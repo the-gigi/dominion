@@ -3,6 +3,7 @@
 class ComputerPlayer:
     def __init__(self, name):
         """ """
+        self.name = name
 
     def play(self, game, state):
         """The player has to make one of the actions on the game object
@@ -13,4 +14,4 @@ class ComputerPlayer:
 
         If an invalid action is attempted the game object will return an error
         """
-        raise NotImplementedError
+        game.end_turn()
