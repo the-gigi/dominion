@@ -2,7 +2,6 @@ import copy
 
 from card_stack import CardStack
 from cards import *
-from typing import Set
 
 
 class PlayerState:
@@ -12,7 +11,7 @@ class PlayerState:
 
     def __init__(self, name):
         self.name = name
-        self.hand = Set[BaseCard]
+        self.hand = []
         self.draw_deck = CardStack()
         self.discard_pile = CardStack()
 

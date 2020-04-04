@@ -35,12 +35,7 @@ class GameEngine:
 
         Returns the winning player
         """
-        raise NotImplementedError
-
-    def is_pile_empty(self, card_type):
-        """Check if a card pile is empty
-        """
-        raise NotImplementedError
+        return self.game.find_winner()
 
     def finish_turn(self):
         """Perform this operation at the end of turn
@@ -71,4 +66,4 @@ class GameEngine:
             self.advance_player()
 
         winner = self.find_winner()
-        print(f'{winner.name} won dominion !!!!')
+        print(f'{winner.name} won the game!!!')

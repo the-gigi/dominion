@@ -1,5 +1,5 @@
 import inspect
-
+from cards import *
 import cards
 from game_state import GameState
 
@@ -55,7 +55,7 @@ class Game:
                     return True
         return False
 
-    def count_player_points(self, player):
+    def count_player_points(self, player_state):
         """Count the total victory points in
            the player's hand, deck and discard pile
 
@@ -63,20 +63,29 @@ class Game:
         """
         raise NotImplementedError
 
-    def count_player_money(self, player):
+    def count_player_money(self, player_state):
         """Count the total amount of coins in
            the player's hand, deck and discard pile
 
            return the sum of all the coins
         """
-        raise NotImplementedError
+        amount = 0
+        all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
+        for card in all_cards:
+            if isinstance(card, Gold):
+                amount += 3
+            elif isinstance(card, Silver):
+                amount += 2
+            elif isinstance(card, Copper):
+                amount += 1
+        return amount
 
     def find_winner(self):
         """The winner is the player with the most victory points
 
         In case of a tie the money is the tie breaker
 
-        Returns the winning player
+        Returns the winning playere
         """
         raise NotImplementedError
 
@@ -111,3 +120,5 @@ class Game:
     @property
     def card_types(self):
         return [cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard]
+
+
