@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from cards import *
 
 
@@ -26,4 +28,23 @@ class CardStack:
     def count(self):
         return len(self.cards)
 
+    def as_dict(self):
+        """
+        Create a dict where the keys are card class and the value is the number of cards of this type
+        Iterate over all the cards
+        For each card type increment the value in the dictionary
 
+        :return dict
+        """
+        dd = defaultdict(int)
+        for card in self.cards:
+            dd[repr(card)] += 1
+        return dd
+
+    def __eq__(self, other):
+        """
+        store the dict repr of self in a var
+        store the dict repr of other in a var
+        return the comparison of the two vars
+        """
+        return self.as_dict() == other.as_dict()

@@ -11,7 +11,7 @@ class BaseCard:
         self.Image = f'images/{self.Name.lower()}.jpg'
 
     def __repr__(self):
-        return f'{type(self)}'
+        return type(self).__name__
 
     def dump(self):
         for a in 'name type text cost coins points reaction'.split():

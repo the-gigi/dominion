@@ -14,6 +14,7 @@ class PlayerState:
         self.hand = []
         self.draw_deck = CardStack()
         self.discard_pile = CardStack()
+        self.initialize_draw_deck()
 
         # How many action cards can the player play
         self.actions = 1
@@ -23,7 +24,7 @@ class PlayerState:
 
     def dump(self):
         print('Name:', self.name)
-        self.hand.dump()
+        print(self.hand)
 
     def cleanup(self):
         """Discard hand and play area
@@ -31,6 +32,8 @@ class PlayerState:
 
     def initialize_draw_deck(self):
         """Add 7 coppers and 3 estates to the draw deck and shuffle it"""
+        self.draw_deck.cards = [Copper()] * 7 + [Estate()] * 3
+        self.draw_deck.shuffle()
 
     def draw_new_hand(self):
         """Draw the 5 top cards from the draw deck and add them to the hand"""
