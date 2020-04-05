@@ -15,6 +15,7 @@ class PlayerState:
         self.draw_deck = CardStack()
         self.discard_pile = CardStack()
         self.initialize_draw_deck()
+        self.draw_new_hand()
 
         # How many action cards can the player play
         self.actions = 1
