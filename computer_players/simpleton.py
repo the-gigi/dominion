@@ -1,11 +1,8 @@
+from object_model import BasePlayer
 
 
-class ComputerPlayer:
-    def __init__(self, name):
-        """ """
-        self.name = name
-
-    def play(self, game, state):
+class Simpleton(BasePlayer):
+    def play(self):
         """The player has to make one of the actions on the game object
 
         Some actions are:
@@ -14,4 +11,8 @@ class ComputerPlayer:
 
         If an invalid action is attempted the game object will return an error
         """
-        game.end_turn()
+        self.game_client.done()
+
+    def react(self, attack):
+        return False
+

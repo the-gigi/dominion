@@ -1,14 +1,13 @@
 from cards import *
 from player_state import PlayerState
 
-copper_count = 60
-silver_count = 40
-gold_count = 30
+
 
 
 class GameState:
-    def __init__(self, card_types, player_names):
+    def __init__(self, piles, player_states):
         """ """
+        self.piles = piles
         self.player_states = [PlayerState(name) for name in player_names]
 
         num_players = len(player_names)

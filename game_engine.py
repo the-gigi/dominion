@@ -1,30 +1,24 @@
-from cards import *
+from collections import Sequence
+
+import object_model
 
 
 class GameEngine:
-    def __init__(self, game, players):
-        self.game = game
+    def __init__(self, game: object_model.Game, players: Sequence):
+        self.game_object = game
         self.players = players
         self.active_player_index = 0
 
     @property
     def game_over(self):
         """Returns the is_over property of the game object"""
-        return self.game.is_over
+        return self.game_object.is_over
 
     def count_player_points(self, player):
         """Count the total victory points in
            the player's hand, deck and discard pile
 
            return the number of victory points
-        """
-        raise NotImplementedError
-
-    def count_player_money(self, player):
-        """Count the total amount of coins in
-           the player's hand, deck and discard pile
-
-           return the sum of all the coins
         """
         raise NotImplementedError
 
@@ -35,7 +29,7 @@ class GameEngine:
 
         Returns the winning player
         """
-        return self.game.find_winner()
+        return self.game_object.find_winner()
 
     def finish_turn(self):
         """Perform this operation at the end of turn
@@ -54,15 +48,15 @@ class GameEngine:
 
     def advance_player(self):
         self.active_player_index = (self.active_player_index + 1) % len(self.players)
-        self.game.active_player_index = self.active_player_index
+        self.game_object.active_player_index = self.active_player_index
 
     def run(self):
         """This is the main loop of the game
 
         """
         while not self.game_over:
-            self.active_player.play(self.game, self.game.personal_player_state)
-            self.game.end_turn()
+            self.active_player.play()
+            self.game_object.end_turn()
             self.advance_player()
 
         winner = self.find_winner()

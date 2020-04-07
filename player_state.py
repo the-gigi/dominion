@@ -38,15 +38,16 @@ class PlayerState:
 
     def draw_new_hand(self):
         """Draw the 5 top cards from the draw deck and add them to the hand"""
-        raise NotImplementedError
+        self.draw_deck.shuffle()
+        self.hand = self.draw_deck.pop(5)
 
-    def end_turn(self):
+    def done(self):
         """Perform the following:
             - cleanup
             - reset buys to 1
             - reset actions to 1
         """
-        print('end turn')
+        print(f'{self.name}: done')
 
     @property
     def personal_state(self):

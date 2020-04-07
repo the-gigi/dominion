@@ -1,26 +1,29 @@
 import inspect
+
+import object_model
 from cards import *
 import cards
 from game_state import GameState
 
 
-class Game:
+class Game(object_model.Game,
+           object_model.GameClient):
     """Game represents the specific game domain
 
     In this case Dominion
 
     """
-
-    def __init__(self, player_names):
+    def __init__(self, piles, player_states):
         # The state of the game
-        self.state = GameState(self.card_types, player_names)
+        self.piles = piles
+        self.player_states = player_states
 
         # The active player
         self.active_player_index = 0
 
     @property
     def player_state(self):
-        return self.state.player_states[self.active_player]
+        return self.player_states[self.active_player]
 
     @property
     def personal_player_state(self):
@@ -30,30 +33,9 @@ class Game:
     def active_player(self):
         return self.active_player_index
 
-    @property
-    def piles(self):
-        return self.state.piles
-
     @active_player.setter
     def active_player(self, player_index):
         self.active_player_index = player_index
-
-    @property
-    def is_over(self):
-        """Check if all provinces are gone or 3 supply piles are empty
-
-        return True if the game is over and False otherwise
-        """
-        if self.piles[cards.Province] == 0:
-            return True
-        empty_piles = 0
-        # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
-        for card_type in self.piles.keys():
-            if self.piles[card_type] == 0:
-                empty_piles += 1
-                if empty_piles >= 3:
-                    return True
-        return False
 
     def count_player_points(self, player_state):
         """Count the total victory points in
@@ -91,15 +73,6 @@ class Game:
                 amount += 1
         return amount
 
-    def find_winner(self):
-        """The winner is the player with the most victory points
-
-        In case of a tie the money is the tie breaker
-
-        Returns the winning playere
-        """
-        raise NotImplementedError
-
     def is_pile_empty(self, card_type):
         """Check if a card pile is empty
         """
@@ -115,7 +88,41 @@ class Game:
         """
         raise NotImplementedError
 
-    # Player interface
+    # Game interface
+    def find_winner(self):
+        """The winner is the player with the most victory points
+
+        In case of a tie the money is the tie breaker
+
+        Returns the winning playere
+        """
+        raise NotImplementedError
+
+    def end_turn(self):
+        """
+
+        :return:
+        """
+
+    @property
+    def is_over(self):
+        """Check if all provinces are gone or 3 supply piles are empty
+
+        return True if the game is over and False otherwise
+        """
+        if self.piles[cards.Province] == 0:
+            return True
+        empty_piles = 0
+        # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
+        for card_type in self.piles.keys():
+            if self.piles[card_type] == 0:
+                empty_piles += 1
+                if empty_piles >= 3:
+                    return True
+        return False
+
+
+    # GameClient interface
     def play_action_card(self, card):
         """ """
         raise NotImplementedError
@@ -124,12 +131,10 @@ class Game:
         """ """
         raise NotImplementedError
 
-    def end_turn(self):
+    def done(self):
         """ """
-        self.player_state.end_turn()
+        self.player_state.done()
 
     @property
-    def card_types(self):
-        return [cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard]
-
-
+    def state(self):
+        raise NotImplementedError

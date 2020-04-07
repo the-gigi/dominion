@@ -1,25 +1,17 @@
-import inspect
-
-import cards
-from computer_player import ComputerPlayer
-from game import Game
-from game_engine import GameEngine
+from card_util import get_card_types
+from computer_players.simpleton import Simpleton
+from game_factory import create_game_engine
 
 
 def main():
     """ """
-    player_names = ['Bob']
-    players = [ComputerPlayer(name) for name in player_names]
-    game = Game(player_names)
-    game_engine = GameEngine(game, players)
+    card_types = get_card_types()[:10]
+    players_info = dict(Saar=Simpleton,
+                        Gigi=Simpleton,
+                        Guuy=Simpleton,
+                        Liat=Simpleton)
+    game_engine = create_game_engine(card_types, players_info)
     game_engine.run()
-
-
-def dump_cards():
-    for name, cls in inspect.getmembers(cards):
-        if inspect.isclass(cls) and cls != cards.BaseCard:
-            print('-' * 10)
-            cls().dump()
 
 
 if __name__ == '__main__':
