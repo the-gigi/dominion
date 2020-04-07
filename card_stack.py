@@ -12,15 +12,21 @@ class CardStack:
         """Shuffle the cards in the stack and return the stack"""
         random.shuffle(self.cards)
 
-    def pop_cards(self, n):
-        """Take n cards from the top of the deck and check how many cards we have to keep"""
+    def pop(self, n):
+        """Take n cards from the top of the deck and return them"""
         cards = self.peek(n)
         self.cards = self.cards[n:]
         return cards
 
     def peek(self, n):
-        """Return a copy of the top n cards without removing them """
+        """Return a copy of the top n cards without removing them
+
+        If n is greater than the number of cards raise a RuntimeError
+        """
+        if n > len(self.cards):
+            raise RuntimeError(f'There are only {len(self.cards)} cards in the stack.')
         return self.cards[:n]
+
     def add_to_top(self, cards):
         """Add the cards to the top of the stack """
 
@@ -55,7 +61,7 @@ class CardStack:
 
 def main():
     s = CardStack([Copper(), Silver(), Gold()])
-    cards = s.pop_cards(2)
+    cards = s.pop(2)
     print(cards)
 
 
