@@ -29,9 +29,11 @@ class CardStack:
 
     def add_to_top(self, cards):
         """Add the cards to the top of the stack """
+        self.cards = cards + self.cards
 
     def add_to_bottom(self, cards):
         """Add the cards to the bottom of the stack """
+        self.cards += cards
 
     @property
     def count(self):

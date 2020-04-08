@@ -14,14 +14,6 @@ class GameEngine:
         """Returns the is_over property of the game object"""
         return self.game_object.is_over
 
-    def count_player_points(self, player):
-        """Count the total victory points in
-           the player's hand, deck and discard pile
-
-           return the number of victory points
-        """
-        raise NotImplementedError
-
     def find_winner(self):
         """The winner is the player with the most victory points
 
@@ -30,14 +22,6 @@ class GameEngine:
         Returns the winning player
         """
         return self.game_object.find_winner()
-
-    def finish_turn(self):
-        """Perform this operation at the end of turn
-
-        - call cleanup() on the active  player
-        - update the active player index to the next player
-        """
-        raise NotImplemented
 
     @property
     def active_player(self):

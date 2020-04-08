@@ -120,5 +120,165 @@ class TestGame(unittest.TestCase):
         self.assertTrue(isinstance(card_stack.cards[1], Silver))
         self.assertTrue(isinstance(card_stack.cards[2], Gold))
 
+    def test_add_to_top(self):
+        """
+        Create card stack
+        Call add_to_top()
+        Check if the cards went to the beginning of the list
+
+        Test cases:
+        There are zero cards in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add many cards to the top
+        There is one card in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add more than one card to the top
+        There are many cards in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add the same amount of cards to the top
+            Add more than the amount of cards to the top
+        """
+
+        # add zero cards to empty stack
+        card_stack = CardStack()
+        card_stack.add_to_top([])
+        self.assertEqual(card_stack.cards, [])
+
+        # add one card to empty stack
+        card_stack.add_to_top([Copper()])
+        self.assertTrue(isinstance(card_stack.cards[0], Copper))
+        self.assertEqual(len(card_stack.cards), 1)
+
+        # add many cards to empty stack
+        card_stack = CardStack()
+        card_stack.add_to_top([Copper(), Silver(), Gold()])
+        self.assertTrue(isinstance(card_stack.cards[0], Copper))
+        self.assertTrue(isinstance(card_stack.cards[1], Silver))
+        self.assertTrue(isinstance(card_stack.cards[2], Gold))
+        self.assertEqual(len(card_stack.cards), 3)
+
+        # add zero cards to one-card stack
+        copper = Copper()
+        card_stack = CardStack([copper])
+        card_stack.add_to_top([])
+        self.assertEqual(card_stack.cards, [copper])
+
+        # add one card to one-card stack
+        silver = Silver()
+        card_stack = CardStack([copper])
+        card_stack.add_to_top([silver])
+        expected = [silver, copper]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add many cards to one-card stack
+        curse = Curse()
+        gold = Gold()
+        card_stack = CardStack([copper])
+        card_stack.add_to_top([curse, silver, gold])
+        expected = [curse, silver, gold, copper]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add zero cards to many-card stack
+        card_stack = CardStack([copper, silver, gold])
+        card_stack.add_to_top([])
+        expected = [copper, silver, gold]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add one card to many-card stack
+        card_stack.add_to_top([curse])
+        expected = [curse, copper, silver, gold]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add many cards to many-card stack
+        estate = Estate()
+        duchy = Duchy()
+        card_stack = CardStack([copper, silver, gold])
+        card_stack.add_to_top([curse, estate, duchy])
+        expected = [curse, estate, duchy, copper, silver, gold]
+        self.assertEqual(card_stack.cards, expected)
+
+    def test_add_to_bottom(self):
+        """
+        Create card stack
+        Call add_to_bottom()
+        Check if the cards went to the end of the list
+
+        Test cases:
+        There are zero cards in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add many cards to the top
+        There is one card in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add more than one card to the top
+        There are many cards in the stack
+            Add nothing to the top
+            Add one card to the top
+            Add the same amount of cards to the top
+            Add more than the amount of cards to the top
+        """
+
+        # add zero cards to empty stack
+        card_stack = CardStack()
+        card_stack.add_to_bottom([])
+        self.assertEqual(card_stack.cards, [])
+
+        # add one card to empty stack
+        card_stack.add_to_bottom([Copper()])
+        self.assertTrue(isinstance(card_stack.cards[0], Copper))
+        self.assertEqual(len(card_stack.cards), 1)
+
+        # add many cards to empty stack
+        card_stack = CardStack()
+        card_stack.add_to_bottom([Copper(), Silver(), Gold()])
+        self.assertTrue(isinstance(card_stack.cards[0], Copper))
+        self.assertTrue(isinstance(card_stack.cards[1], Silver))
+        self.assertTrue(isinstance(card_stack.cards[2], Gold))
+        self.assertEqual(len(card_stack.cards), 3)
+
+        # add zero cards to one-card stack
+        copper = Copper()
+        card_stack = CardStack([copper])
+        card_stack.add_to_bottom([])
+        self.assertEqual(card_stack.cards, [copper])
+
+        # add one card to one-card stack
+        silver = Silver()
+        card_stack = CardStack([copper])
+        card_stack.add_to_bottom([silver])
+        expected = [copper, silver]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add many cards to one-card stack
+        curse = Curse()
+        gold = Gold()
+        card_stack = CardStack([copper])
+        card_stack.add_to_bottom([curse, silver, gold])
+        expected = [copper, curse, silver, gold]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add zero cards to many-card stack
+        card_stack = CardStack([copper, silver, gold])
+        card_stack.add_to_bottom([])
+        expected = [copper, silver, gold]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add one card to many-card stack
+        card_stack.add_to_bottom([curse])
+        expected = [copper, silver, gold, curse]
+        self.assertEqual(card_stack.cards, expected)
+
+        # add many cards to many-card stack
+        estate = Estate()
+        duchy = Duchy()
+        card_stack = CardStack([copper, silver, gold])
+        card_stack.add_to_bottom([curse, estate, duchy])
+        expected = [copper, silver, gold, curse, estate, duchy]
+        self.assertEqual(card_stack.cards, expected)
+
 if __name__ == '__main__':
     unittest.main()

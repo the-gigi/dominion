@@ -13,6 +13,7 @@ class Game(object_model.Game,
     In this case Dominion
 
     """
+
     def __init__(self, piles, player_states):
         # The state of the game
         self.piles = piles
@@ -74,18 +75,15 @@ class Game(object_model.Game,
         return amount
 
     def is_pile_empty(self, card_type):
-        """Check if a card pile is empty
-        """
+        """Check if a card pile is empty"""
         raise NotImplementedError
 
     def verify_action(self, card):
-        """verify the player has the card in hand and has at least one action
-        """
+        """verify the player has the card in hand and has at least one action"""
         raise NotImplementedError
 
     def verify_buy(self, card):
-        """verify the player has enough money and has at least one buy
-        """
+        """verify the player has enough money and has at least one buy"""
         raise NotImplementedError
 
     # Game interface
@@ -120,7 +118,6 @@ class Game(object_model.Game,
                 if empty_piles >= 3:
                     return True
         return False
-
 
     # GameClient interface
     def play_action_card(self, card):

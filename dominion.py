@@ -7,9 +7,10 @@ def main():
     """ """
     card_types = get_card_types()[:10]
     players_info = dict(Saar=Simpleton,
-                        Gigi=Simpleton,
+                        Igig=Simpleton,
                         Guuy=Simpleton,
-                        Liat=Simpleton)
+                        Liat=Simpleton,
+                        Ofir=Simpleton)
     game_engine = create_game_engine(card_types, players_info)
     game_engine.run()
 
