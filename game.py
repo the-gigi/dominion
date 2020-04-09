@@ -1,9 +1,9 @@
 import inspect
 
+import card_util
 import object_model
 from cards import *
 import cards
-from game_state import GameState
 
 
 class Game(object_model.Game,
@@ -65,26 +65,30 @@ class Game(object_model.Game,
         """
         amount = 0
         all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
-        for card in all_cards:
-            if isinstance(card, Gold):
-                amount += 3
-            elif isinstance(card, Silver):
-                amount += 2
-            elif isinstance(card, Copper):
-                amount += 1
-        return amount
+        return card_util.count_money(all_cards)
 
     def is_pile_empty(self, card_type):
-        """Check if a card pile is empty"""
-        raise NotImplementedError
+        """Check if a card pile is empty
+
+        return True if the pile of the given card type is empty and False otherwise
+        """
+        return self.piles[card_type] == 0
 
     def verify_action(self, card):
-        """verify the player has the card in hand and has at least one action"""
-        raise NotImplementedError
+        """verify that the player's card is an action, has the card in their hand, and has at least one action
+        return True if the player can play the card, otherwise return False
+        """
+        is_action_card = cards.BaseCard.Type == 'Action'
+        is_card_in_hand = card in self.player_state.hand
+        has_actions = self.player_state.actions > 0
+        return is_action_card and is_card_in_hand and has_actions
 
-    def verify_buy(self, card):
+    def verify_buy(self, card_type):
         """verify the player has enough money and has at least one buy"""
-        raise NotImplementedError
+        amount = card_util.count_money(self.player_state.hand)
+        if amount < card_type.cost:
+            return False
+        return self.player_state.buys > 0
 
     # Game interface
     def find_winner(self):

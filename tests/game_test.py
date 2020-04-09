@@ -12,7 +12,7 @@ class TestGame(unittest.TestCase):
     def test_is_over(self):
         names = ['Gus', 'Sara', 'Beaver', 'Igig']
         # new game, game not over
-        game = Game(names)
+        game = Game(piles, player_states)
         self.assertFalse(game.is_over)
 
         # provinces are empty, game over

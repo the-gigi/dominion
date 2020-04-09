@@ -59,13 +59,3 @@ class CardStack:
         return the comparison of the two vars
         """
         return self.as_dict() == other.as_dict()
-
-
-def main():
-    s = CardStack([Copper(), Silver(), Gold()])
-    cards = s.pop(2)
-    print(cards)
-
-
-if __name__ == '__main__':
-    main()

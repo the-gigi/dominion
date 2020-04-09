@@ -21,7 +21,7 @@ class PlayerState:
         self.actions = 1
 
         # How many cards can the player buy
-        self.buy = 1
+        self.buys = 1
 
     def dump(self):
         print('Name:', self.name)
