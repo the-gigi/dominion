@@ -78,7 +78,7 @@ class Game(object_model.Game,
         """verify that the player's card is an action, has the card in their hand, and has at least one action
         return True if the player can play the card, otherwise return False
         """
-        is_action_card = cards.BaseCard.Type == 'Action'
+        is_action_card = card.Type == 'Action'
         is_card_in_hand = card in self.player_state.hand
         has_actions = self.player_state.actions > 0
         return is_action_card and is_card_in_hand and has_actions
@@ -86,7 +86,7 @@ class Game(object_model.Game,
     def verify_buy(self, card_type):
         """verify the player has enough money and has at least one buy"""
         amount = card_util.count_money(self.player_state.hand)
-        if amount < card_type.cost:
+        if amount < card_type.Cost:
             return False
         return self.player_state.buys > 0
 
@@ -96,7 +96,7 @@ class Game(object_model.Game,
 
         In case of a tie the money is the tie breaker
 
-        Returns the winning playere
+        Returns the winning player
         """
         raise NotImplementedError
 

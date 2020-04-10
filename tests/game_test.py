@@ -1,3 +1,4 @@
+import card_util
 from card_util import get_card_types, setup_piles
 from game import Game
 from cards import *
@@ -159,6 +160,111 @@ class TestGame(unittest.TestCase):
         player_state.discard_pile.cards = []
         money_count = self.game.count_player_money(player_state)
         self.assertEqual(money_count, 0)
+
+    def test_verify_action(self):
+        """
+        card not in hand, card not an action, no actions (0, 0, 0)
+        card not in hand, card not an action, has actions (0, 0, 1)
+        card not in hand, card is an action, has actions (0, 1, 1)
+        card not in hand, card is an action, no actions (0, 1, 0)
+        card in hand, card not an action, has actions (1, 0, 1)
+        card in hand, card not an action, no actions (1, 0, 0)
+        card in hand, card is an action, has actions (1, 1, 1)
+        card in hand, card is an action, no actions (1, 1, 0)
+
+        :return:
+        """
+        player_state = self.game.player_state
+
+        # 0, 0, 0
+        test_card = Copper()
+        player_state.hand = []
+        player_state.actions = 0
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 0, 0, 1
+        test_card = Copper()
+        player_state.hand = []
+        player_state.actions = 1
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 0, 1, 1
+        test_card = Moat()
+        player_state.hand = []
+        player_state.actions = 1
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 0, 1, 0
+        test_card = Moat()
+        player_state.hand = []
+        player_state.actions = 0
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 1, 0, 1
+        test_card = Copper()
+        player_state.hand = [test_card]
+        player_state.actions = 1
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 1, 0, 0
+        test_card = Copper()
+        player_state.hand = [test_card]
+        player_state.actions = 0
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+        # 1, 1, 1
+        test_card = Moat()
+        player_state.hand = [test_card]
+        player_state.actions = 1
+        is_verified = self.game.verify_action(test_card)
+        self.assertTrue(is_verified)
+
+        # 1, 1, 0
+        test_card = Moat()
+        player_state.hand = [test_card]
+        player_state.actions = 0
+        is_verified = self.game.verify_action(test_card)
+        self.assertFalse(is_verified)
+
+    def test_verify_buy(self):
+        """
+        has enough money, has buys (1, 1)
+        has enough money, no buys (1, 0)
+        not enough money, has buys (0, 1)
+        not enough money, no buys (0, 0)
+        :return:
+        """
+        player_state = self.game.player_state
+
+        # 1, 1
+        player_state.hand = [Silver(), Copper(), Gold()]
+        player_state.buys = 1
+        is_verified = self.game.verify_buy(Gold())
+        self.assertTrue(is_verified)
+
+        # 1, 0
+        player_state.hand = [Gold()]
+        player_state.buys = 0
+        is_verified = self.game.verify_buy(Moat())
+        self.assertFalse(is_verified)
+
+        # 0, 1
+        player_state.hand = [Copper()]
+        player_state.buys = 1
+        is_verified = self.game.verify_buy(Moat())
+        self.assertFalse(is_verified)
+
+        # 0, 0
+        player_state.hand = [Copper()]
+        player_state.buys = 0
+        is_verified = self.game.verify_buy(Moat())
+        self.assertFalse(is_verified)
 
     def test_find_winner(self):
         self.fail()
