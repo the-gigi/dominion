@@ -1,38 +1,43 @@
-from game_engine import GameEngine
+from card_util import get_card_types
+from computer_players.simpleton import Simpleton
 from cards import *
-from player_state import PlayerState
+from game_factory import create_game_engine
 
 import unittest
 
 
 class TestGameEngine(unittest.TestCase):
+    def setUp(self):
+        card_types = get_card_types()[:10]
+        players_info = players_info = dict(
+            Gus=Simpleton,
+            Sara=Simpleton,
+            Beaver=Simpleton,
+            Igig=Simpleton
+        )
+        self.game_engine = create_game_engine(card_types, players_info)
+
     def test_init(self):
         pass
 
     def test_game_over(self):
-        names = ['Gus', 'Sara', 'Beaver', 'Igig']
-        players = [PlayerState(name) for name in names]
-        card_types = [Copper, Silver, Gold, Estate, Duchy, Province, Curse]
-        game = None
         # new game, game not over
-        game_engine = GameEngine(game, players, card_types)
-        self.assertFalse(game_engine.game_over)
+        self.assertFalse(self.game_engine.game_over)
 
         # provinces are empty, game over
-        game_engine.piles[Province] = 0
-        game_over_true_province = game_engine.game_over
-        self.assertTrue(game_engine.game_over)
+        self.game_engine.game_object.piles[Province] = 0
+        game_over_true_province = self.game_engine.game_over
+        self.assertTrue(self.game_engine.game_over)
 
         # 2 empty piles, game not over
-        game_engine.piles[Province] = 1
-        game_engine.piles[Silver] = 0
-        game_engine.piles[Copper] = 0
-        self.assertFalse(game_engine.game_over)
+        self.game_engine.game_object.piles[Province] = 1
+        self.game_engine.game_object.piles[Silver] = 0
+        self.game_engine.game_object.piles[Copper] = 0
+        self.assertFalse(self.game_engine.game_over)
 
         # 3 empty piles, game over
-        game_engine.piles[Curse] = 0
-        game_over_true_other = game_engine.game_over
-        self.assertTrue(game_engine.game_over)
+        self.game_engine.game_object.piles[Curse] = 0
+        self.assertTrue(self.game_engine.game_over)
 
     def test_count_player_points(self):
         self.fail()

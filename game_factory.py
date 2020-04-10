@@ -1,7 +1,7 @@
 from collections import Mapping
 
 from card_stack import CardStack
-from cards import *
+from card_util import setup_piles
 from game import Game
 from game_client import GameClient
 from game_engine import GameEngine
@@ -21,17 +21,7 @@ def create_player(name, player_class: type(BasePlayer), player_state, game):
 
 
 def create_game_engine(card_types, players_info: Mapping):
-    num_players = len(players_info)
-    piles = {c: 13 for c in card_types}
-
-    piles[Copper] = copper_count - num_players * 7
-    piles[Silver] = silver_count
-    piles[Gold] = gold_count
-
-    piles[Estate] = 8 if num_players == 2 else 12
-    piles[Duchy] = 8 if num_players == 2 else 12
-    piles[Province] = 8 if num_players == 2 else 12
-    piles[Curse] = (num_players - 1) * 10
+    piles = setup_piles(card_types, len(players_info))
 
     player_states = {}
     players = []
