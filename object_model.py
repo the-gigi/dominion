@@ -22,7 +22,7 @@ class GameClient(metaclass=ABCMeta):
 
 class Game(metaclass=ABCMeta):
     @abstractmethod
-    def find_winner(self):
+    def find_winners(self):
         pass
 
     @abstractmethod

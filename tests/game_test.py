@@ -7,13 +7,13 @@ from player_state import PlayerState
 import unittest
 
 
-class TestGame(unittest.TestCase):
+class GameTest(unittest.TestCase):
     def setUp(self):
         card_types = get_card_types()[:10]
-        names = ['tester1', 'tester2', 'tester3', 'tester4']
-        piles = setup_piles(card_types, len(names))
+        self.names = ['tester1', 'tester2', 'tester3', 'tester4']
+        piles = setup_piles(card_types, len(self.names))
 
-        player_states = [PlayerState(n) for n in names]
+        player_states = [PlayerState(n) for n in self.names]
         self.game = Game(piles, player_states)
 
     def test_init(self):
@@ -266,8 +266,30 @@ class TestGame(unittest.TestCase):
         is_verified = self.game._verify_buy(Moat())
         self.assertFalse(is_verified)
 
-    def test_find_winner(self):
-        self.fail()
+    def test_find_winners(self):
+        """
+        Everyone has an equal amount of points
+        A couple people have an equal amount of points
+        One person has the most points
+        :return:
+        """
+        # equal points
+        winners = self.game.find_winners()
+        expected = self.names
+        self.assertEqual(winners, expected)
+
+        # pair with equal points
+        self.game.player_states[2].hand += [Estate()]
+        self.game.player_states[3].hand += [Estate()]
+        winners = self.game.find_winners()
+        expected = ['tester3', 'tester4']
+        self.assertEqual(winners, expected)
+
+        # one winner
+        self.game.player_states[0].hand += [Duchy(), Province()]
+        winners = self.game.find_winners()
+        expected = ['tester1']
+        self.assertEqual(winners, expected)
 
     def test_is_pile_empty(self):
         self.fail()

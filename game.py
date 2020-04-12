@@ -95,14 +95,28 @@ class Game(object_model.Game,
         return self.player_state.buys > 0
 
     # Game interface
-    def find_winner(self):
+    def find_winners(self):
         """The winner is the player with the most victory points
 
         In case of a tie the money is the tie breaker
 
-        Returns the winning player
+        Returns a list with the winning player(s)
+
+        In case of a money tie everyone is a winner and it returns a list of all names
         """
-        raise NotImplementedError
+        winners = []
+        current_vp = 0
+        for player_state in self.player_states:
+            vp = self.count_player_points(player_state)
+            if winners == []:
+                winners = [player_state.name]
+                current_vp = vp
+            elif vp > current_vp:
+                winners = [player_state.name]
+                current_vp = vp
+            elif vp == current_vp:
+                winners += [player_state.name]
+        return winners
 
     def end_turn(self):
         """

@@ -21,7 +21,7 @@ class GameEngine:
 
         Returns the winning player
         """
-        return self.game_object.find_winner()
+        return self.game_object.find_winners()
 
     @property
     def active_player(self):

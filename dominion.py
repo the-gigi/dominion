@@ -12,7 +12,9 @@ def main():
     #                     Guuy=Simpleton,
     #                     Liat=Simpleton,
     #                     Ofir=Simpleton)
-    players_info = dict(Rocky=Rockefeller)
+    players_info = dict(Rocky=Rockefeller,
+                        Igig=Simpleton,
+                        Sara=Simpleton,)
     game_engine = create_game_engine(card_types, players_info)
     game_engine.run()
 
