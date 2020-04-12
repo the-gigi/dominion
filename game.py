@@ -2,6 +2,7 @@ import inspect
 
 import card_util
 import object_model
+from card_stack import CardStack
 from cards import *
 import cards
 
@@ -11,7 +12,6 @@ class Game(object_model.Game,
     """Game represents the specific game domain
 
     In this case Dominion
-
     """
 
     def __init__(self, piles, player_states):
@@ -38,7 +38,8 @@ class Game(object_model.Game,
     def active_player(self, player_index):
         self.active_player_index = player_index
 
-    def count_player_points(self, player_state):
+    @staticmethod
+    def count_player_points(player_state):
         """Count the total victory points in
            the player's hand, deck and discard pile
 
@@ -57,24 +58,24 @@ class Game(object_model.Game,
                 vp -= 1
         return vp
 
-    def count_player_money(self, player_state):
+    @staticmethod
+    def count_player_money(player_state):
         """Count the total amount of coins in
            the player's hand, deck and discard pile
 
            return the sum of all the coins
         """
-        amount = 0
         all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
         return card_util.count_money(all_cards)
 
-    def is_pile_empty(self, card_type):
+    def _is_pile_empty(self, card_type):
         """Check if a card pile is empty
 
         return True if the pile of the given card type is empty and False otherwise
         """
         return self.piles[card_type] == 0
 
-    def verify_action(self, card):
+    def _verify_action(self, card):
         """verify that the player's card is an action, has the card in their hand, and has at least one action
         return True if the player can play the card, otherwise return False
         """
@@ -83,8 +84,11 @@ class Game(object_model.Game,
         has_actions = self.player_state.actions > 0
         return is_action_card and is_card_in_hand and has_actions
 
-    def verify_buy(self, card_type):
-        """verify the player has enough money and has at least one buy"""
+    def _verify_buy(self, card_type):
+        """verify the supply if not exhausted, player has enough money and has at least one buy"""
+        if self._is_pile_empty(card_type):
+            return False
+
         amount = card_util.count_money(self.player_state.hand)
         if amount < card_type.Cost:
             return False
@@ -105,6 +109,7 @@ class Game(object_model.Game,
 
         :return:
         """
+        self.player_state.sync_personal_state()
 
     @property
     def is_over(self):
@@ -128,14 +133,16 @@ class Game(object_model.Game,
         """ """
         raise NotImplementedError
 
-    def buy(self, card):
+
+    def buy(self, card_type):
         """ """
-        raise NotImplementedError
+        if not self._verify_buy(card_type):
+            return False
+
+        self.piles[card_type] -= 1
+        self.player_state.discard_pile.add_to_top([card_type()])
+        self.player_state.sync_personal_state()
 
     def done(self):
         """ """
         self.player_state.done()
-
-    @property
-    def state(self):
-        raise NotImplementedError

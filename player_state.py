@@ -2,6 +2,7 @@ import copy
 
 from card_stack import CardStack
 from cards import *
+from personal_state import PersonalState
 
 
 class PlayerState:
@@ -23,13 +24,17 @@ class PlayerState:
         # How many cards can the player buy
         self.buys = 1
 
+        self._personal_state = PersonalState(hand=copy.deepcopy(self.hand), discard_pile=copy.deepcopy(self.discard_pile))
+
     def dump(self):
         print('Name:', self.name)
         print(self.hand)
 
-    def cleanup(self):
+    def _cleanup(self):
         """Discard hand and play area
         """
+        self.discard_pile.add_to_top(self.hand)
+        self.hand = []
 
     def initialize_draw_deck(self):
         """Add 7 coppers and 3 estates to the draw deck and shuffle it"""
@@ -39,7 +44,13 @@ class PlayerState:
     def draw_new_hand(self):
         """Draw the 5 top cards from the draw deck and add them to the hand"""
         self.draw_deck.shuffle()
-        self.hand = self.draw_deck.pop(5)
+        card_count = min(5, self.draw_deck.count)
+        self.hand = self.draw_deck.pop(card_count)
+        if card_count < 5:
+            self.draw_deck = self.discard_pile
+            self.draw_deck.shuffle()
+            self.discard_pile = CardStack()
+            self.hand += self.draw_deck.pop(5 - card_count)
 
     def done(self):
         """Perform the following:
@@ -47,8 +58,17 @@ class PlayerState:
             - reset buys to 1
             - reset actions to 1
         """
+        self._cleanup()
+        self.draw_new_hand()
+        self.buys = 1
+        self.actions = 1
         print(f'{self.name}: done')
+
+    def sync_personal_state(self):
+        self.personal_state.discard_pile = CardStack(self.discard_pile.cards[:])
+        self.personal_state.hand = self.hand[:]
+
 
     @property
     def personal_state(self):
-        return dict(hand=copy.deepcopy(self.hand), discard_pile=copy.deepcopy(self.discard_pile))
+        return self._personal_state

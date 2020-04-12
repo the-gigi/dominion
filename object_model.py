@@ -7,17 +7,17 @@ class GameClient(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def buy(self, card):
+    def buy(self, card_type):
         pass
 
     @abstractmethod
     def done(self):
         pass
 
-    @property
-    @abstractmethod
-    def state(self):
-        pass
+    # @property
+    # @abstractmethod
+    # def state(self):
+    #     pass
 
 
 class Game(metaclass=ABCMeta):

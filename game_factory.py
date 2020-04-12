@@ -15,8 +15,7 @@ gold_count = 30
 
 
 def create_player(name, player_class: type(BasePlayer), player_state, game):
-    personal_state = PersonalState(player_state.hand[:], CardStack())
-    game_client = GameClient(personal_state, game)
+    game_client = GameClient(player_state.personal_state, game)
     return player_class(name, game_client)
 
 

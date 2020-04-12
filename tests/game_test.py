@@ -180,56 +180,56 @@ class TestGame(unittest.TestCase):
         test_card = Copper()
         player_state.hand = []
         player_state.actions = 0
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 0, 0, 1
         test_card = Copper()
         player_state.hand = []
         player_state.actions = 1
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 0, 1, 1
         test_card = Moat()
         player_state.hand = []
         player_state.actions = 1
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 0, 1, 0
         test_card = Moat()
         player_state.hand = []
         player_state.actions = 0
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 1, 0, 1
         test_card = Copper()
         player_state.hand = [test_card]
         player_state.actions = 1
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 1, 0, 0
         test_card = Copper()
         player_state.hand = [test_card]
         player_state.actions = 0
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
         # 1, 1, 1
         test_card = Moat()
         player_state.hand = [test_card]
         player_state.actions = 1
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertTrue(is_verified)
 
         # 1, 1, 0
         test_card = Moat()
         player_state.hand = [test_card]
         player_state.actions = 0
-        is_verified = self.game.verify_action(test_card)
+        is_verified = self.game._verify_action(test_card)
         self.assertFalse(is_verified)
 
     def test_verify_buy(self):
@@ -245,25 +245,25 @@ class TestGame(unittest.TestCase):
         # 1, 1
         player_state.hand = [Silver(), Copper(), Gold()]
         player_state.buys = 1
-        is_verified = self.game.verify_buy(Gold())
+        is_verified = self.game._verify_buy(Gold())
         self.assertTrue(is_verified)
 
         # 1, 0
         player_state.hand = [Gold()]
         player_state.buys = 0
-        is_verified = self.game.verify_buy(Moat())
+        is_verified = self.game._verify_buy(Moat())
         self.assertFalse(is_verified)
 
         # 0, 1
         player_state.hand = [Copper()]
         player_state.buys = 1
-        is_verified = self.game.verify_buy(Moat())
+        is_verified = self.game._verify_buy(Moat())
         self.assertFalse(is_verified)
 
         # 0, 0
         player_state.hand = [Copper()]
         player_state.buys = 0
-        is_verified = self.game.verify_buy(Moat())
+        is_verified = self.game._verify_buy(Moat())
         self.assertFalse(is_verified)
 
     def test_find_winner(self):

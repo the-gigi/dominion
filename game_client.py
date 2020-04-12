@@ -20,6 +20,6 @@ class GameClient(object_model.GameClient):
     def done(self):
         self.game.done()
 
-    @property
-    def state(self):
-        return self.state
+    # @property
+    # def state(self):
+    #     return self.state
