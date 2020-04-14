@@ -22,12 +22,13 @@ class Rockefeller(BasePlayer):
         elif supply[Copper] > 0 and money >= Copper.Cost:
             self.game_client.buy(Copper)
 
-        print(f'money: {self.game_client.game.count_player_money(self.game_client.game.player_state)}')
-        print(f'supply - gold: {supply[Gold]}, silver: {supply[Silver]}, copper: {supply[Copper]},')
+        self.game_client.done()
 
+        supply = self.game_client.personal_state.supply
+        print(f'money: {self.game_client.personal_state.money}')
+        print(f'supply - gold: {supply[Gold]}, silver: {supply[Silver]}, copper: {supply[Copper]},')
         print('-' * 20)
 
-        self.game_client.done()
 
     def react(self, attack):
         return False

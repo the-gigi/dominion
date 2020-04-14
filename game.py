@@ -111,7 +111,7 @@ class Game(object_model.Game,
         for player_state in self.player_states:
             vp = self.count_player_points(player_state)
             coins = self.count_player_money(player_state)
-            if winners == []:
+            if not winners:
                 winners = [player_state.name]
                 current_vp = vp
                 current_coins = coins
@@ -126,14 +126,6 @@ class Game(object_model.Game,
                 elif coins == current_coins:
                     winners += [player_state.name]
         return winners
-
-    def find_tie_winner(self):
-        """"""
-        current_money = 0
-        if len(self.winners) > 1:
-            for player_state in self.player_states:
-                self.winners = [player_state.name]
-                current_money = self.count_player_money(player_state)
 
     def start_turn(self):
         """ """

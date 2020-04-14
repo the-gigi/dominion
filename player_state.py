@@ -26,6 +26,7 @@ class PlayerState:
 
         self._personal_state = PersonalState(hand=copy.deepcopy(self.hand),
                                              discard_pile=copy.deepcopy(self.discard_pile),
+                                             draw_deck=self.draw_deck.as_dict(),
                                              supply=copy.deepcopy(supply))
 
     def dump(self):
@@ -71,8 +72,8 @@ class PlayerState:
     def sync_personal_state(self, supply):
         self.personal_state.discard_pile = CardStack(self.discard_pile.cards[:])
         self.personal_state.hand = self.hand[:]
+        self.personal_state.draw_deck = self.draw_deck.as_dict()
         self.personal_state.supply = supply
-
 
     @property
     def personal_state(self):
