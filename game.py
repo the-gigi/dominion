@@ -106,17 +106,35 @@ class Game(object_model.Game,
         """
         winners = []
         current_vp = 0
+        current_coins = 0
         for player_state in self.player_states:
             vp = self.count_player_points(player_state)
+            coins = self.count_player_money(player_state)
             if winners == []:
                 winners = [player_state.name]
                 current_vp = vp
+                current_coins = coins
             elif vp > current_vp:
                 winners = [player_state.name]
                 current_vp = vp
+                current_coins = coins
             elif vp == current_vp:
-                winners += [player_state.name]
+                if coins > current_coins:
+                    winners = [player_state.name]
+                    current_coins = coins
+                elif coins == current_coins:
+                    winners += [player_state.name]
         return winners
+
+    def find_tie_winner(self):
+        """"""
+        current_money = 0
+        if len(self.winners) > 1:
+            for player_state in self.player_states:
+                self.winners = [player_state.name]
+                current_money = self.count_player_money(player_state)
+
+
 
     def end_turn(self):
         """
@@ -124,6 +142,7 @@ class Game(object_model.Game,
         :return:
         """
         self.player_state.sync_personal_state()
+        print(f'name: {self.player_state.name} money: {self.count_player_money(self.player_state)}')
 
     @property
     def is_over(self):

@@ -3,6 +3,7 @@ from card_util import get_card_types, setup_piles
 from game import Game
 from cards import *
 from player_state import PlayerState
+from card_stack import *
 
 import unittest
 
@@ -271,6 +272,11 @@ class GameTest(unittest.TestCase):
         Everyone has an equal amount of points
         A couple people have an equal amount of points
         One person has the most points
+
+        Tie-breaker
+        Everyone has an equal amount of coins
+        A couple people have the highest amount of coins
+        One person has the most coins
         :return:
         """
         # equal points
@@ -279,16 +285,89 @@ class GameTest(unittest.TestCase):
         self.assertEqual(winners, expected)
 
         # pair with equal points
-        self.game.player_states[2].hand += [Estate()]
-        self.game.player_states[3].hand += [Estate()]
+        self.game.player_states[0].hand = []
+        self.game.player_states[1].hand = []
+        self.game.player_states[2].hand = [Estate()]
+        self.game.player_states[3].hand = [Estate()]
+        self.game.player_states[0].discard_pile = CardStack()
+        self.game.player_states[0].draw_deck = CardStack()
+        self.game.player_states[1].discard_pile = CardStack()
+        self.game.player_states[1].draw_deck = CardStack()
+        self.game.player_states[2].discard_pile = CardStack()
+        self.game.player_states[2].draw_deck = CardStack()
+        self.game.player_states[3].discard_pile = CardStack()
+        self.game.player_states[3].draw_deck = CardStack()
         winners = self.game.find_winners()
         expected = ['tester3', 'tester4']
         self.assertEqual(winners, expected)
 
         # one winner
-        self.game.player_states[0].hand += [Duchy(), Province()]
+        self.game.player_states[0].hand = [Duchy(), Province()]
+        self.game.player_states[1].hand = []
+        self.game.player_states[2].hand = []
+        self.game.player_states[3].hand = []
+        self.game.player_states[0].discard_pile = CardStack()
+        self.game.player_states[0].draw_deck = CardStack()
+        self.game.player_states[1].discard_pile = CardStack()
+        self.game.player_states[1].draw_deck = CardStack()
+        self.game.player_states[2].discard_pile = CardStack()
+        self.game.player_states[2].draw_deck = CardStack()
+        self.game.player_states[3].discard_pile = CardStack()
+        self.game.player_states[3].draw_deck = CardStack()
         winners = self.game.find_winners()
         expected = ['tester1']
+        self.assertEqual(winners, expected)
+
+        # TIE-BREAKER
+        # equal coins
+        self.game.player_states[0].hand = [Copper()]
+        self.game.player_states[1].hand = [Copper()]
+        self.game.player_states[2].hand = [Copper()]
+        self.game.player_states[3].hand = [Copper()]
+        self.game.player_states[0].discard_pile = CardStack()
+        self.game.player_states[0].draw_deck = CardStack()
+        self.game.player_states[1].discard_pile = CardStack()
+        self.game.player_states[1].draw_deck = CardStack()
+        self.game.player_states[2].discard_pile = CardStack()
+        self.game.player_states[2].draw_deck = CardStack()
+        self.game.player_states[3].discard_pile = CardStack()
+        self.game.player_states[3].draw_deck = CardStack()
+        winners = self.game.find_winners()
+        expected = ['tester1', 'tester2', 'tester3', 'tester4']
+        self.assertEqual(winners, expected)
+
+        #pair with equal coins
+        self.game.player_states[0].hand = []
+        self.game.player_states[1].hand = []
+        self.game.player_states[2].hand = [Silver()]
+        self.game.player_states[3].hand = [Silver()]
+        self.game.player_states[0].discard_pile = CardStack()
+        self.game.player_states[0].draw_deck = CardStack()
+        self.game.player_states[1].discard_pile = CardStack()
+        self.game.player_states[1].draw_deck = CardStack()
+        self.game.player_states[2].discard_pile = CardStack()
+        self.game.player_states[2].draw_deck = CardStack()
+        self.game.player_states[3].discard_pile = CardStack()
+        self.game.player_states[3].draw_deck = CardStack()
+        winners = self.game.find_winners()
+        expected = ['tester3', 'tester4']
+        self.assertEqual(winners, expected)
+
+        # one winner
+        self.game.player_states[0].hand = []
+        self.game.player_states[1].hand = [Gold()]
+        self.game.player_states[2].hand = []
+        self.game.player_states[3].hand = []
+        self.game.player_states[0].discard_pile = CardStack()
+        self.game.player_states[0].draw_deck = CardStack()
+        self.game.player_states[1].discard_pile = CardStack()
+        self.game.player_states[1].draw_deck = CardStack()
+        self.game.player_states[2].discard_pile = CardStack()
+        self.game.player_states[2].draw_deck = CardStack()
+        self.game.player_states[3].discard_pile = CardStack()
+        self.game.player_states[3].draw_deck = CardStack()
+        winners = self.game.find_winners()
+        expected = ['tester2']
         self.assertEqual(winners, expected)
 
     def test_is_pile_empty(self):
