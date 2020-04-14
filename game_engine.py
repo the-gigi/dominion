@@ -43,5 +43,8 @@ class GameEngine:
             self.game_object.end_turn()
             self.advance_player()
 
-        winner = self.find_winner()
-        print(f'{winner.name} won the game!!!')
+        winners = self.find_winner()
+        if len(winners) == 1:
+            print(f'🎉 {winners[0]} won the game!!!')
+        else:
+            print(f'🎉 The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!')

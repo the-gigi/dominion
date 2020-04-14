@@ -25,7 +25,7 @@ def create_game_engine(card_types, players_info: Mapping):
     player_states = {}
     players = []
     for name, player_class in players_info.items():
-        player_state = PlayerState(name)
+        player_state = PlayerState(name, piles)
         player_states[name] = player_state
 
     game = Game(piles, list(player_states.values()))

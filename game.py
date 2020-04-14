@@ -1,3 +1,4 @@
+import copy
 import inspect
 
 import card_util
@@ -134,15 +135,17 @@ class Game(object_model.Game,
                 self.winners = [player_state.name]
                 current_money = self.count_player_money(player_state)
 
-
+    def start_turn(self):
+        """ """
+        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
 
     def end_turn(self):
-        """
+        """ """
+        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
+        print(f'money: {self.count_player_money(self.player_state)}')
+        print(f'supply - gold: {self.piles[Gold]}, silver: {self.piles[Silver]}, copper: {self.piles[Copper]},')
 
-        :return:
-        """
-        self.player_state.sync_personal_state()
-        print(f'name: {self.player_state.name} money: {self.count_player_money(self.player_state)}')
+        print('-' * 20)
 
     @property
     def is_over(self):
@@ -166,7 +169,6 @@ class Game(object_model.Game,
         """ """
         raise NotImplementedError
 
-
     def buy(self, card_type):
         """ """
         if not self._verify_buy(card_type):
@@ -174,7 +176,7 @@ class Game(object_model.Game,
 
         self.piles[card_type] -= 1
         self.player_state.discard_pile.add_to_top([card_type()])
-        self.player_state.sync_personal_state()
+        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
 
     def done(self):
         """ """

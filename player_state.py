@@ -10,7 +10,7 @@ class PlayerState:
 
     """
 
-    def __init__(self, name):
+    def __init__(self, name, supply):
         self.name = name
         self.hand = []
         self.draw_deck = CardStack()
@@ -24,11 +24,15 @@ class PlayerState:
         # How many cards can the player buy
         self.buys = 1
 
-        self._personal_state = PersonalState(hand=copy.deepcopy(self.hand), discard_pile=copy.deepcopy(self.discard_pile))
+        self._personal_state = PersonalState(hand=copy.deepcopy(self.hand),
+                                             discard_pile=copy.deepcopy(self.discard_pile),
+                                             supply=copy.deepcopy(supply))
 
     def dump(self):
         print('Name:', self.name)
         print(self.hand)
+        print(repr(self.discard_pile))
+        print(repr(self.draw_deck))
 
     def _cleanup(self):
         """Discard hand and play area
@@ -64,9 +68,10 @@ class PlayerState:
         self.actions = 1
         print(f'{self.name}: done')
 
-    def sync_personal_state(self):
+    def sync_personal_state(self, supply):
         self.personal_state.discard_pile = CardStack(self.discard_pile.cards[:])
         self.personal_state.hand = self.hand[:]
+        self.personal_state.supply = supply
 
 
     @property

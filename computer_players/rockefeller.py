@@ -13,12 +13,13 @@ class Rockefeller(BasePlayer):
         """
 
         hand = self.game_client.personal_state.hand
+        supply = self.game_client.personal_state.supply
         money = count_money(hand)
-        if money >= Gold.Cost:
+        if supply[Gold] > 0 and money >= Gold.Cost:
             self.game_client.buy(Gold)
-        elif money >= Silver.Cost:
+        elif supply[Silver] > 0 and money >= Silver.Cost:
             self.game_client.buy(Silver)
-        elif money >= Copper.Cost:
+        elif supply[Copper] > 0 and money >= Copper.Cost:
             self.game_client.buy(Copper)
 
         self.game_client.done()

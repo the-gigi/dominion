@@ -59,3 +59,6 @@ class CardStack:
         return the comparison of the two vars
         """
         return self.as_dict() == other.as_dict()
+
+    def __repr__(self):
+        return str(self.as_dict())
