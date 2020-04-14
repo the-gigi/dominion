@@ -142,10 +142,6 @@ class Game(object_model.Game,
     def end_turn(self):
         """ """
         self.player_state.sync_personal_state(copy.deepcopy(self.piles))
-        print(f'money: {self.count_player_money(self.player_state)}')
-        print(f'supply - gold: {self.piles[Gold]}, silver: {self.piles[Silver]}, copper: {self.piles[Copper]},')
-
-        print('-' * 20)
 
     @property
     def is_over(self):
