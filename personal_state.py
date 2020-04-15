@@ -8,6 +8,7 @@ class PersonalState:
         self.discard_pile = discard_pile
         self.supply = supply
         self.draw_deck = draw_deck
+        self.play_area = []
 
     @property
     def money(self):

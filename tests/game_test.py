@@ -14,7 +14,7 @@ class GameTest(unittest.TestCase):
         self.names = ['tester1', 'tester2', 'tester3', 'tester4']
         piles = setup_piles(card_types, len(self.names))
 
-        player_states = [PlayerState(n) for n in self.names]
+        player_states = [PlayerState(n, piles) for n in self.names]
         self.game = Game(piles, player_states)
 
     def test_init(self):
@@ -369,6 +369,27 @@ class GameTest(unittest.TestCase):
         winners = self.game.find_winners()
         expected = ['tester2']
         self.assertEqual(winners, expected)
+
+    def test_play_action_card(self):
+        """
+        create a game with a player with an action card in their hand
+        call play_action_card()
+        check if the card got moved from the hand to the play area
+        """
+        moat = Moat()
+        self.game.player_state.hand = [moat]
+        ok = self.game.play_action_card(moat)
+        self.assertTrue(ok)
+        self.assertNotEqual(self.game.player_state.hand, [moat])
+        self.assertEqual(self.game.player_state.play_area, [moat])
+
+        bureaucrat = Bureaucrat()
+        self.game.player_state.play_area = []
+        self.game.player_state.hand = [bureaucrat]
+        ok = self.game.play_action_card(moat)
+        self.assertFalse(ok)
+        self.assertEqual(self.game.player_state.hand, [bureaucrat])
+        self.assertEqual(self.game.player_state.play_area, [])
 
     def test_is_pile_empty(self):
         self.fail()

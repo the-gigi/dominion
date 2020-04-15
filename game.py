@@ -154,8 +154,25 @@ class Game(object_model.Game,
 
     # GameClient interface
     def play_action_card(self, card):
+        """
+        Verify that the player can play the card
+        Depending on the card, take its action
+        Move the card from the player's hand to the play area
+        """
+        if not self._verify_action(card):
+            return False
+
+        # take action based on card type
+        if type(card) == Moat:
+            self.play_moat()
+
+        # move the card from the player's hand to the play area
+        self.player_state.hand.remove(card)
+        self.player_state.play_area.append(card)
+        return True
+
+    def play_moat(self):
         """ """
-        raise NotImplementedError
 
     def buy(self, card_type):
         """ """

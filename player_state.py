@@ -13,6 +13,7 @@ class PlayerState:
     def __init__(self, name, supply):
         self.name = name
         self.hand = []
+        self.play_area = []
         self.draw_deck = CardStack()
         self.discard_pile = CardStack()
         self.initialize_draw_deck()
@@ -74,6 +75,7 @@ class PlayerState:
         self.personal_state.hand = self.hand[:]
         self.personal_state.draw_deck = self.draw_deck.as_dict()
         self.personal_state.supply = supply
+        self.personal_state.play_area = self.play_area[:]
 
     @property
     def personal_state(self):
