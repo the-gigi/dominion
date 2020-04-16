@@ -41,23 +41,13 @@ class Game(object_model.Game,
 
     @staticmethod
     def count_player_points(player_state):
-        """Count the total victory points in
+        """Count the total amount of coins in
            the player's hand, deck and discard pile
 
-           return the number of victory points
+           return the sum of all the coins
         """
-        vp = 0
         all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
-        for card in all_cards:
-            if isinstance(card, Province):
-                vp += 6
-            elif isinstance(card, Duchy):
-                vp += 3
-            elif isinstance(card, Estate):
-                vp += 1
-            elif isinstance(card, Curse):
-                vp -= 1
-        return vp
+        return card_util.count_points(all_cards)
 
     @staticmethod
     def count_player_money(player_state):

@@ -55,56 +55,56 @@ class GameTest(unittest.TestCase):
         """
         # Player has starting deck (3 Estates)
         player_state = self.game.player_states[0]
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 3)
 
         # Player has Province, Duchy, and Estate
         player_state.hand = [Province()]
         player_state.draw_deck.cards = [Duchy()]
         player_state.discard_pile.cards = [Estate()]
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 10)
 
         # Player only has Provinces
         player_state.hand = [Province(), Province()]
         player_state.draw_deck.cards = [Province()]
         player_state.discard_pile.cards = [Province()]
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 24)
 
         # Player only has Duchys
         player_state.hand = [Duchy(), Duchy(), Duchy()]
         player_state.draw_deck.cards = []
         player_state.discard_pile.cards = [Duchy()]
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 12)
 
         # Player only has Estates
         player_state.hand = []
         player_state.draw_deck.cards = []
         player_state.discard_pile.cards = [Estate()]
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 1)
 
         # Player has no Victory Points
         player_state.hand = []
         player_state.draw_deck.cards = []
         player_state.discard_pile.cards = []
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 0)
 
         # Player has just curses
         player_state.hand = [Curse()]
         player_state.draw_deck.cards = [Curse()] * 4
         player_state.discard_pile.cards = []
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, -5)
 
         # Player has Curses, Provinces, Duchys, and Estates
         player_state.hand = [Curse(), Province(), Duchy()]
         player_state.draw_deck.cards = [Curse()] * 4
         player_state.discard_pile.cards = [Estate()] * 10
-        point_count = self.game.count_player_points(player_state)
+        point_count = card_util.count_points(player_state)
         self.assertEqual(point_count, 14)
 
     def test_count_player_money(self):

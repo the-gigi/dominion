@@ -15,3 +15,10 @@ class PersonalState:
         money = count_money(self.hand + self.discard_pile.cards)
         money += self.draw_deck['Copper'] + 2 * self.draw_deck['Silver'] + 3 * self.draw_deck['Gold']
         return money
+
+    @property
+    def points(self):
+        points = count_points(self.hand + self.discard_pile.cards)
+        points += self.draw_deck['Estate'] + 3 * self.draw_deck['Duchy'] + 6 * self.draw_deck['Province']
+        return points
+

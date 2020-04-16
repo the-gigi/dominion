@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
+import card_util
+
 
 class GameClient(metaclass=ABCMeta):
     @abstractmethod
@@ -59,6 +61,16 @@ class BasePlayer(Player):
         self.name = name
         self.game_client = game_client
         self.events = []
+
+    @property
+    def personal_state(self):
+        return self.game_client.personal_state
+
+    @property
+    def all_cards(self):
+        hand = card_util.as_dict(self.personal_state.hand)
+        draw_deck = card_util.as_dict(self.personal_state.draw_deck.cards)
+        return dict(**hand, **draw_deck, **self.personal_state.discard_pile)
 
     def on_event(self, event):
         self.events.append(event)
