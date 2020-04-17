@@ -25,7 +25,7 @@ class CardStack:
         If n is greater than the number of cards raise a RuntimeError
         """
         if n > len(self.cards):
-            raise RuntimeError(f'There are only {len(self.cards)} cards in the stack.')
+            raise RuntimeError(f'There is/are only {len(self.cards)} card(s) in the stack.')
         return self.cards[:n]
 
     def add_to_top(self, cards):

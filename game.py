@@ -162,7 +162,10 @@ class Game(object_model.Game,
         return True
 
     def play_moat(self):
-        """ """
+        """
+        The active player draws 2 cards and adds them to their hand.
+        """
+        self.player_state.draw_cards(2)
 
     def buy(self, card_type):
         """ """

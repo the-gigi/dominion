@@ -17,7 +17,7 @@ class PlayerState:
         self.draw_deck = CardStack()
         self.discard_pile = CardStack()
         self.initialize_draw_deck()
-        self.draw_new_hand()
+        self.draw_cards(5)
 
         # How many action cards can the player play
         self.actions = 1
@@ -47,16 +47,15 @@ class PlayerState:
         self.draw_deck.cards = [Copper()] * 7 + [Estate()] * 3
         self.draw_deck.shuffle()
 
-    def draw_new_hand(self):
-        """Draw the 5 top cards from the draw deck and add them to the hand"""
-        self.draw_deck.shuffle()
-        card_count = min(5, self.draw_deck.count)
-        self.hand = self.draw_deck.pop(card_count)
-        if card_count < 5:
-            self.draw_deck = self.discard_pile
-            self.draw_deck.shuffle()
+    def draw_cards(self, n):
+        """Draw the top n cards from the draw deck and add them to the hand"""
+        if n <= 0:
+            return
+        if self.draw_deck.count < n:
+            self.discard_pile.shuffle()
+            self.draw_deck.cards += self.discard_pile.cards
             self.discard_pile = CardStack()
-            self.hand += self.draw_deck.pop(5 - card_count)
+        self.hand += self.draw_deck.pop(n)
 
     def done(self):
         """Perform the following:
@@ -65,7 +64,7 @@ class PlayerState:
             - reset actions to 1
         """
         self._cleanup()
-        self.draw_new_hand()
+        self.draw_cards(5)
         self.buys = 1
         self.actions = 1
         print(f'{self.name}: done')
