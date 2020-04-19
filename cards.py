@@ -67,18 +67,6 @@ class Gold(BaseCard):
     Cost = 6
 
 
-class Moat(BaseCard):
-    Type = 'Action'
-    Text = """
-    +2 Cards
-    
-    When another player plays an Attack card, you may first
-    reveal this from your hand, to be unaffected by it.     
-    """
-    Cost = 2
-    Reaction = True
-
-
 class Bureaucrat(BaseCard):
     Type = 'Action'
     Text = """
@@ -148,6 +136,18 @@ class Militia(BaseCard):
     Coins = 2
     Cost = 4
     Reaction = False
+
+
+class Moat(BaseCard):
+    Type = 'Action'
+    Text = """
+    +2 Cards
+
+    When another player plays an Attack card, you may first
+    reveal this from your hand, to be unaffected by it.     
+    """
+    Cost = 2
+    Reaction = True
 
 
 class Spy(BaseCard):

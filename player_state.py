@@ -75,6 +75,8 @@ class PlayerState:
         self.personal_state.draw_deck = self.draw_deck.as_dict()
         self.personal_state.supply = supply
         self.personal_state.play_area = self.play_area[:]
+        self.personal_state.actions = self.actions
+        self.personal_state.buys = self.buys
 
     @property
     def personal_state(self):

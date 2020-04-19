@@ -9,6 +9,8 @@ class PersonalState:
         self.supply = supply
         self.draw_deck = draw_deck
         self.play_area = []
+        self.actions = 1
+        self.buys = 1
 
     @property
     def money(self):

@@ -165,6 +165,8 @@ class Game(object_model.Game,
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(card)
         self.player_state.play_area.append(card)
+
+        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
         return True
 
     def play_moat(self):
