@@ -1,5 +1,18 @@
 # Overview
 
+
+# Running the game
+
+```
+python3 dominion.py
+```
+
+# Testing
+
+```
+python3 -m unittest discover -s . -p '*_test.py' -v
+```
+
 # Concepts
 
 ## Zones
@@ -76,13 +89,12 @@ The game engine is responsible for all the generic aspects of teh game that can 
 
 The game object is where all the domain-specific knowledge exists.
 
-###
-
-
-
-## GameState
+## Player State
 
 The game state is the data that the game object operates on.
+
+### Personal Player State
+
 
 ## Players
 
@@ -110,6 +122,8 @@ Card stacks behave like stacks and allow operations like:
 - peek
 - add on top
 - push to bottom
+
+
 
 # Reference
 
