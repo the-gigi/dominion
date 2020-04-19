@@ -22,13 +22,13 @@ Zones are areas that contain cards. A card is always in exactly one zone.
 ### Supply piles
 
 The kingdom cards, the treasures, the victory cards and the curses are all considered supply piles.
-Each such pile contain cards of the same type and can be implemented as a simple counter  (how many cards 
+Each such pile contain cards of the same type and can be implemented as a simple counter (how many cards
 of this type remain in the pile) 
 
 ### Player hand
 
 The player hand is an unordered collection of cards. The human player may organize and order them for, but that is
-for human display only. It doesn't effect the game state or the other players in any way. The only relevant 
+for human display only. It doesn't affect the game state or the other players in any way. The only relevant
 information is what cards are in the player's hand.
 
 ### Play area
@@ -37,13 +37,13 @@ When a player plays an action card the card moves out of their hand to the play 
 
 ### Draw deck
 
-The draw deck is a stack of cards that the player draws their hands at the beginning of their turn and sometimes more 
-cards during the turn or other players turn. Cards are sometimes put back on top of the draw deck or pushed to the 
+The draw deck is a stack of cards that the player draws their hands from at the beginning of their turn and sometimes more
+cards during their turn or other players' turns. Cards are sometimes put back on top of the draw deck or pushed to the
 bottom of the deck.
 
 ### Player Discard pile
 
-The discard pile is another stack of cards. When the draw deck is exhausted the discard pile is shuffled and all its 
+The discard pile is another stack of cards. When the draw deck is exhausted the discard pile is shuffled and all of its
 cards are added to the draw deck. 
 
 ### Trash
