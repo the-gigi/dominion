@@ -1,9 +1,6 @@
 import copy
-import inspect
-
 import card_util
 import object_model
-from card_stack import CardStack
 from cards import *
 import cards
 
@@ -51,10 +48,11 @@ class Game(object_model.Game,
 
     @staticmethod
     def count_player_money(player_state):
-        """Count the total amount of coins in
-           the player's hand, deck and discard pile
+        """
+        Count the total amount of coins in
+        the player's hand, deck and discard pile
 
-           return the sum of all the coins
+        return the sum of all the coins
         """
         all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
         return card_util.count_money(all_cards)
@@ -79,8 +77,8 @@ class Game(object_model.Game,
         """verify the supply if not exhausted, player has enough money and has at least one buy"""
         if self._is_pile_empty(card_type):
             return False
-
-        amount = card_util.count_money(self.player_state.hand)
+        cm = card_util.count_money
+        amount = cm(self.player_state.hand) + cm(self.player_state.play_area, False)
         if amount < card_type.Cost:
             return False
         return self.player_state.buys > 0
@@ -155,6 +153,12 @@ class Game(object_model.Game,
         # take action based on card type
         if type(card) == Moat:
             self.play_moat()
+        elif type(card) == Chancellor:
+            self.play_chancellor()
+        elif type(card) == Festival:
+            self.play_festival()
+        elif type(card) == Village:
+            self.play_village()
 
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(card)
@@ -164,8 +168,46 @@ class Game(object_model.Game,
     def play_moat(self):
         """
         The active player draws 2 cards and adds them to their hand.
+
+        Counter - When another player plays an Attack card, you may first
+        reveal this from your hand, to be unaffected by it.
         """
         self.player_state.draw_cards(2)
+
+    def play_chancellor(self):
+        """
+        +$2
+
+        You may immediately put your deck into your discard pile.
+        """
+        # TO DO - Ask player if they want to put their deck into their discard pile
+
+    def play_festival(self):
+        """
+        +2 Actions
+        +1 Buy
+        +$2
+        """
+        self.player_state.actions += 2
+        self.player_state.buys += 1
+
+    def play_village(self):
+        """
+        +1 Card
+        +2 Actions
+        """
+        self.player_state.hand += self.player_state.draw_deck.cards[0]
+        self.player_state.actions += 2
+
+    def play_council_room(self):
+        """
+        +4 Cards
+        +1 Buy
+
+        Each other player draws a card.
+        """
+        self.player_state.hand += self.player_state.draw_deck[:4]
+        self.player_state.buys += 1
 
     def buy(self, card_type):
         """ """

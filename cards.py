@@ -98,6 +98,7 @@ class Chancellor(BaseCard):
     
     You may immediately put your deck into your discard pile.
     """
+    Coins = 2
     Cost = 3
     Reaction = False
 
@@ -119,8 +120,9 @@ class Festival(BaseCard):
     Text = """
     +2 Actions
     +1 Buy
-    +2 Coins
+    +$2
     """
+    Coins = 2
     Cost = 5
     Reaction = False
 
@@ -143,6 +145,7 @@ class Militia(BaseCard):
     
     Each player discards down to 3 cards in his hand.
     """
+    Coins = 2
     Cost = 4
     Reaction = False
 

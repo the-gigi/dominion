@@ -30,26 +30,16 @@ def count_points(cards):
     """
     vp = 0
     for card in cards:
-        if isinstance(card, Province):
-            vp += 6
-        elif isinstance(card, Duchy):
-            vp += 3
-        elif isinstance(card, Estate):
-            vp += 1
-        elif isinstance(card, Curse):
-            vp -= 1
+        vp += card.Points
     return vp
 
 
-def count_money(cards):
+def count_money(cards, only_treasures=True):
     amount = 0
     for card in cards:
-        if isinstance(card, Gold):
-            amount += 3
-        elif isinstance(card, Silver):
-            amount += 2
-        elif isinstance(card, Copper):
-            amount += 1
+        if only_treasures and card.Type != 'Treasure':
+            continue
+        amount += card.Coins
     return amount
 
 
