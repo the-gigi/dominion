@@ -159,6 +159,8 @@ class Game(object_model.Game,
             self.play_festival()
         elif type(card) == Village:
             self.play_village()
+        elif type(card) == CouncilRoom:
+            self.play_council_room()
 
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(card)
@@ -206,8 +208,10 @@ class Game(object_model.Game,
 
         Each other player draws a card.
         """
-        self.player_state.hand += self.player_state.draw_deck[:4]
+        self.player_state.draw_cards(3)
         self.player_state.buys += 1
+        for player_state in self.player_states:
+            player_state.draw_cards(1)
 
     def buy(self, card_type):
         """ """

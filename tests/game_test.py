@@ -413,9 +413,22 @@ class GameTest(unittest.TestCase):
         self.assertEqual(self.game.player_state.hand, [bureaucrat])
         self.assertEqual(self.game.player_state.play_area, [])
 
-        chancellor = Chancellor()
+        council_room = CouncilRoom()
+        self.game.player_state.buys = 1
         self.game.player_state.play_area = []
-
+        for player_state in self.game.player_states:
+            player_state.hand = []
+            player_state.draw_deck.cards =[Copper(), Silver(), Gold(), Estate()]
+        self.game.player_state.hand = [council_room]
+        ok = self.game.play_action_card(council_room)
+        self.assertTrue(ok)
+        for i, player_state in enumerate(self.game.player_states):
+            if self.game.active_player_index == i:
+                self.assertEqual(len(player_state.hand), 4)
+                self.assertEqual(player_state.buys, 2)
+            else:
+                self.assertEqual(len(player_state.hand), 1)
+                self.assertEqual(player_state.buys, 1)
 
     def test_is_pile_empty(self):
         """ """
