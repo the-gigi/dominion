@@ -55,6 +55,8 @@ class PlayerState:
             self.discard_pile.shuffle()
             self.draw_deck.cards += self.discard_pile.cards
             self.discard_pile = CardStack()
+            if self.draw_deck.count < n:
+                n = self.draw_deck.count
         self.hand += self.draw_deck.pop(n)
 
     def done(self):

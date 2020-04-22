@@ -166,6 +166,7 @@ class Game(object_model.Game,
         self.player_state.hand.remove(card)
         self.player_state.play_area.append(card)
 
+        self.player_state.actions -= 1
         self.player_state.sync_personal_state(copy.deepcopy(self.piles))
         return True
 
