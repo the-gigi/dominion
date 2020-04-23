@@ -12,28 +12,42 @@ class Game(object_model.Game,
     In this case Dominion
     """
 
-    def __init__(self, piles, player_states):
+    def __init__(self, piles):
         # The state of the game
         self.piles = piles
-        self.player_states = player_states
 
         # The active player
         self.active_player_index = 0
 
+        self.players = []
+
+    @property
+    def player(self):
+        return self.players[self.active_player_index][0]
+
+    def run(self, players):
+        self.players = players
+
+        while not self.is_over:
+            self.player.play()
+            self.end_turn()
+            self.active_player_index = (self.active_player_index + 1) % len(self.players)
+
+        winners = self.find_winners()
+        if len(winners) == 1:
+            print(f'🎉 {winners[0]} won the game!!!')
+        else:
+            print(f'🎉 The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!')
+
     @property
     def player_state(self):
-        return self.player_states[self.active_player]
+        return self.players[self.active_player_index][1]
 
     @property
     def personal_player_state(self):
         return self.player_state.personal_state
 
-    @property
-    def active_player(self):
-        return self.active_player_index
-
-    @active_player.setter
-    def active_player(self, player_index):
+    def set_active_player_index(self, player_index):
         self.active_player_index = player_index
 
     @staticmethod
@@ -96,7 +110,7 @@ class Game(object_model.Game,
         winners = []
         current_vp = 0
         current_coins = 0
-        for player_state in self.player_states:
+        for _, player_state in self.players:
             vp = self.count_player_points(player_state)
             coins = self.count_player_money(player_state)
             if not winners:
@@ -215,6 +229,13 @@ class Game(object_model.Game,
         self.player_state.buys += 1
         for player_state in self.player_states:
             player_state.draw_cards(1)
+
+    def play_militia(self):
+        """
+        +$2
+
+        Each player discards down to 3 cards in his hand.
+        """
 
     def buy(self, card_type):
         """ """
