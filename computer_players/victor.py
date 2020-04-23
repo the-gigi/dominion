@@ -25,5 +25,5 @@ class Victor(BasePlayer):
         print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]},')
         print('-' * 20)
 
-    def react(self, attack):
-        return False
+    def respond(self, request):
+        return

@@ -56,7 +56,6 @@ class TheGuy(BasePlayer):
         supply = self.personal_state.supply
         money = count_money(hand)
 
-        play = self.game_client.play_action_card
         self.play_no_brainers(hand)
 
         self.play_brainers(hand)
@@ -70,5 +69,6 @@ class TheGuy(BasePlayer):
         print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]},')
         print('-' * 20)
 
-    def react(self, attack):
-        return False
+    def respond(self, request):
+        return
+
