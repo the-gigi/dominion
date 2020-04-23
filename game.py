@@ -1,4 +1,6 @@
 import copy
+import re
+
 import card_util
 import object_model
 from cards import *
@@ -22,8 +24,16 @@ class Game(object_model.Game,
         self.players = []
 
     @property
+    def player_states(self):
+        return [p[1] for p in self.players]
+
+    @property
     def player(self):
         return self.players[self.active_player_index][0]
+
+    @property
+    def other_players(self):
+        return [p for i, p in enumerate(self.players) if i != self.active_player_index]
 
     def run(self, players):
         self.players = players
@@ -164,17 +174,21 @@ class Game(object_model.Game,
         if not self._verify_action(card):
             return False
 
-        # take action based on card type
-        if type(card) == Moat:
-            self.play_moat()
-        elif type(card) == Chancellor:
-            self.play_chancellor()
-        elif type(card) == Festival:
-            self.play_festival()
-        elif type(card) == Village:
-            self.play_village()
-        elif type(card) == CouncilRoom:
-            self.play_council_room()
+        card_type = re.sub(r'(?<!^)(?=[A-Z])', '_', card.Name).lower()
+        handler = getattr(self, 'play_' + card_type)
+        handler()
+
+        # # take action based on card type
+        # if type(card) == Moat:
+        #     self.play_moat()
+        # elif type(card) == Chancellor:
+        #     self.play_chancellor()
+        # elif type(card) == Festival:
+        #     self.play_festival()
+        # elif type(card) == Village:
+        #     self.play_village()
+        # elif type(card) == CouncilRoom:
+        #     self.play_council_room()
 
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(card)
@@ -236,6 +250,33 @@ class Game(object_model.Game,
 
         Each player discards down to 3 cards in his hand.
         """
+
+        def validate_response(cards):
+            """The expected response is a set of 3 cards from the player's hand
+
+            If the response is different return None
+            """
+            if not isinstance(cards, set) or len(cards) != 3:
+                return None
+
+            for card in cards:
+                if not card in player.hand:
+                    return None
+
+            return cards
+
+        for player, player_state in self.other_players:
+            response = player.respond(Militia)
+            cards = validate_response(response)
+            if cards is None:
+                discarded = player_state.hand[3:]
+                new_hand = player_state.hand[:3]
+            else:
+                new_hand = cards
+                discarded = [c for c in player.hand if c not in new_hand]
+
+            player_state.hand = new_hand
+            player_state.discard_pile.add_to_top(discarded)
 
     def buy(self, card_type):
         """ """
