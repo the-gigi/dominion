@@ -47,7 +47,7 @@ class Player(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def respond(self, request):
+    def respond(self, action, *args):
         """The player should return a proper response to the specific request
 
         this method may be called during the play of the active player
@@ -84,3 +84,6 @@ class BasePlayer(Player):
 
     def on_event(self, event):
         self.events.append(event)
+
+    def respond(self, action, *args):
+        return

@@ -29,5 +29,5 @@ class Rockefeller(BasePlayer):
         print(f'supply - gold: {supply[Gold]}, silver: {supply[Silver]}, copper: {supply[Copper]},')
         print('-' * 20)
 
-    def respond(self, request):
+    def respond(self, action, *args):
         return

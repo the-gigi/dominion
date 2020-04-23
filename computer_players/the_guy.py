@@ -69,6 +69,6 @@ class TheGuy(BasePlayer):
         print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]},')
         print('-' * 20)
 
-    def respond(self, request):
+    def respond(self, request, *args):
         return
 

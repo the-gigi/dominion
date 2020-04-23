@@ -13,7 +13,7 @@ class Simpleton(BasePlayer):
         """
         self.game_client.done()
 
-    def respond(self, request):
+    def respond(self, request, *args):
         return
 
 
