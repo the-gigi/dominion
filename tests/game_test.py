@@ -14,8 +14,10 @@ class GameTest(unittest.TestCase):
         self.names = ['tester1', 'tester2', 'tester3', 'tester4']
         piles = setup_piles(card_types, len(self.names))
 
-        player_states = [PlayerState(n, piles) for n in self.names]
-        self.game = Game(piles, player_states)
+
+        players_states = [PlayerState(n, piles) for n in self.names]
+        self.game = Game(piles)
+        self.game.players = [(None, p) for p in players_states]
 
     def test_init(self):
         pass
@@ -358,7 +360,7 @@ class GameTest(unittest.TestCase):
         expected = ['tester1', 'tester2', 'tester3', 'tester4']
         self.assertEqual(winners, expected)
 
-        #pair with equal coins
+        # pair with equal coins
         self.game.player_states[0].hand = []
         self.game.player_states[1].hand = []
         self.game.player_states[2].hand = [Silver()]
@@ -414,11 +416,12 @@ class GameTest(unittest.TestCase):
         self.assertEqual(self.game.player_state.play_area, [])
 
         council_room = CouncilRoom()
+        self.game.player_state.actions = 1
         self.game.player_state.buys = 1
         self.game.player_state.play_area = []
         for player_state in self.game.player_states:
             player_state.hand = []
-            player_state.draw_deck.cards =[Copper(), Silver(), Gold(), Estate()]
+            player_state.draw_deck.cards = [Copper(), Silver(), Gold(), Estate()]
         self.game.player_state.hand = [council_room]
         ok = self.game.play_action_card(council_room)
         self.assertTrue(ok)
