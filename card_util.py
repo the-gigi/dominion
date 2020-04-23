@@ -8,6 +8,7 @@ from cards import *
 def get_card_types():
     return [cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard]
 
+
 def as_dict(cards):
     """
     Create a dict where the keys are card class and the value is the number of cards of this type
