@@ -37,8 +37,6 @@ class Napoleon(BasePlayer):
             elif money == 5:
                 if supply[Duchy] > 0 and supply[Province] < 4:
                     buy(Duchy)
-                elif supply[Festival] > 0:
-                    buy(Festival)
             elif money >= 4:
                 if supply[Militia] > 0:
                     buy(Militia)

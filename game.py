@@ -120,7 +120,7 @@ class Game(object_model.Game,
         winners = []
         current_vp = 0
         current_coins = 0
-        for _, player_state in self.players:
+        for player_state in self.player_states:
             vp = self.count_player_points(player_state)
             coins = self.count_player_money(player_state)
             if not winners:
@@ -251,32 +251,62 @@ class Game(object_model.Game,
         Each player discards down to 3 cards in his hand.
         """
 
-        def validate_response(cards):
+        def choose_hand(response):
             """The expected response is a set of 3 cards from the player's hand
 
             If the response is different return None
             """
+            if isinstance(response, Moat):
+                if response in player.hand:
+                    return None
+
             if not isinstance(cards, set) or len(cards) != 3:
-                return None
+                return player.hand[:3]
 
             for card in cards:
-                if not card in player.hand:
-                    return None
+                if card not in player.hand:
+                    return player.hand[:3]
 
             return cards
 
         for player, player_state in self.other_players:
             response = player.respond(Militia)
-            cards = validate_response(response)
-            if cards is None:
-                discarded = player_state.hand[3:]
-                new_hand = player_state.hand[:3]
-            else:
-                new_hand = cards
-                discarded = [c for c in player.hand if c not in new_hand]
+            hand = choose_hand(response)
+            if hand is None:
+                break
+            discarded = [c for c in player.hand if c not in hand]
 
-            player_state.hand = new_hand
+            player_state.hand = hand
             player_state.discard_pile.add_to_top(discarded)
+
+    def play_bureaucrat(self):
+        """
+            Gain a silver card; put it on top of your deck.
+            Each other player reveals a Victory card from
+            his hand and puts it on top of his deck (or reveals
+            a hand with no Victory cards).
+        """
+
+        def choose_victory(response):
+            is_victory = response.Type == "Victory"
+            in_hand = response in player_state.hand
+            victory = response if is_victory and in_hand else None
+            return victory
+
+        if self._is_pile_empty(Silver):
+            self.piles[Silver] -= 1
+            self.player_state.draw_deck.add_to_top([Silver()])
+        for player, player_state in self.other_players:
+            response = player.respond(Bureaucrat)
+            victory = choose_victory(response)
+            if victory is not None:
+                player_state.draw_deck.add_to_top([victory])
+                player_state.hand.remove(victory)
+            rest = (p for p in self.other_players + self.player if p != player)
+            event = victory if victory else player_state.hand
+            for p in rest:
+                p.on_event(event)
+
 
     def buy(self, card_type):
         """ """
