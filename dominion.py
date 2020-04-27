@@ -16,11 +16,11 @@ def main():
     # TEMPORARY. FOR TESTING
     if not Militia in card_types:
         card_types.append(Militia)
-    players_info = dict(Jack=Simpleton,
-                        Vicky=Victor,
+    players_info = dict(Vicky=Victor,
                         The_Rock=Rockefeller,
                         Guy=TheGuy,
-                        Dynamite=Napoleon)
+                        Dynamite=Napoleon,
+                        Dynamite2=Napoleon)
 
 
     start_game(card_types, players_info)

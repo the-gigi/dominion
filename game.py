@@ -41,6 +41,13 @@ class Game(object_model.Game,
         while not self.is_over:
             self.player.play()
             self.end_turn()
+
+            supply = self.piles
+            points = self.count_player_points(self.player_state)
+            print(f'points: {points}')
+            print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]}, silver: {supply[Silver]}')
+            print('-' * 20)
+
             self.active_player_index = (self.active_player_index + 1) % len(self.players)
 
         winners = self.find_winners()
@@ -99,13 +106,18 @@ class Game(object_model.Game,
 
     def _verify_buy(self, card_type):
         """verify the supply if not exhausted, player has enough money and has at least one buy"""
+        if self.player_state.buys < 1:
+            return False
+
         if self._is_pile_empty(card_type):
             return False
         cm = card_util.count_money
-        amount = cm(self.player_state.hand) + cm(self.player_state.play_area, False)
+        amount = cm(self.player_state.hand) + cm(self.player_state.play_area, False) - self.player_state.used_money
         if amount < card_type.Cost:
             return False
-        return self.player_state.buys > 0
+
+        self.player_state.used_money += card_type.Cost
+        return True
 
     # Game interface
     def find_winners(self):
@@ -139,12 +151,9 @@ class Game(object_model.Game,
                     winners += [player_state.name]
         return winners
 
-    def start_turn(self):
-        """ """
-        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
-
     def end_turn(self):
         """ """
+        self.player_state.used_money = 0
         self.player_state.sync_personal_state(copy.deepcopy(self.piles))
 
     @property
@@ -251,33 +260,34 @@ class Game(object_model.Game,
         Each player discards down to 3 cards in his hand.
         """
 
-        def choose_hand(response):
+        def choose_hand():
             """The expected response is a set of 3 cards from the player's hand
 
             If the response is different return None
             """
             if isinstance(response, Moat):
-                if response in player.hand:
+                if response in player_state.hand:
                     return None
 
-            if not isinstance(cards, set) or len(cards) != 3:
-                return player.hand[:3]
+            if not isinstance(response, set) or len(response) != 3:
+                return player_state.hand[:3]
 
-            for card in cards:
-                if card not in player.hand:
-                    return player.hand[:3]
+            for card in response:
+                if card not in player_state.hand:
+                    return player_state.hand[:3]
 
-            return cards
+            return response
 
         for player, player_state in self.other_players:
             response = player.respond(Militia)
-            hand = choose_hand(response)
+            hand = choose_hand()
             if hand is None:
                 break
-            discarded = [c for c in player.hand if c not in hand]
+            discarded = [c for c in player_state.hand if c not in hand]
 
             player_state.hand = hand
             player_state.discard_pile.add_to_top(discarded)
+            player_state.sync_personal_state(self.piles)
 
     def play_bureaucrat(self):
         """
@@ -307,7 +317,6 @@ class Game(object_model.Game,
             for p in rest:
                 p.on_event(event)
 
-
     def buy(self, card_type):
         """ """
         if not self._verify_buy(card_type):
@@ -315,6 +324,7 @@ class Game(object_model.Game,
 
         self.piles[card_type] -= 1
         self.player_state.discard_pile.add_to_top([card_type()])
+        self.player_state.buys -= 1
         self.player_state.sync_personal_state(copy.deepcopy(self.piles))
 
     def done(self):

@@ -6,10 +6,6 @@ from game_client import GameClient
 from object_model import BasePlayer
 from player_state import PlayerState
 
-copper_count = 60
-silver_count = 40
-gold_count = 30
-
 
 def create_player(name, player_class: type(BasePlayer), player_state, game):
     game_client = GameClient(player_state.personal_state, game)
@@ -31,6 +27,4 @@ def start_game(card_types, players_info: Mapping):
         player_state = player_states[name]
         players.append((create_player(name, player_class, player_state, game), player_states[name]))
 
-
     game.run(players)
-

@@ -25,6 +25,9 @@ class PlayerState:
         # How many cards can the player buy
         self.buys = 1
 
+        # How much money did the player used in the current turn
+        self.used_money = 0
+
         self._personal_state = PersonalState(hand=copy.deepcopy(self.hand),
                                              discard_pile=copy.deepcopy(self.discard_pile),
                                              draw_deck=self.draw_deck.as_dict(),
@@ -44,7 +47,10 @@ class PlayerState:
 
     def initialize_draw_deck(self):
         """Add 7 coppers and 3 estates to the draw deck and shuffle it"""
-        self.draw_deck.cards = [Copper()] * 7 + [Estate()] * 3
+        for i in range(7):
+            self.draw_deck.cards.append(Copper())
+        for i in range(3):
+            self.draw_deck.cards.append(Estate())
         self.draw_deck.shuffle()
 
     def draw_cards(self, n):
@@ -79,6 +85,7 @@ class PlayerState:
         self.personal_state.play_area = self.play_area[:]
         self.personal_state.actions = self.actions
         self.personal_state.buys = self.buys
+        self.personal_state.used_money = self.used_money
 
     @property
     def personal_state(self):

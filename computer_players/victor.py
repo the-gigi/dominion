@@ -10,7 +10,7 @@ class Victor(BasePlayer):
         """
         hand = self.personal_state.hand
         supply = self.personal_state.supply
-        money = count_money(hand)
+        money = count_money(hand) - self.personal_state.used_money
         if supply[Province] > 0 and money >= Province.Cost:
             self.game_client.buy(Province)
         elif supply[Duchy] > 0 and money >= Duchy.Cost:
@@ -19,11 +19,6 @@ class Victor(BasePlayer):
             self.game_client.buy(Estate)
 
         self.game_client.done()
-
-        supply = self.personal_state.supply
-        print(f'points: {self.personal_state.points}')
-        print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]},')
-        print('-' * 20)
 
     def respond(self, request, *args):
         return

@@ -1,10 +1,31 @@
 # Overview
 
 
+# Installation
+
+## Pre-requisites
+
+- Install [pyenv](https://github.com/pyenv/pyenv) or [pyenv-win](https://github.com/pyenv-win/pyenv-win)
+- Install [poetry](https://python-poetry.org/docs/#installation)
+
+Create a Python 3.8.2 environment
+
+```
+$ pyenv install 3.8.2
+
+$ pyenv local
+
+$ poetry env use 3.8.2
+
+$ poetry install
+
+```
+
+
 # Running the game
 
 ```
-python3 dominion.py
+poetry run python dominion.py
 ```
 
 # Testing

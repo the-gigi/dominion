@@ -28,10 +28,6 @@ class Game(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def start_turn(self):
-        pass
-
-    @abstractmethod
     def end_turn(self):
         pass
 

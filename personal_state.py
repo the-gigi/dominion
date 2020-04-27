@@ -11,6 +11,7 @@ class PersonalState:
         self.play_area = []
         self.actions = 1
         self.buys = 1
+        self.used_money = 0
 
     @property
     def money(self):
@@ -20,7 +21,7 @@ class PersonalState:
 
     @property
     def points(self):
-        points = count_points(self.hand + self.discard_pile.cards)
+        points = count_points(self.hand + self.play_area + self.discard_pile.cards)
         points += self.draw_deck['Estate'] + 3 * self.draw_deck['Duchy'] + 6 * self.draw_deck['Province']
         return points
 

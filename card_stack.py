@@ -9,14 +9,19 @@ class CardStack:
     def __init__(self, cards=()):
         self.cards = list(cards)
 
+    def invariant(self):
+        assert(len(self.cards) == len(set(self.cards)))
+
     def shuffle(self):
         """Shuffle the cards in the stack and return the stack"""
         random.shuffle(self.cards)
+        self.invariant()
 
     def pop(self, n):
         """Take n cards from the top of the deck and return them"""
         cards = self.peek(n)
         self.cards = self.cards[n:]
+        self.invariant()
         return cards
 
     def peek(self, n):
@@ -24,17 +29,23 @@ class CardStack:
 
         If n is greater than the number of cards raise a RuntimeError
         """
+        self.invariant()
         if n > len(self.cards):
             raise RuntimeError(f'There is/are only {len(self.cards)} card(s) in the stack.')
+        self.invariant()
         return self.cards[:n]
 
     def add_to_top(self, cards):
         """Add the cards to the top of the stack """
+        self.invariant()
         self.cards = cards + self.cards
+        self.invariant()
 
     def add_to_bottom(self, cards):
         """Add the cards to the bottom of the stack """
+        self.invariant()
         self.cards += cards
+        self.invariant()
 
     @property
     def count(self):
