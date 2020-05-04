@@ -1,6 +1,6 @@
 # Overview
 
-
+This project is a Python implementation of the well-known card game [Dominion](https://en.wikipedia.org/wiki/Dominion_%28card_game%29)
 # Installation
 
 ## Pre-requisites
@@ -116,16 +116,53 @@ The game state is the data that the game object operates on.
 
 ### Personal Player State
 
+The personal game state is the state that each player is allowed to see.
+The game frequently syncs the personal game state to reflect the real game state
+
 
 ## Players
 
 There are two types of players: human players and computer players (a.k.a AI).
+From the game's point of view they are identical and the interaction is
+through the Player interface
+
+```
+class Player(metaclass=ABCMeta):
+    @abstractmethod
+    def play(self):
+        pass
+
+    @abstractmethod
+    def respond(self, action, *args):
+        """The player should return a proper response to the specific request
+
+        this method may be called during the play of the active player
+        while they play an action card on the active player and/or other
+        players.
+
+        Example:
+            - in response to militia card all other players must discard to 3 cards
+            - in response to an attack card, each player with  moat may block the attack
+            - in response to a thief, the active player must select if/who to steal from
+        """
+        pass
+
+    @abstractmethod
+    def on_event(self, event):
+        pass
+```
 
 ### Human players
 
-Human players
+Human players will use a user interface client program that understands the Dominion protocol,
+display relevant information to the human player and interact with the game on behalf of the
+human via the Player interface.
 
 ### Computer players
+
+Computer players implement the Player interface as well and implement some algorithm.
+There are several computer players that come with the game. check out the `computer_players`
+directory.
 
 ## Cards
 
@@ -143,8 +180,6 @@ Card stacks behave like stacks and allow operations like:
 - peek
 - add on top
 - push to bottom
-
-
 
 # Reference
 
