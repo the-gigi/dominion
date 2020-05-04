@@ -24,7 +24,6 @@ class BaseComputerPlayer(BasePlayer):
         if money >= card_type.Cost and self.personal_state.supply[card_type] > 0 and condition():
             ok = self.game_client.buy(card_type)
             return ok
-            return True
 
         return False
 

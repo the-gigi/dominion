@@ -1,5 +1,6 @@
 from computer_players.base_computer_player import BaseComputerPlayer
 from player_state import *
+import random
 
 
 class Napoleon(BaseComputerPlayer):
@@ -8,10 +9,14 @@ class Napoleon(BaseComputerPlayer):
             for card in hand:
                 if isinstance(card, Militia):
                     self.play_card(card, hand)
+                elif isinstance(card, Spy):
+                    self.play_card(card, hand)
 
     def buy(self, supply, money, buys):
         if money == 4:
-            return self.buy_card(money, Militia)
+            number = random.randint(0, 2)
+            card = Militia if number == 1 else Spy
+            return self.buy_card(money, card)
 
         return False
 
@@ -20,5 +25,15 @@ class Napoleon(BaseComputerPlayer):
         hand.remove(card)
 
     def respond(self, request, *args):
-        return
-
+        if request == Spy:
+            top_cards = args[0]
+            response = {}
+            for name, top_card in top_cards.items():
+                response[name] = 'put_back'
+                if name == self.name:
+                    if top_card.Type in ('Victory', 'Curse'):
+                        response[name] = 'discard'
+                else:
+                    if top_card.Type not in ('Victory', 'Curse'):
+                        response[name] = 'discard'
+            return response

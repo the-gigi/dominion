@@ -45,7 +45,8 @@ class Game(object_model.Game,
             supply = self.piles
             points = self.count_player_points(self.player_state)
             print(f'points: {points}')
-            print(f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]}, silver: {supply[Silver]}')
+            print(
+                f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]}, silver: {supply[Silver]}')
             print('-' * 20)
 
             self.active_player_index = (self.active_player_index + 1) % len(self.players)
@@ -187,18 +188,6 @@ class Game(object_model.Game,
         handler = getattr(self, 'play_' + card_type)
         handler()
 
-        # # take action based on card type
-        # if type(card) == Moat:
-        #     self.play_moat()
-        # elif type(card) == Chancellor:
-        #     self.play_chancellor()
-        # elif type(card) == Festival:
-        #     self.play_festival()
-        # elif type(card) == Village:
-        #     self.play_village()
-        # elif type(card) == CouncilRoom:
-        #     self.play_council_room()
-
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(card)
         self.player_state.play_area.append(card)
@@ -238,7 +227,7 @@ class Game(object_model.Game,
         +1 Card
         +2 Actions
         """
-        self.player_state.hand += self.player_state.draw_deck.cards[0]
+        self.player_state.draw_cards(1)
         self.player_state.actions += 2
 
     def play_council_room(self):
@@ -316,6 +305,28 @@ class Game(object_model.Game,
             event = victory if victory else player_state.hand
             for p in rest:
                 p.on_event(event)
+
+    def play_spy(self):
+        """+1 Card
+        +1 Action
+
+        Each player (including you) reveals the top card of his deck
+        and either discards it or puts it back, your choice.
+        """
+
+        self.player_state.draw_cards(1)
+        self.player_state.actions += 1
+
+        top_cards = {}
+        for player_state in self.player_states:
+            player_state.reload_deck(1)
+            top_card = player_state.draw_deck.cards[0]
+            top_cards[player_state.name] = top_card
+        response = self.player.respond(Spy, top_cards)
+        for player_state in self.player_states:
+            if response[player_state.name] == 'discard':
+                card = player_state.draw_deck.pop(1)
+                player_state.discard_pile.cards += card
 
     def buy(self, card_type):
         """ """
