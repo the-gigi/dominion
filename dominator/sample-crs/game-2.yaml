@@ -1,0 +1,4 @@
+apiVersion: dominion.org/v1
+kind: Game
+metadata:
+  name: game-2
