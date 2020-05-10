@@ -328,6 +328,35 @@ class Game(object_model.Game,
                 card = player_state.draw_deck.pop(1)
                 player_state.discard_pile.cards += card
 
+    def play_thief(self):
+        """ Each other player reveals the top 2 cards of his deck.
+        If they revealed any Treasure cards, they trash one of them that you choose.
+        You may gain any or all of these trashed cards.
+        They discard the other revealed cards.
+        """
+        treasure_dict = {}
+        for name, player_state in self.other_players:
+            top_2 = player_state.draw_deck.peek(2)
+            treasures = [c for c in top_2 if c.Type == 'Treasure']
+            treasure_dict[name] = treasures
+        response = self.player.respond(Thief, treasure_dict)
+        for name, player_state in self.other_players:
+            index, action = response[name]
+            top_2 = player_state.draw_deck.pop(2)
+            discard = player_state.discard_pile.add_to_top
+            gain = self.player_state.discard_pile.add_to_top
+            if index == 0:
+                discard(top_2[1])
+                if action == 'gain':
+                    gain(top_2[0])
+            elif index == 1:
+                discard(top_2[0])
+                if action == 'gain':
+                    gain(top_2[1])
+            else:
+                discard(top_2[0])
+                discard(top_2[1])
+
     def buy(self, card_type):
         """ """
         if not self._verify_buy(card_type):

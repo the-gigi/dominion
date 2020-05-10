@@ -10,6 +10,7 @@ class CardStack:
         self.cards = list(cards)
 
     def invariant(self):
+        # Verifies that there are only unique cards in a stack of cards (no copies of cards).
         assert(len(self.cards) == len(set(self.cards)))
 
     def shuffle(self):
