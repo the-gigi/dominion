@@ -1,8 +1,8 @@
 from collections import defaultdict
 
-import cards
+from dominion import cards
 import inspect
-from cards import *
+from dominion.cards import *
 
 
 def get_card_types():

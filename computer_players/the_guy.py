@@ -1,9 +1,8 @@
 from random import randint
 
 from computer_players.base_computer_player import BaseComputerPlayer
-from card_util import count_money
-from player_state import *
-
+from dominion.card_util import count_money
+from dominion.cards import *
 
 class TheGuy(BaseComputerPlayer):
     def play_action_cards(self, hand):

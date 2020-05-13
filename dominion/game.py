@@ -1,10 +1,8 @@
 import copy
 import re
 
-import card_util
-import object_model
-from cards import *
-import cards
+from dominion import card_util, cards, object_model
+from dominion.cards import *
 
 
 class Game(object_model.Game,

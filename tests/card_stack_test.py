@@ -1,4 +1,4 @@
-from card_stack import *
+from dominion.card_stack import *
 import unittest
 
 

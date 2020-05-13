@@ -1,5 +1,5 @@
 from computer_players.base_computer_player import BaseComputerPlayer
-from player_state import *
+from dominion.player_state import *
 import random
 
 

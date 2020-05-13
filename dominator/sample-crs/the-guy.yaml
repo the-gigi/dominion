@@ -1,0 +1,8 @@
+apiVersion: dominion.org/v1
+kind: Player
+metadata:
+  name: the-guy
+spec:
+  name: TheGuy
+  playerType: human
+

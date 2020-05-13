@@ -1,8 +1,8 @@
 import copy
 
-from card_stack import CardStack
-from cards import *
-from personal_state import PersonalState
+from dominion.card_stack import CardStack
+from dominion.cards import *
+from dominion.personal_state import PersonalState
 
 
 class PlayerState:

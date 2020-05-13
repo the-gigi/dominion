@@ -1,10 +1,7 @@
-import random
-
-from card_stack import CardStack
-from card_util import *
-from game import Game
-from cards import *
-from player_state import PlayerState
+from dominion.card_stack import CardStack
+from dominion.card_util import *
+from dominion.cards import *
+from dominion.player_state import PlayerState
 
 import unittest
 

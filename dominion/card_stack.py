@@ -1,8 +1,6 @@
-from collections import defaultdict
 import random
 
-import card_util
-from cards import *
+from dominion import card_util
 
 
 class CardStack:

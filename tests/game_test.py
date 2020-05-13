@@ -1,9 +1,8 @@
-import card_util
-from card_util import get_card_types, setup_piles
-from game import Game
-from cards import *
-from player_state import PlayerState
-from card_stack import *
+from dominion.card_util import get_card_types, setup_piles
+from dominion.game import Game
+from dominion.cards import *
+from dominion.player_state import PlayerState
+from dominion.card_stack import *
 
 import unittest
 

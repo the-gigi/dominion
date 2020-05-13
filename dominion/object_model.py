@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-import card_util
+from dominion import card_util
 
 
 class GameClient(metaclass=ABCMeta):

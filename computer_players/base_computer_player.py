@@ -1,6 +1,6 @@
-from card_util import count_money
-from object_model import BasePlayer
-from player_state import *
+from dominion.card_util import count_money
+from dominion.cards import *
+from dominion.object_model import BasePlayer
 
 
 class BaseComputerPlayer(BasePlayer):

@@ -1,10 +1,10 @@
 from collections import Mapping
 
-from card_util import setup_piles
-from game import Game
-from game_client import GameClient
-from object_model import BasePlayer
-from player_state import PlayerState
+from dominion.card_util import setup_piles
+from dominion.game import Game
+from dominion.game_client import GameClient
+from dominion.object_model import BasePlayer
+from dominion.player_state import PlayerState
 
 
 def create_player(name, player_class: type(BasePlayer), player_state, game):

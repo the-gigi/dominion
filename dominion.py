@@ -1,4 +1,4 @@
-from game_factory import start_game
+from dominion.game_factory import start_game
 from config import (card_types, players_info)
 
 

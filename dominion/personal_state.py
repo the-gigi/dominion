@@ -1,4 +1,4 @@
-from card_util import *
+from dominion.card_util import *
 
 
 class PersonalState:
