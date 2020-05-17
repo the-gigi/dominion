@@ -18,7 +18,8 @@ spec:
               properties:
                 name:
                   type: string
-
+                numPlayers:
+                  type: integer
   names:
     kind: Game
     plural: games

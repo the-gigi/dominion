@@ -13,9 +13,9 @@ class CustomResource:
         self.patch = partial(self.kube_client.patch_namespaced_custom_object, **kwargs)
 
     @property
-    def status(self):
-        return self.get()['status']
+    def spec(self):
+        return self.get().get('spec', {})
 
     @property
-    def spec(self):
-        return self.get()['spec']
+    def status(self):
+        return self.get().get('status', {})

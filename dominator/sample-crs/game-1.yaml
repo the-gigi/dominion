@@ -2,3 +2,6 @@ apiVersion: dominion.org/v1
 kind: Game
 metadata:
   name: game-1
+spec:
+  name: game-1
+  numPlayers: 4

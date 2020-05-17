@@ -1,7 +1,9 @@
 from kubernetes import client, config
 
+from dominion.cards import *
 from dominator.game_custom_resource import GameCustomResource
 from dominator.player_custom_resource import PlayerCustomResource
+from dominion.game_factory import start_game
 
 from computer_players import (
     napoleon,
@@ -20,9 +22,9 @@ class Game:
         self.players = {}
         self.computer_players = dict(
             Napoleon=napoleon.Napoleon,
-            Rockefeller = rockefeller.Rockefeller,
-            TheGuy = the_guy.TheGuy,
-            Victor = victor.Victor
+            Rockefeller=rockefeller.Rockefeller,
+            TheGuy=the_guy.TheGuy,
+            Victor=victor.Victor
         )
 
     def join(self, name):
@@ -35,10 +37,24 @@ class Game:
         player = PlayerCustomResource(name, self.kube_client)
         self.players[name] = player
 
+        if len(self.players) == self.num_players:
+            self._start()
+
     def get_computer_player(self, player_cr):
-        return self.computer_players[player_cr.spec.playerType]
+        return self.computer_players[player_cr.spec.player_type]
 
     def _start(self):
         players_info = {name: self.get_computer_player(cr) for name, cr in self.players.items()}
+        card_types = [
+            Bureaucrat,
+            Chancellor,
+            CouncilRoom,
+            Festival,
+            Library,
+            Militia,
+            Moat,
+            Spy,
+            Thief,
+            Village]
 
-
+        start_game(card_types, players_info)

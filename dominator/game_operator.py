@@ -1,8 +1,11 @@
 import asyncio
 import kopf
 
+from dominator.game import Game
+
 game = None
 players = []
+
 
 @kopf.on.create('dominion.org', 'v1', 'games')
 @kopf.on.resume('dominion.org', 'v1', 'games')
@@ -12,11 +15,10 @@ def on_create_game(body, name, namespace, logger, **kwargs):
     if game is not None:
         return
 
-    game = (name, body)
+    game = Game(name, body['spec']['numPlayers'])
 
 
 @kopf.on.create('dominion.org', 'v1', 'players')
-@kopf.on.resume('dominion.org', 'v1', 'players')
 def on_create_player(body, name, namespace, logger, **kwargs):
     """Update game by adding the player name to its status
 
@@ -25,8 +27,11 @@ def on_create_player(body, name, namespace, logger, **kwargs):
     if game is None:
         return
 
-
-
+    try:
+        game.join(name)
+    except Exception as e:
+        print(e)
+    print(game.players)
 
 @kopf.on.update('dominion.org', 'v1', 'games')
 def on_game_update(spec, status, namespace, logger, **kwargs):

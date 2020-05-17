@@ -6,7 +6,5 @@ class PlayerCustomResource(CustomResource):
         super().__init__(name, 'players', kube_client)
 
     @property
-    def playerType(self):
-        return self.spec['playerType']
-
-
+    def player_type(self):
+        return self.spec.get('playerType', None)
