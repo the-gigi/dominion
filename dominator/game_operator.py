@@ -20,6 +20,7 @@ def on_create_game(body, name, namespace, logger, **kwargs):
         print(f'A player joined the game: {name}')
         game.join(name)
 
+
 @kopf.on.create('dominion.org', 'v1', 'players')
 @kopf.on.resume('dominion.org', 'v1', 'players')
 def on_create_player(body, name, namespace, logger, **kwargs):
@@ -31,12 +32,8 @@ def on_create_player(body, name, namespace, logger, **kwargs):
         pending_players.append(name)
         return
 
-    try:
-        print(f'A player joined the game: {name}')
-        game.join(name)
-    except Exception as e:
-        print(e)
-    print(game.players)
+    print(f'A player joined the game: {name}')
+    game.join(name)
 
 
 @kopf.on.update('dominion.org', 'v1', 'games')
