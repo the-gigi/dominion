@@ -1,0 +1,8 @@
+apiVersion: dominion.org/v1
+kind: Player
+metadata:
+  name: dynamite2
+spec:
+  name: Dynamite-2
+  playerType: Napoleon
+

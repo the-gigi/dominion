@@ -7,6 +7,7 @@ class CustomResource:
         self.name = name
         kwargs = dict(version='v1',
                       namespace='default',
+                      group='dominion.org',
                       plural=kind_plural,
                       name=name)
         self.get = partial(self.kube_client.get_namespaced_custom_object, **kwargs)

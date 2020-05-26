@@ -1,0 +1,8 @@
+apiVersion: dominion.org/v1
+kind: Player
+metadata:
+  name: rocky
+spec:
+  name: Rocky
+  playerType: Rockefeller
+

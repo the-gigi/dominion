@@ -1,3 +1,5 @@
+import asyncio
+
 from kubernetes import client, config
 
 from dominion.cards import *
@@ -11,6 +13,8 @@ from computer_players import (
     the_guy,
     victor
 )
+
+_lock = asyncio.Lock()
 
 
 class Game:
@@ -27,23 +31,28 @@ class Game:
             Victor=victor.Victor
         )
 
+    async def _async_join(self, name):
+        async with _lock:
+            if name in self.players:
+                raise RuntimeError(f'Player {name} has already joined')
+
+            if len(self.players) == self.num_players:
+                raise RuntimeError(f'Game is full')
+
+            player = PlayerCustomResource(name, self.kube_client)
+            self.players[name] = player
+
+            if len(self.players) == self.num_players:
+                self._start()
+
     def join(self, name):
-        if name in self.players:
-            raise RuntimeError(f'Player {name} has already joined')
-
-        if len(self.players) == self.num_players:
-            raise RuntimeError(f'Game is full')
-
-        player = PlayerCustomResource(name, self.kube_client)
-        self.players[name] = player
-
-        if len(self.players) == self.num_players:
-            self._start()
+        asyncio.run(self._async_join(name))
 
     def get_computer_player(self, player_cr):
-        return self.computer_players[player_cr.spec.player_type]
+        return self.computer_players[player_cr.player_type]
 
     def _start(self):
+        print(f'Starting game...')
         players_info = {name: self.get_computer_player(cr) for name, cr in self.players.items()}
         card_types = [
             Bureaucrat,
@@ -56,5 +65,4 @@ class Game:
             Spy,
             Thief,
             Village]
-
         start_game(card_types, players_info)

@@ -4,34 +4,40 @@ import kopf
 from dominator.game import Game
 
 game = None
-players = []
+pending_players = []
 
 
 @kopf.on.create('dominion.org', 'v1', 'games')
 @kopf.on.resume('dominion.org', 'v1', 'games')
 def on_create_game(body, name, namespace, logger, **kwargs):
-    print(f'A game was created with body: {body}')
+    print(f"A {body['spec']['numPlayers']}-players game was created : {name}")
     global game
     if game is not None:
         return
 
     game = Game(name, body['spec']['numPlayers'])
-
+    for name in pending_players[:game.num_players]:
+        print(f'A player joined the game: {name}')
+        game.join(name)
 
 @kopf.on.create('dominion.org', 'v1', 'players')
+@kopf.on.resume('dominion.org', 'v1', 'players')
 def on_create_player(body, name, namespace, logger, **kwargs):
     """Update game by adding the player name to its status
 
     """
-    print(f'A player was created with body: {body}')
     if game is None:
+        print(f'A player was added to pending players: {name}')
+        pending_players.append(name)
         return
 
     try:
+        print(f'A player joined the game: {name}')
         game.join(name)
     except Exception as e:
         print(e)
     print(game.players)
+
 
 @kopf.on.update('dominion.org', 'v1', 'games')
 def on_game_update(spec, status, namespace, logger, **kwargs):

@@ -4,4 +4,4 @@ metadata:
   name: game-1
 spec:
   name: game-1
-  numPlayers: 4
+  numPlayers: 2
