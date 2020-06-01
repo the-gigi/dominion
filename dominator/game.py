@@ -1,27 +1,23 @@
 import asyncio
 
-from kubernetes import client, config
-
 from dominion.cards import *
 from dominator.game_custom_resource import GameCustomResource
 from dominator.player_custom_resource import PlayerCustomResource
-from dominion.game_factory import start_game
-
+from dominator.game_factory import create_game
 from computer_players import (
     napoleon,
     rockefeller,
     the_guy,
     victor
 )
+from dominator.kube_client import kube_client
 
 _lock = asyncio.Lock()
 
 
 class Game:
     def __init__(self, name, num_players):
-        config.load_kube_config()
-        self.kube_client = client.CustomObjectsApi()
-        self.game = GameCustomResource(name, self.kube_client)
+        self.game = GameCustomResource(name, kube_client)
         self.num_players = num_players
         self.players = {}
         self.computer_players = dict(
@@ -39,7 +35,7 @@ class Game:
             if len(self.players) == self.num_players:
                 raise RuntimeError(f'Game is full')
 
-            player = PlayerCustomResource(name, self.kube_client)
+            player = PlayerCustomResource(name, kube_client)
             self.players[name] = player
 
             if len(self.players) == self.num_players:
@@ -65,4 +61,16 @@ class Game:
             Spy,
             Thief,
             Village]
-        start_game(card_types, players_info)
+
+        dominion_game, players = create_game(card_types, players_info)
+
+        for player, player_state in players:
+            player_cr = player.game_client.player_cr
+            personal_state = player_state.personal_state
+            try:
+                player_cr.patch(body=dict(status=dict(state=personal_state)))
+            except Exception as e:
+                print(e)
+                raise
+
+        dominion_game.run(players)

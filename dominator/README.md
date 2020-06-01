@@ -190,8 +190,6 @@ $ kubectl apply -f sample-crs/game-1.yaml
 game.dominion.org/game-1 created
 ```
 
-
-
 # Usage
 
 # References

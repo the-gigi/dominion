@@ -16,10 +16,10 @@ class GameClient(metaclass=ABCMeta):
     def done(self):
         pass
 
-    # @property
-    # @abstractmethod
-    # def state(self):
-    #     pass
+    @property
+    @abstractmethod
+    def state(self):
+        pass
 
 
 class Game(metaclass=ABCMeta):
@@ -70,7 +70,7 @@ class BasePlayer(Player):
 
     @property
     def personal_state(self):
-        return self.game_client.personal_state
+        return self.game_client.state
 
     @property
     def all_cards(self):

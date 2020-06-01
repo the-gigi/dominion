@@ -11,7 +11,6 @@ class Game(object_model.Game,
 
     In this case Dominion
     """
-
     def __init__(self, piles):
         # The state of the game
         self.piles = piles
@@ -37,9 +36,12 @@ class Game(object_model.Game,
         self.players = players
 
         while not self.is_over:
-            self.player.play()
-            self.end_turn()
-
+            try:
+                self.player.play()
+                self.end_turn()
+            except Exception as e:
+                print(e)
+                raise
             supply = self.piles
             points = self.count_player_points(self.player_state)
             print(f'points: {points}')
@@ -368,3 +370,7 @@ class Game(object_model.Game,
     def done(self):
         """ """
         self.player_state.done()
+
+    @property
+    def state(self):
+        return self.player_state.personal_state
