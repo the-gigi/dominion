@@ -304,7 +304,7 @@ class Game(object_model.Game,
             rest = (p for p in self.other_players + self.player if p != player)
             event = victory if victory else player_state.hand
             for p in rest:
-                p.on_event(event)
+                p.on_game_event(event)
 
     def play_spy(self):
         """+1 Card

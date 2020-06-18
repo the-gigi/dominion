@@ -58,7 +58,7 @@ class Player(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def on_event(self, event):
+    def on_game_event(self, event):
         pass
 
 
@@ -78,7 +78,7 @@ class BasePlayer(Player):
         draw_deck = card_util.as_dict(self.personal_state.draw_deck.cards)
         return dict(**hand, **draw_deck, **self.personal_state.discard_pile)
 
-    def on_event(self, event):
+    def on_game_event(self, event):
         self.events.append(event)
 
     def respond(self, action, *args):
