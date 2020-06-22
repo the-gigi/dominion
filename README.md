@@ -188,3 +188,7 @@ https://entertainment.howstuffworks.com/leisure/brain-games/dominion3.htm
 
 Cards description here:
 http://wiki.dominionstrategy.com/index.php/List_of_cards
+
+Multiplayer game library:
+https://github.com/chr15m/PodSixNet/
+
