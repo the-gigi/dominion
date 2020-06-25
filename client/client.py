@@ -50,6 +50,13 @@ class Client(ConnectionListener,
     def Network_on_state(self, data):
         self._state = data['state']
 
+    # Server commands
+    def Network_play(self, data):
+        self.play()
+
+    def Network_respond(self, data):
+        self.respond(data['action_card'], data['args'])
+
     # built in stuff
     def Network_connected(self, data):
         print("You are now connected to the server")
