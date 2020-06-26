@@ -22,9 +22,8 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
-
         card_types = []
-        players_info = {player.name: player for player in self.players}
+        players_info = {player.name: player for player in self.players.values()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
             players_info[name] = player
@@ -33,7 +32,8 @@ class DominionServer(Server, EventHandler):
 
     def get_computer_players(self):
         """ """
-        n = MAX_PLAYER_COUNT - len(self.players)
+        joined_players = [p for p in self.players if p.name]
+        n = MAX_PLAYER_COUNT - len(joined_players)
         return random.shuffle(config.computer_players)[:n]
 
     # EventHandler interface implementation
