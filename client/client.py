@@ -72,7 +72,6 @@ class Client(ConnectionListener,
 
 
 class DummyPlayer(object_model.Player):
-
     def play(self):
         pass
 

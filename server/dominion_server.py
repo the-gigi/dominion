@@ -1,4 +1,4 @@
-from random import random
+import random
 
 from PodSixNet.Server import Server
 
@@ -7,7 +7,7 @@ from server.event_handler import EventHandler
 from server.player import Player
 from dominion import game_factory
 
-MAX_PLAYER_COUNT = 4
+MAX_PLAYER_COUNT = 2
 
 
 class DominionServer(Server, EventHandler):
@@ -41,6 +41,13 @@ class DominionServer(Server, EventHandler):
         self.start_game()
 
     def on_join(self, channel, name):
+        try:
+            while name in (p.name for p in self.players.values()):
+                name += str(random.randint(1, 10))
+        except Exception as e:
+            while name in (p.name for p in self.players.values()):
+                name += str(random.randint(10))
+
         player = self.players[channel.addr]
         player.name = name
 
