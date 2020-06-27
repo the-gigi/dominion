@@ -2,6 +2,10 @@ from dominion import object_model
 
 
 class Player(object_model.Player):
+    def __init__(self):
+        """ """
+        self._name = ''
+
     def play(self):
         pass
 
@@ -11,9 +15,8 @@ class Player(object_model.Player):
     def on_game_event(self, event):
         pass
 
-    def __init__(self):
-        """ """
-        self._name = ''
+    def on_state_change(self, state):
+        pass
 
     @property
     def name(self):

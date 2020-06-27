@@ -26,6 +26,9 @@ class Client(ConnectionListener,
     def on_game_event(self, event):
         pass
 
+    def on_state_change(self, state):
+        pass
+
     # GameClient interface
     def play_action_card(self, card):
         self.Send(dict(action='play_action_card', card=card))
@@ -79,6 +82,9 @@ class DummyPlayer(object_model.Player):
         pass
 
     def on_game_event(self, event):
+        pass
+
+    def on_state_change(self, state):
         pass
 
 
