@@ -17,7 +17,7 @@ class DominionServer(Server, EventHandler):
 
     def Connected(self, channel, addr):
         channel.attach_event_handler(self)
-        player = Player()
+        player = Player
         self.players[addr] = player
 
     def start_game(self):
@@ -32,9 +32,10 @@ class DominionServer(Server, EventHandler):
 
     def get_computer_players(self):
         """ """
-        joined_players = [p for p in self.players if p.name]
+        joined_players = [p for p in self.players.values() if p.name]
         n = MAX_PLAYER_COUNT - len(joined_players)
-        return random.shuffle(config.computer_players)[:n]
+        random.shuffle(config.computer_players)
+        return config.computer_players[:n]
 
     # EventHandler interface implementation
     def on_start(self, channel):
