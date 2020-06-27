@@ -23,8 +23,7 @@ class PlayerChannel(Channel):
         self.event_handler.on_buy(self, data['card'])
 
     def Network_done(self, data):
-        def Network_buy(self, data):
-            self.event_handler.on_done(self)
+        self.event_handler.on_done(self)
 
     def Network_respond(self, data):
         self.event_handler.on_respond(self, data['response'])

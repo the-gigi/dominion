@@ -25,7 +25,7 @@ $ poetry install
 # Running the game
 
 ```
-poetry run python dominion.py
+poetry run python main.py
 ```
 
 # Testing
