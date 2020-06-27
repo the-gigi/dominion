@@ -3,8 +3,23 @@ from dominion.game import Game
 from dominion.cards import *
 from dominion.player_state import PlayerState
 from dominion.card_stack import *
+from dominion.object_model import Player
 
 import unittest
+
+
+class DummyPlayer(Player):
+    def play(self):
+        pass
+
+    def respond(self, action, *args):
+        pass
+
+    def on_game_event(self, event):
+        pass
+
+    def on_state_change(self, state):
+        pass
 
 
 class GameTest(unittest.TestCase):
@@ -16,7 +31,7 @@ class GameTest(unittest.TestCase):
 
         players_states = [PlayerState(n, piles) for n in self.names]
         self.game = Game(piles)
-        self.game.players = [(None, p) for p in players_states]
+        self.game.players = [(DummyPlayer(), p) for p in players_states]
 
     def test_init(self):
         pass
@@ -257,8 +272,10 @@ class GameTest(unittest.TestCase):
         player_state.buys = 1
         is_verified = self.game._verify_buy(Gold)
         self.assertTrue(is_verified)
+        self.assertEqual(player_state.used_money, Gold.Cost)
 
         # has enough money, no buy
+        player_state.used_money = 0
         player_state.hand = [Gold()]
         player_state.buys = 0
         is_verified = self.game._verify_buy(Moat)
@@ -278,12 +295,15 @@ class GameTest(unittest.TestCase):
 
         # has 5 coins in hand, Chancellor in play area, and wants to buy gold
         player_state.buys = 1
+        player_state.used_money = 0
         player_state.hand = [Gold(), Silver()]
         player_state.play_area = [Chancellor()]
         is_verified = self.game._verify_buy(Gold)
         self.assertTrue(is_verified)
+        self.assertEqual(player_state.used_money, Gold.Cost)
 
         # has 5 coins in hand and Chancellor, and wants to buy gold
+        player_state.used_money = 0
         player_state.buys = 1
         player_state.hand = [Gold(), Silver(), Chancellor()]
         player_state.play_area = []

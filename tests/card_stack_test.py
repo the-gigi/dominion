@@ -1,5 +1,7 @@
-from dominion.card_stack import *
+from dominion.card_stack import CardStack
 import unittest
+
+from dominion.cards import *
 
 
 class TestGame(unittest.TestCase):
@@ -279,6 +281,7 @@ class TestGame(unittest.TestCase):
         card_stack.add_to_bottom([curse, estate, duchy])
         expected = [copper, silver, gold, curse, estate, duchy]
         self.assertEqual(card_stack.cards, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

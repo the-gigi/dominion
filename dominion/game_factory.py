@@ -8,7 +8,7 @@ from dominion.player_state import PlayerState
 
 
 def create_player(name, player_class: type(BasePlayer), player_state, game):
-    game_client = GameClient(player_state.personal_state, game)
+    game_client = GameClient(game)
     return player_class(name, game_client)
 
 

@@ -8,9 +8,9 @@ class Victor(BasePlayer):
         """
         Victor only buys the largest possible victory card
         """
-        hand = self.personal_state.hand
-        supply = self.personal_state.supply
-        money = count_money(hand) - self.personal_state.used_money
+        hand = self.state.hand
+        supply = self.state.supply
+        money = count_money(hand) - self.state.used_money
         if supply[Province] > 0 and money >= Province.Cost:
             self.game_client.buy(Province)
         elif supply[Duchy] > 0 and money >= Duchy.Cost:

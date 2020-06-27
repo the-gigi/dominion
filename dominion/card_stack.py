@@ -56,7 +56,9 @@ class CardStack:
         store the dict repr of other in a var
         return the comparison of the two vars
         """
-        return self.as_dict() == other.as_dict()
+        d1 = self.as_dict()
+        d2 = other.as_dict()
+        return d1 == d2
 
     def as_dict(self):
         return card_util.as_dict(self.cards)

@@ -31,7 +31,8 @@ class PlayerState:
         self._personal_state = PersonalState(hand=copy.deepcopy(self.hand),
                                              discard_pile=copy.deepcopy(self.discard_pile),
                                              draw_deck=self.draw_deck.as_dict(),
-                                             supply=copy.deepcopy(supply))
+                                             supply=copy.deepcopy(supply),
+                                             play_area=[])
 
     def dump(self):
         print('Name:', self.name)
@@ -80,15 +81,16 @@ class PlayerState:
         self.actions = 1
         print(f'{self.name}: done')
 
-    def sync_personal_state(self, supply):
-        self.personal_state.discard_pile = CardStack(self.discard_pile.cards[:])
-        self.personal_state.hand = self.hand[:]
-        self.personal_state.draw_deck = self.draw_deck.as_dict()
-        self.personal_state.supply = supply
-        self.personal_state.play_area = self.play_area[:]
-        self.personal_state.actions = self.actions
-        self.personal_state.buys = self.buys
-        self.personal_state.used_money = self.used_money
+    def get_personal_state(self, supply) -> PersonalState:
+        return PersonalState(hand=copy.deepcopy(self.hand),
+                             discard_pile=copy.deepcopy(self.discard_pile),
+                             draw_deck=self.draw_deck.as_dict(),
+                             supply=copy.deepcopy(supply),
+                             play_area=self.play_area[:],
+                             actions=self.actions,
+                             buys=self.buys,
+                             used_money=self.used_money)
+
 
     @property
     def personal_state(self):

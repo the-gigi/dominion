@@ -14,14 +14,18 @@ class TestPlayerState(unittest.TestCase):
 
     def test_initialize_draw_deck(self):
         """
-        ✔ Create new player state
-        Check if the player has exactly 7 coppers and 3 estates in their Draw Deck
-        Check if the deck are shuffled
+        √ Create new player state
+        √ Check if the player has exactly 7 coppers and 3 estates in their Draw Deck
         """
+
         self.player_state.draw_deck.cards += self.player_state.hand
         self.player_state.hand = []
-        expected_deck = CardStack([Copper()] * 7 + [Estate()] * 3)
-        self.assertEqual(self.player_state.draw_deck, expected_deck)
+
+        num_coppers = sum(1 if type(c) == Copper else 0 for c in self.player_state.draw_deck.cards)
+        num_estates = sum(1 if type(c) == Estate else 0 for c in self.player_state.draw_deck.cards)
+
+        self.assertEqual(num_coppers, 7)
+        self.assertEqual(num_estates, 3)
 
     def test_draw_cards(self):
         """
@@ -55,10 +59,13 @@ class TestPlayerState(unittest.TestCase):
         # draw 1 card with no cards in deck or discard
         self.player_state.hand = [copper]
         self.player_state.draw_deck.cards = []
-        self.assertRaises(RuntimeError, self.player_state.draw_cards, 1)
+        expected = [copper]
+        self.player_state.draw_cards(1)
+        self.assertEqual(self.player_state.hand, expected)
 
-        # draw multiple cards with no cards in deck or discard
-        self.assertRaises(RuntimeError, self.player_state.draw_cards, 3)
+        expected = [copper]
+        self.player_state.draw_cards(3)
+        self.assertEqual(self.player_state.hand, expected)
 
         # draw 1 card with no cards in deck and 1 card in discard
         self.player_state.hand = [copper]
@@ -72,7 +79,9 @@ class TestPlayerState(unittest.TestCase):
         self.player_state.hand = [copper]
         self.player_state.draw_deck.cards = []
         self.player_state.discard_pile.cards = [silver]
-        self.assertRaises(RuntimeError, self.player_state.draw_cards, 3)
+        expected = [copper, silver]
+        self.player_state.draw_cards(3)
+        self.assertEqual(self.player_state.hand, expected)
 
         # draw 1 card with 1 card in deck and multiple cards in discard
         self.player_state.hand = [copper]

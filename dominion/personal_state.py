@@ -2,16 +2,25 @@ from dominion.card_util import *
 
 
 class PersonalState:
-    def __init__(self, hand, discard_pile, draw_deck, supply):
+    def __init__(self,
+                 hand,
+                 discard_pile,
+                 draw_deck,
+                 supply,
+                 play_area,
+                 actions=1,
+                 buys=1,
+                 used_money=0
+                 ):
         """ """
         self.hand = hand
         self.discard_pile = discard_pile
         self.supply = supply
         self.draw_deck = draw_deck
-        self.play_area = []
-        self.actions = 1
-        self.buys = 1
-        self.used_money = 0
+        self.play_area = play_area
+        self.actions = actions
+        self.buys = buys
+        self.used_money = used_money
 
     @property
     def money(self):

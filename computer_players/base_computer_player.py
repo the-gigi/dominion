@@ -21,7 +21,7 @@ class BaseComputerPlayer(BasePlayer):
         pass
 
     def buy_card(self, money, card_type, condition=lambda:True):
-        if money >= card_type.Cost and self.personal_state.supply[card_type] > 0 and condition():
+        if money >= card_type.Cost and self.state.supply[card_type] > 0 and condition():
             ok = self.game_client.buy(card_type)
             return ok
 
@@ -34,10 +34,10 @@ class BaseComputerPlayer(BasePlayer):
         return False
 
     def buy_stuff(self, hand):
-        while self.personal_state.buys > 0:
-            buys = self.personal_state.buys
-            supply = self.personal_state.supply
-            money = count_money(hand + self.personal_state.play_area) - self.personal_state.used_money
+        while self.state.buys > 0:
+            buys = self.state.buys
+            supply = self.state.supply
+            money = count_money(hand + self.state.play_area) - self.state.used_money
 
             if self.buy(supply, money, buys):
                 continue
@@ -60,7 +60,7 @@ class BaseComputerPlayer(BasePlayer):
     def play(self):
         """
         """
-        hand = self.personal_state.hand
+        hand = self.state.hand
         self.play_no_brainers(hand)
         self.play_action_cards(hand)
         self.buy_stuff(hand)

@@ -7,9 +7,8 @@ class GameClient(object_model.GameClient):
     In this case Dominion
 
     """
-    def __init__(self, personal_state, game):
+    def __init__(self, game):
         self.game = game
-        self.personal_state = personal_state
 
     def play_action_card(self, card):
         return self.game.play_action_card(card)
@@ -19,7 +18,3 @@ class GameClient(object_model.GameClient):
 
     def done(self):
         self.game.done()
-
-    @property
-    def state(self):
-        return self.personal_state

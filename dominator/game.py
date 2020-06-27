@@ -66,7 +66,7 @@ class Game:
 
         for player, player_state in players:
             player_cr = player.game_client.player_cr
-            personal_state = player_state.personal_state
+            personal_state = player_state.state
             try:
                 player_cr.patch(body=dict(status=dict(state=personal_state)))
             except Exception as e:

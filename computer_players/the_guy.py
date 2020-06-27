@@ -6,7 +6,7 @@ from dominion.cards import *
 
 class TheGuy(BaseComputerPlayer):
     def play_action_cards(self, hand):
-        for i in range(self.personal_state.actions):
+        for i in range(self.state.actions):
             for card in hand:
                 if isinstance(card, CouncilRoom):
                     self.play_card(card, hand)
@@ -14,11 +14,11 @@ class TheGuy(BaseComputerPlayer):
                     self.play_card(card, hand)
 
     def buy_stuff(self, hand):
-        buys = self.personal_state.buys
+        buys = self.state.buys
 
         for i in range(buys):
-            money = count_money(hand + self.personal_state.play_area) - self.personal_state.used_money
-            supply = self.personal_state.supply
+            money = count_money(hand + self.state.play_area) - self.state.used_money
+            supply = self.state.supply
 
             if self.buy_card(money, Province):
                 break

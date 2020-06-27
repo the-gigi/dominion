@@ -25,7 +25,7 @@ class Game(object_model.Game,
         return [p[1] for p in self.players]
 
     @property
-    def player(self):
+    def player(self) -> object_model.Player:
         return self.players[self.active_player_index][0]
 
     @property
@@ -37,6 +37,7 @@ class Game(object_model.Game,
 
         while not self.is_over:
             try:
+                self.notify_player()
                 self.player.play()
                 self.end_turn()
             except Exception as e:
@@ -63,7 +64,7 @@ class Game(object_model.Game,
 
     @property
     def personal_player_state(self):
-        return self.player_state.personal_state
+        return self.player_state.state
 
     def set_active_player_index(self, player_index):
         self.active_player_index = player_index
@@ -152,10 +153,14 @@ class Game(object_model.Game,
                     winners += [player_state.name]
         return winners
 
+    def notify_player(self):
+        personal_state = self.player_state.get_personal_state(copy.deepcopy(self.piles))
+        self.player.on_state_change(personal_state)
+
     def end_turn(self):
         """ """
         self.player_state.used_money = 0
-        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
+        self.notify_player()
 
     @property
     def is_over(self):
@@ -193,7 +198,7 @@ class Game(object_model.Game,
         self.player_state.play_area.append(card)
 
         self.player_state.actions -= 1
-        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
+        self.notify_player()
         return True
 
     def play_moat(self):
@@ -276,7 +281,7 @@ class Game(object_model.Game,
 
             player_state.hand = hand
             player_state.discard_pile.add_to_top(discarded)
-            player_state.sync_personal_state(self.piles)
+            self.notify_player()
 
     def play_bureaucrat(self):
         """
@@ -365,7 +370,7 @@ class Game(object_model.Game,
         self.piles[card_type] -= 1
         self.player_state.discard_pile.add_to_top([card_type()])
         self.player_state.buys -= 1
-        self.player_state.sync_personal_state(copy.deepcopy(self.piles))
+        self.notify_player()
 
     def done(self):
         """ """
@@ -373,4 +378,4 @@ class Game(object_model.Game,
 
     @property
     def state(self):
-        return self.player_state.personal_state
+        return self.player_state.state

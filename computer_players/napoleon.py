@@ -5,7 +5,7 @@ import random
 
 class Napoleon(BaseComputerPlayer):
     def play_action_cards(self, hand):
-        for i in range(self.personal_state.actions):
+        for i in range(self.state.actions):
             for card in hand:
                 if isinstance(card, Militia):
                     self.play_card(card, hand)
