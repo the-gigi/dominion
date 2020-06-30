@@ -17,6 +17,15 @@ class BaseCard:
         for a in 'name type text cost coins points reaction'.split():
             print(f'{a.capitalize()}: {self.__getattribute__(a.capitalize())}')
 
+    def as_dict(self):
+        return dict(
+            type=self.Type,
+            text=self.Text,
+            cost=self.Cost,
+            coins=self.Coins,
+            points=self.Points,
+            reaction=self.Reaction
+        )
 
 class Estate(BaseCard):
     Type = 'Victory'

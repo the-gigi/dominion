@@ -7,9 +7,9 @@ from dominion.object_model import BasePlayer
 from dominion.player_state import PlayerState
 
 
-def create_player(name, player_class: type(BasePlayer), game):
+def create_player(name, player_class: type(BasePlayer), game, channel):
     game_client = GameClient(game)
-    return player_class(name, game_client)
+    return player_class(name, game_client, channel)
 
 
 def start_game(card_types, players_info: Mapping):
@@ -17,17 +17,14 @@ def start_game(card_types, players_info: Mapping):
 
     player_states = {}
     players = []
-    for name, player_class in players_info.items():
+    for name, (player_class, _) in players_info.items():
         player_state = PlayerState(name, piles)
-        player_states[name] = (player_state)
+        player_states[name] = player_state
 
     game = Game(piles)
 
-    for name, player_class in players_info.items():
-        try:
-            player = create_player(name, player_class, game)
-        except Exception as e:
-            player = create_player(name, player_class, game)
+    for name, (player_class, channel) in players_info.items():
+        player = create_player(name, player_class, game, channel)
         players.append((player, player_states[name]))
 
     game.run(players)

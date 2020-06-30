@@ -16,8 +16,8 @@ card_types = [
     Thief,
     Village]
 
-players_info = dict(Vicky=Victor,
-                    The_Rock=Rockefeller,
-                    Guy=TheGuy,
-                    Dynamite=Napoleon,
-                    Dynamite2=Napoleon)
+players_info = dict(Vicky=(Victor, None),
+                    The_Rock=(Rockefeller, None),
+                    Guy=(TheGuy, None),
+                    Dynamite=(Napoleon, None),
+                    Dynamite2=(Napoleon, None))

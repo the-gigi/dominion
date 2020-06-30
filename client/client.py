@@ -43,6 +43,10 @@ class Client(ConnectionListener,
     def state(self):
         return self._state
 
+    def Network(self, data):
+        print(data)
+
+
     # Server events
     def Network_on_player_join(self, data):
         print(f'*** player join: {data["player"]}')

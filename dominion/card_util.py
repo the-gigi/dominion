@@ -19,8 +19,8 @@ def as_dict(cards):
     """
     dd = defaultdict(int)
     for card in cards:
-        dd[repr(card)] += 1
-    return dd
+        dd[card.Type] += 1
+    return dict(dd)
 
 
 def count_points(cards):

@@ -62,7 +62,7 @@ class Player(metaclass=ABCMeta):
 
 
 class BasePlayer(Player):
-    def __init__(self, name, game_client: GameClient):
+    def __init__(self, name, game_client: GameClient, channel):
         self.name = name
         self.game_client = game_client
         self.events = []

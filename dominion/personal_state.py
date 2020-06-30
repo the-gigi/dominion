@@ -10,8 +10,7 @@ class PersonalState:
                  play_area,
                  actions=1,
                  buys=1,
-                 used_money=0
-                 ):
+                 used_money=0):
         """ """
         self.hand = hand
         self.discard_pile = discard_pile
@@ -34,3 +33,17 @@ class PersonalState:
         points += self.draw_deck['Estate'] + 3 * self.draw_deck['Duchy'] + 6 * self.draw_deck['Province']
         return points
 
+    def as_dict(self):
+        def listify(cards):
+            return [c.as_dict() for c in cards]
+
+        return dict(
+            hand=listify(self.hand),
+            discard_pile=listify(self.discard_pile.cards),
+            draw_deck=self.draw_deck,
+            supply={k.Type: v for k,v in self.supply.items()},
+            play_area=[],
+            actions=self.actions,
+            buys=self.buys,
+            used_money=self.used_money
+        )

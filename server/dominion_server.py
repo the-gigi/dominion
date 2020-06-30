@@ -17,21 +17,21 @@ class DominionServer(Server, EventHandler):
 
     def Connected(self, channel, addr):
         channel.attach_event_handler(self)
-        self.players[addr] = Player
+        self.players[addr] = ('', Player, channel)
 
     def start_game(self):
         """ """
         card_types = []
-        players_info = {player.name: player for player in self.players.values()}
+        players_info = {p[1][0]: (p[1][1], p[1][2]) for p in self.players.items()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
-            players_info[name] = player
+            players_info[name] = (player, None)
 
         game_factory.start_game(card_types, players_info)
 
     def get_computer_players(self):
         """ """
-        joined_players = [p for p in self.players.values() if p.name]
+        joined_players = [p for p in self.players.values() if p[0]]
         n = MAX_PLAYER_COUNT - len(joined_players)
         random.shuffle(config.computer_players)
         return config.computer_players[:n]
@@ -43,18 +43,13 @@ class DominionServer(Server, EventHandler):
     def on_join(self, channel, name):
         if name == '':
             raise RuntimeError('Player name must not be empty')
-        try:
-            while name in (p.name for p in self.players.values()):
-                name += str(random.randint(1, 10))
-        except Exception as e:
-            while name in (p.name for p in self.players.values()):
-                name += str(random.randint(10))
 
-        player = self.players[channel.addr]
-        player.name = name
-        player.channel = channel
+        while name in (p[0] for p in self.players.values()):
+            name += str(random.randint(1, 10))
 
-        joined_players = [p for p in self.players.values() if p.name != '']
+        self.players[channel.addr] = (name, Player, channel)
+
+        joined_players = [p for p in self.players.values() if p[0] != '']
         if len(joined_players) == MAX_PLAYER_COUNT:
             self.start_game()
 
