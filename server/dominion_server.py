@@ -17,8 +17,7 @@ class DominionServer(Server, EventHandler):
 
     def Connected(self, channel, addr):
         channel.attach_event_handler(self)
-        player = Player
-        self.players[addr] = player
+        self.players[addr] = Player
 
     def start_game(self):
         """ """
@@ -42,6 +41,8 @@ class DominionServer(Server, EventHandler):
         self.start_game()
 
     def on_join(self, channel, name):
+        if name == '':
+            raise RuntimeError('Player name must not be empty')
         try:
             while name in (p.name for p in self.players.values()):
                 name += str(random.randint(1, 10))
@@ -51,8 +52,10 @@ class DominionServer(Server, EventHandler):
 
         player = self.players[channel.addr]
         player.name = name
+        player.channel = channel
 
-        if len(self.players) == MAX_PLAYER_COUNT:
+        joined_players = [p for p in self.players.values() if p.name != '']
+        if len(joined_players) == MAX_PLAYER_COUNT:
             self.start_game()
 
     def on_play_action_card(self, channel, card):
