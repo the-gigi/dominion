@@ -13,7 +13,11 @@ MAX_PLAYER_COUNT = 2
 class DominionServer(Server, EventHandler):
     def __init__(self):
         super().__init__(player_channel.PlayerChannel)
+        self.game_client = None
         self.players = {}
+
+    def attach_game_client(self, game_client):
+        self.game_client = game_client
 
     def Connected(self, channel, addr):
         channel.attach_event_handler(self)
@@ -27,7 +31,7 @@ class DominionServer(Server, EventHandler):
         for name, player in computer_players:
             players_info[name] = (player, None)
 
-        game_factory.start_game(card_types, players_info)
+        game_factory.start_game(card_types, players_info, self)
 
     def get_computer_players(self):
         """ """
@@ -54,13 +58,13 @@ class DominionServer(Server, EventHandler):
             self.start_game()
 
     def on_play_action_card(self, channel, card):
-        pass
+        self.game_client.play_action_card(card)
 
     def on_buy(self, channel, card):
-        pass
+        self.game_client.buy(card)
 
     def on_done(self, channel):
-        pass
+        self.game_client.done()
 
     def on_respond(self, channel, response):
         pass

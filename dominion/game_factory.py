@@ -12,7 +12,7 @@ def create_player(name, player_class: type(BasePlayer), game, channel):
     return player_class(name, game_client, channel)
 
 
-def start_game(card_types, players_info: Mapping):
+def start_game(card_types, players_info: Mapping, server=None):
     piles = setup_piles(card_types, len(players_info))
 
     player_states = {}
@@ -22,9 +22,11 @@ def start_game(card_types, players_info: Mapping):
         player_states[name] = player_state
 
     game = Game(piles)
+    if server is not None:
+        server.attach_game_client(game)
 
     for name, (player_class, channel) in players_info.items():
         player = create_player(name, player_class, game, channel)
         players.append((player, player_states[name]))
 
-    game.run(players)
+    game.run(players, server)

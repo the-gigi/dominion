@@ -20,7 +20,7 @@ class Player(object_model.Player):
     def on_state_change(self, state):
         state = state.as_dict()
 
-        self.channel.Send(dict(action='on_state_change', state=state))
+        self.channel.Send(dict(action='on_state', state=state))
 
     @property
     def name(self):

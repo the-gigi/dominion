@@ -1,5 +1,6 @@
 import copy
 import re
+import time
 
 from dominion import card_util, cards, object_model
 from dominion.cards import *
@@ -19,6 +20,7 @@ class Game(object_model.Game,
         self.active_player_index = 0
 
         self.players = []
+        self.current_player_done = False
 
     @property
     def player_states(self):
@@ -32,13 +34,20 @@ class Game(object_model.Game,
     def other_players(self):
         return [p for i, p in enumerate(self.players) if i != self.active_player_index]
 
-    def run(self, players):
+    def run(self, players, server=None):
         self.players = players
 
         while not self.is_over:
+            if server is not None:
+                server.Pump()
+                time.sleep(0.001)
             try:
                 self.notify_player()
+                self.current_player_done = False
                 self.player.play()
+                while server is not None and not self.current_player_done:
+                    server.Pump()
+                    time.sleep(0.001)
                 self.end_turn()
             except Exception as e:
                 print(e)
@@ -374,6 +383,7 @@ class Game(object_model.Game,
 
     def done(self):
         """ """
+        self.current_player_done = True
         self.player_state.done()
 
     @property

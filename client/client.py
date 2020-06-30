@@ -18,16 +18,17 @@ class Client(ConnectionListener,
 
     # Player interface
     def play(self):
-        pass
+        self._player.play()
+        self.done()
 
     def respond(self, action, *args):
-        pass
+        self._player.respond(action, *args)
 
     def on_game_event(self, event):
-        pass
+        self._player.respond(event)
 
     def on_state_change(self, state):
-        pass
+        self._player.on_state_change(state)
 
     # GameClient interface
     def play_action_card(self, card):
