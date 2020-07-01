@@ -19,7 +19,7 @@ def as_dict(cards):
     """
     dd = defaultdict(int)
     for card in cards:
-        dd[card.Type] += 1
+        dd[card.__class__.__name__] += 1
     return dict(dd)
 
 

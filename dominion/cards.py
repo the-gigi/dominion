@@ -19,6 +19,7 @@ class BaseCard:
 
     def as_dict(self):
         return dict(
+            name=self.__class__.__name__,
             type=self.Type,
             text=self.Text,
             cost=self.Cost,
