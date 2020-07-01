@@ -71,10 +71,6 @@ class Game(object_model.Game,
     def player_state(self):
         return self.players[self.active_player_index][1]
 
-    @property
-    def personal_player_state(self):
-        return self.player_state.state
-
     def set_active_player_index(self, player_index):
         self.active_player_index = player_index
 
@@ -385,7 +381,3 @@ class Game(object_model.Game,
         """ """
         self.current_player_done = True
         self.player_state.done()
-
-    @property
-    def state(self):
-        return self.player_state.state
