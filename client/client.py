@@ -31,8 +31,8 @@ class Client(ConnectionListener,
         self._player.on_state_change(state)
 
     # GameClient interface
-    def play_action_card(self, card):
-        self.Send(dict(action='play_action_card', card=card))
+    def play_action_card(self, card_type):
+        self.Send(dict(action='play_action_card', card=card_type))
 
     def buy(self, card_type):
         self.Send(dict(action='buy', card_type=card_type))
