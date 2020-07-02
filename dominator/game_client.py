@@ -8,12 +8,12 @@ class GameClient(object_model.GameClient):
     def __init__(self, player_cr: PlayerCustomResource):
         self.player_cr = player_cr
 
-    def play_action_card(self, card):
+    def play_action_card(self, card_type):
         """
         Update the spec with:
         play_action_card: card
         """
-        self.player_cr.patch(body=dict(play_action_card=card))
+        self.player_cr.patch(body=dict(play_action_card=card_type))
         return True
 
     def buy(self, card):

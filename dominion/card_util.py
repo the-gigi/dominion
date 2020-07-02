@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Dict
 
 from dominion import cards
 import inspect
@@ -6,7 +7,11 @@ from dominion.cards import *
 
 
 def get_card_types():
-    return [cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard]
+    return {cls.__name__: cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard}
+
+
+def get_card_class(card_name):
+    return get_card_types()[card_name]
 
 
 def as_dict(cards):
@@ -44,18 +49,18 @@ def count_money(cards, only_treasures=True):
     return amount
 
 
-def setup_piles(card_types, num_players):
+def setup_piles(card_types, num_players) -> Dict[str, int]:
     copper_count = 60
     silver_count = 40
     gold_count = 30
 
-    piles = {c: 13 for c in card_types}
-    piles[Copper] = copper_count - num_players * 7
-    piles[Silver] = silver_count
-    piles[Gold] = gold_count
+    piles = {c.Name(): 13 for c in card_types}
+    piles['Copper'] = copper_count - num_players * 7
+    piles['Silver'] = silver_count
+    piles['Gold'] = gold_count
 
-    piles[Estate] = 8 if num_players == 2 else 12
-    piles[Duchy] = 8 if num_players == 2 else 12
-    piles[Province] = 8 if num_players == 2 else 12
-    piles[Curse] = (num_players - 1) * 10
+    piles['Estate'] = 8 if num_players == 2 else 12
+    piles['Duchy'] = 8 if num_players == 2 else 12
+    piles['Province'] = 8 if num_players == 2 else 12
+    piles['Curse'] = (num_players - 1) * 10
     return piles

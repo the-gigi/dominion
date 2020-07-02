@@ -41,7 +41,7 @@ class PersonalState:
             hand=listify(self.hand),
             discard_pile=listify(self.discard_pile.cards),
             draw_deck=self.draw_deck,
-            supply={k.__name__: v for k,v in self.supply.items()},
+            supply=self.supply,
             play_area=[],
             actions=self.actions,
             buys=self.buys,

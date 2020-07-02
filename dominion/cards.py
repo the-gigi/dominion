@@ -7,11 +7,15 @@ class BaseCard:
     Reaction = False
 
     def __init__(self):
-        self.Name = self.__class__.__name__
-        self.Image = f'images/{self.Name.lower()}.jpg'
+        # self.Name = self.__class__.__name__
+        self.Image = f'images/{self.Name().lower()}.jpg'
 
     def __repr__(self):
         return f'{type(self).__name__}: {id(self)}'
+
+    @classmethod
+    def Name(cls):
+        return cls.__name__
 
     def dump(self):
         for a in 'name type text cost coins points reaction'.split():

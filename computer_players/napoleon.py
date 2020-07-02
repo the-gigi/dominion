@@ -15,7 +15,7 @@ class Napoleon(BaseComputerPlayer):
     def buy(self, supply, money, buys):
         if money == 4:
             number = random.randint(0, 2)
-            card = Militia if number == 1 else Spy
+            card = 'Militia' if number == 1 else 'Spy'
             return self.buy_card(money, card)
 
         return False

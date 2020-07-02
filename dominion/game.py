@@ -3,6 +3,7 @@ import re
 import time
 
 from dominion import card_util, cards, object_model
+from dominion.card_util import get_card_class
 from dominion.cards import *
 
 
@@ -56,7 +57,7 @@ class Game(object_model.Game,
             points = self.count_player_points(self.player_state)
             print(f'points: {points}')
             print(
-                f'supply - provinces: {supply[Province]}, duchies: {supply[Duchy]}, estates: {supply[Estate]}, silver: {supply[Silver]}')
+                f'supply - provinces: {supply["Province"]}, duchies: {supply["Duchy"]}, estates: {supply["Estate"]}, silver: {supply["Silver"]}')
             print('-' * 20)
 
             self.active_player_index = (self.active_player_index + 1) % len(self.players)
@@ -113,6 +114,7 @@ class Game(object_model.Game,
 
     def _verify_buy(self, card_type):
         """verify the supply if not exhausted, player has enough money and has at least one buy"""
+        card_class = get_card_class(card_type)
         if self.player_state.buys < 1:
             return False
 
@@ -120,10 +122,10 @@ class Game(object_model.Game,
             return False
         cm = card_util.count_money
         amount = cm(self.player_state.hand) + cm(self.player_state.play_area, False) - self.player_state.used_money
-        if amount < card_type.Cost:
+        if amount < card_class.Cost:
             return False
 
-        self.player_state.used_money += card_type.Cost
+        self.player_state.used_money += card_class.Cost
         return True
 
     # Game interface
@@ -173,34 +175,34 @@ class Game(object_model.Game,
 
         return True if the game is over and False otherwise
         """
-        if self.piles[cards.Province] == 0:
+        if self.piles[cards.Province.Name()] == 0:
             return True
         empty_piles = 0
         # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
-        for card_type in self.piles.keys():
-            if self.piles[card_type] == 0:
+        for card_type, count in self.piles.items():
+            if count == 0:
                 empty_piles += 1
                 if empty_piles >= 3:
                     return True
         return False
 
     # GameClient interface
-    def play_action_card(self, card):
+    def play_action_card(self, card_type):
         """
         Verify that the player can play the card
         Depending on the card, take its action
         Move the card from the player's hand to the play area
         """
-        if not self._verify_action(card):
+        if not self._verify_action(card_type):
             return False
 
-        card_type = re.sub(r'(?<!^)(?=[A-Z])', '_', card.Name).lower()
+        card_type = re.sub(r'(?<!^)(?=[A-Z])', '_', card_type.Name).lower()
         handler = getattr(self, 'play_' + card_type)
         handler()
 
         # move the card from the player's hand to the play area
-        self.player_state.hand.remove(card)
-        self.player_state.play_area.append(card)
+        self.player_state.hand.remove(card_type)
+        self.player_state.play_area.append(card_type)
 
         self.player_state.actions -= 1
         self.notify_player()
@@ -367,13 +369,15 @@ class Game(object_model.Game,
                 discard(top_2[0])
                 discard(top_2[1])
 
-    def buy(self, card_type):
+    def buy(self, card_name):
         """ """
-        if not self._verify_buy(card_type):
+        if not self._verify_buy(card_name):
             return False
 
-        self.piles[card_type] -= 1
-        self.player_state.discard_pile.add_to_top([card_type()])
+        card_class = get_card_class(card_name)
+
+        self.piles[card_name] -= 1
+        self.player_state.discard_pile.add_to_top([card_class()])
         self.player_state.buys -= 1
         self.notify_player()
 

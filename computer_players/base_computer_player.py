@@ -1,4 +1,4 @@
-from dominion.card_util import count_money
+from dominion.card_util import count_money, get_card_class
 from dominion.cards import *
 from dominion.object_model import BasePlayer
 
@@ -20,9 +20,11 @@ class BaseComputerPlayer(BasePlayer):
     def play_action_cards(self, hand):
         pass
 
-    def buy_card(self, money, card_type, condition=lambda:True):
-        if money >= card_type.Cost and self.state.supply[card_type] > 0 and condition():
-            ok = self.game_client.buy(card_type)
+    def buy_card(self, money, card_name, condition=lambda: True):
+        card_class = get_card_class(card_name)
+
+        if money >= card_class.Cost and self.state.supply[card_class.Name()] > 0 and condition():
+            ok = self.game_client.buy(card_name)
             return ok
 
         return False
@@ -42,12 +44,12 @@ class BaseComputerPlayer(BasePlayer):
             if self.buy(supply, money, buys):
                 continue
 
-            for card_type, condition in ((Province, lambda: True),
-                                         (Gold, lambda: supply[Province] >= 4),
-                                         (Duchy, lambda: supply[Province] < 4),
-                                         (Silver, lambda: supply[Province] >= 4 or supply[Duchy] >= 4),
-                                         (Estate, lambda: supply[Province] < 4 and supply[Duchy] < 4)):
-                if self.buy_card(money, card_type, condition):
+            for card_name, condition in (('Province', lambda: True),
+                                         ('Gold', lambda: supply['Province'] >= 4),
+                                         ('Duchy', lambda: supply['Province'] < 4),
+                                         ('Silver', lambda: supply['Province'] >= 4 or supply['Duchy'] >= 4),
+                                         ('Estate', lambda: supply['Province'] < 4 and supply['Duchy'] < 4)):
+                if self.buy_card(money, card_name, condition):
                     break
 
             # Can't byt anything interesting

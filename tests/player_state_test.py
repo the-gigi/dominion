@@ -8,7 +8,7 @@ import unittest
 
 class TestPlayerState(unittest.TestCase):
     def setUp(self):
-        card_types = get_card_types()
+        card_types = get_card_types().values()
         piles = setup_piles(card_types, 4)
         self.player_state = PlayerState('tester1', piles)
 

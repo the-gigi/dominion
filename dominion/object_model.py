@@ -5,11 +5,11 @@ from dominion import card_util
 
 class GameClient(metaclass=ABCMeta):
     @abstractmethod
-    def play_action_card(self, card):
+    def play_action_card(self, card_type: str):
         pass
 
     @abstractmethod
-    def buy(self, card_type):
+    def buy(self, card_type: str):
         pass
 
     @abstractmethod

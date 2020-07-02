@@ -4,8 +4,8 @@ from dominion.player_state import *
 
 class Rockefeller(BaseComputerPlayer):
     def buy(self, supply, money, buys):
-        for card_type in (Gold, Silver, Copper):
-            if self.buy_card(money, card_type):
+        for card_name in ('Gold', 'Silver', 'Copper'):
+            if self.buy_card(money, card_name):
                 return True
 
         return False

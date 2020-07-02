@@ -20,26 +20,26 @@ class TheGuy(BaseComputerPlayer):
             money = count_money(hand + self.state.play_area) - self.state.used_money
             supply = self.state.supply
 
-            if self.buy_card(money, Province):
+            if self.buy_card(money, 'Province'):
                 break
 
-            if self.buy_card(money, Gold):
+            if self.buy_card(money, 'Gold'):
                 break
 
-            if self.buy_card(money, Duchy, lambda: supply[Province] < 4):
+            if self.buy_card(money, 'Duchy', lambda: supply['Province'] < 4):
                 break
 
             if randint(0, 1) == 0:
-                if self.buy_card(money, Festival):
+                if self.buy_card(money, 'Festival'):
                     break
             else:
-                if self.buy_card(money, CouncilRoom):
+                if self.buy_card(money, 'CouncilRoom'):
                     break
 
-            if self.buy_card(money, Militia):
+            if self.buy_card(money, 'Militia'):
                 break
 
-            if self.buy_card(money, Silver):
+            if self.buy_card(money, 'Silver'):
                 break
 
     def respond(self, request, *args):

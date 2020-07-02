@@ -24,7 +24,7 @@ class DummyPlayer(Player):
 
 class GameTest(unittest.TestCase):
     def setUp(self):
-        card_types = get_card_types()
+        card_types = get_card_types().values()
         self.names = ['tester1', 'tester2', 'tester3', 'tester4']
         piles = setup_piles(card_types, len(self.names))
 

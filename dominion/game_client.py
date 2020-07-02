@@ -10,8 +10,8 @@ class GameClient(object_model.GameClient):
     def __init__(self, game):
         self.game = game
 
-    def play_action_card(self, card):
-        return self.game.play_action_card(card)
+    def play_action_card(self, card_type):
+        return self.game.play_action_card(card_type)
 
     def buy(self, card):
         return self.game.buy(card)
