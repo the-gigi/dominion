@@ -25,13 +25,12 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
-        card_types = []
         players_info = {p[1][0]: (p[1][1], p[1][2]) for p in self.players.items()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
             players_info[name] = (player, None)
 
-        game_factory.start_game(card_types, players_info, self)
+        game_factory.start_game(config.card_types, players_info, self)
 
     def get_computer_players(self):
         """ """
