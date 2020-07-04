@@ -25,10 +25,21 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
+
+        # Remove unjoined players
+        self.players = {k:v for k,v in self.players.items() if v[0] != ''}
         players_info = {p[1][0]: (p[1][1], p[1][2]) for p in self.players.items()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
             players_info[name] = (player, None)
+
+        # Send 'game start' event to all players with cards and player names
+        player_names = [p[0] for p in self.players.values()]
+        for p in self.players.values():
+            card_names = [c.Name() for c in config.card_types]
+            p[2].Send(dict(action='on_game_start',
+                           card_names=card_names,
+                           player_names=player_names))
 
         game_factory.start_game(config.card_types, players_info, self)
 
@@ -50,10 +61,14 @@ class DominionServer(Server, EventHandler):
         while name in (p[0] for p in self.players.values()):
             name += str(random.randint(1, 10))
 
-        self.players[channel.addr] = (name, Player, channel)
-
         joined_players = [p for p in self.players.values() if p[0] != '']
-        if len(joined_players) == MAX_PLAYER_COUNT:
+        for p in joined_players:
+            p[2].Send(dict(action='on_player_join', name=name))
+
+        new_player = (name, Player, channel)
+        self.players[channel.addr] = new_player
+
+        if len(joined_players) == MAX_PLAYER_COUNT - 1:
             self.start_game()
 
     def on_play_action_card(self, channel, card):

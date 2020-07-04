@@ -25,7 +25,7 @@ class Client(ConnectionListener,
         self._player.respond(action, *args)
 
     def on_game_event(self, event):
-        self._player.respond(event)
+        self._player.on_game_event(event)
 
     def on_state_change(self, state):
         self._player.on_state_change(state)
@@ -47,13 +47,18 @@ class Client(ConnectionListener,
     def Network(self, data):
         print(data)
 
-
     # Server events
     def Network_on_player_join(self, data):
-        print(f'*** player join: {data["player"]}')
+        message = f'Player joined: {data["name"]}'
+        print(message)
+        self.on_game_event(message)
 
     def Network_on_game_start(self, data):
-        print('Game started!')
+        message = 'Game started!'
+        print(message)
+        card_names = data['card_names']
+        player_names = data['player_names']
+        self.on_game_event(message)
 
     def Network_on_state(self, data):
         self._state = data['state']

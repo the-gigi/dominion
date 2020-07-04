@@ -1,5 +1,5 @@
 from dominion import object_model
-from pprint import pprint as pp
+
 
 class Player(object_model.Player):
     def __init__(self, name, game_client, channel):
@@ -11,7 +11,7 @@ class Player(object_model.Player):
         self.channel.Send(dict(action='play'))
 
     def respond(self, action, *args):
-        response = self.channel.Send(dict(action='play',args=args))
+        response = self.channel.Send(dict(action='play', args=args))
         return response
 
     def on_game_event(self, event):
