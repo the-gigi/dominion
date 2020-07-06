@@ -64,9 +64,14 @@ class Game(object_model.Game,
 
         winners = self.find_winners()
         if len(winners) == 1:
-            print(f'🎉 {winners[0]} won the game!!!')
+            message = f'🎉 {winners[0]} won the game!!!'
         else:
-            print(f'🎉 The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!')
+            message = f'🎉 The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!'
+        print(message)
+
+        for p in self.players:
+            p.on_game_event(message)
+        server.Pump()
 
     @property
     def player_state(self):
