@@ -108,12 +108,13 @@ class Game(object_model.Game,
         """
         return self.piles[card_type] == 0
 
-    def _verify_action(self, card):
+    def _verify_action(self, card_name):
         """verify that the player's card is an action, has the card in their hand, and has at least one action
         return True if the player can play the card, otherwise return False
         """
+        card = get_card_class(card_name)
         is_action_card = card.Type == 'Action'
-        is_card_in_hand = card in self.player_state.hand
+        is_card_in_hand = card.Name() in [card.Name() for card in self.player_state.hand]
         has_actions = self.player_state.actions > 0
         return is_action_card and is_card_in_hand and has_actions
 
@@ -192,22 +193,29 @@ class Game(object_model.Game,
         return False
 
     # GameClient interface
-    def play_action_card(self, card_type):
+    def play_action_card(self, card_name):
         """
         Verify that the player can play the card
         Depending on the card, take its action
         Move the card from the player's hand to the play area
         """
-        if not self._verify_action(card_type):
+        if not self._verify_action(card_name):
             return False
 
-        card_type = re.sub(r'(?<!^)(?=[A-Z])', '_', card_type.Name).lower()
-        handler = getattr(self, 'play_' + card_type)
+        lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
+        handler = getattr(self, 'play_' + lower_card_name)
         handler()
 
+        # find the played card in the player's hand
+        played_card = None
+        for card in self.player_state.hand:
+            if card.Name() == card_name:
+                played_card = card
+                break
+
         # move the card from the player's hand to the play area
-        self.player_state.hand.remove(card_type)
-        self.player_state.play_area.append(card_type)
+        self.player_state.hand.remove(played_card)
+        self.player_state.play_area.append(played_card)
 
         self.player_state.actions -= 1
         self.notify_player()

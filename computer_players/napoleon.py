@@ -21,7 +21,7 @@ class Napoleon(BaseComputerPlayer):
         return False
 
     def play_card(self, card, hand):
-        self.game_client.play_action_card(card)
+        self.game_client.play_action_card(card.Name())
         hand.remove(card)
 
     def respond(self, request, *args):

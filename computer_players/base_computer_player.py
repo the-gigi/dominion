@@ -9,10 +9,10 @@ class BaseComputerPlayer(BasePlayer):
         to_remove = []
         for card in hand:
             if isinstance(card, Village):
-                play(card)
+                play(card.Name())
                 to_remove.append(card)
             elif isinstance(card, Festival):
-                play(card)
+                play(card.Name())
                 to_remove.append(card)
         for card in to_remove:
             hand.remove(card)
@@ -56,7 +56,7 @@ class BaseComputerPlayer(BasePlayer):
             break
 
     def play_card(self, card, hand):
-        self.game_client.play_action_card(card)
+        self.game_client.play_action_card(card.Name())
         hand.remove(card)
 
     def play(self):
