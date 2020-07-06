@@ -43,8 +43,9 @@ class PlayerState:
     def _cleanup(self):
         """Discard hand and play area
         """
-        self.discard_pile.add_to_top(self.hand)
+        self.discard_pile.add_to_top(self.hand + self.play_area)
         self.hand = []
+        self.play_area = []
 
     def initialize_draw_deck(self):
         """Add 7 coppers and 3 estates to the draw deck and shuffle it"""
