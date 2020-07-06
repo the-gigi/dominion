@@ -293,7 +293,7 @@ class Game(object_model.Game,
             return response
 
         for player, player_state in self.other_players:
-            response = player.respond(Militia)
+            response = player.respond('Militia')
             hand = choose_hand()
             if hand is None:
                 break
@@ -321,7 +321,7 @@ class Game(object_model.Game,
             self.piles[Silver] -= 1
             self.player_state.draw_deck.add_to_top([Silver()])
         for player, player_state in self.other_players:
-            response = player.respond(Bureaucrat)
+            response = player.respond('Bureaucrat')
             victory = choose_victory(response)
             if victory is not None:
                 player_state.draw_deck.add_to_top([victory])
@@ -347,9 +347,9 @@ class Game(object_model.Game,
             player_state.reload_deck(1)
             top_card = player_state.draw_deck.cards[0]
             top_cards[player_state.name] = top_card
-        response = self.player.respond(Spy, top_cards)
+        response = self.player.respond('Spy', [card.Name() for card in top_cards.values()])
         for player_state in self.player_states:
-            if response[player_state.name] == 'discard':
+            if player_state.name in response and response[player_state.name] == 'discard':
                 card = player_state.draw_deck.pop(1)
                 player_state.discard_pile.cards += card
 
@@ -364,12 +364,18 @@ class Game(object_model.Game,
             top_2 = player_state.draw_deck.peek(2)
             treasures = [c for c in top_2 if c.Type == 'Treasure']
             treasure_dict[name] = treasures
-        response = self.player.respond(Thief, treasure_dict)
+        response = self.player.respond('Thief', [card.Name() for cards in treasure_dict.values() for card in cards])
         for name, player_state in self.other_players:
-            index, action = response[name]
             top_2 = player_state.draw_deck.pop(2)
             discard = player_state.discard_pile.add_to_top
             gain = self.player_state.discard_pile.add_to_top
+
+            if name not in response:
+                discard(top_2[0])
+                discard(top_2[1])
+                continue
+
+            index, action = response[name]
             if index == 0:
                 discard(top_2[1])
                 if action == 'gain':

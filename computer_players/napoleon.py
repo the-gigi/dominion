@@ -1,4 +1,5 @@
 from computer_players.base_computer_player import BaseComputerPlayer
+from dominion.card_util import get_card_class
 from dominion.player_state import *
 import random
 
@@ -25,15 +26,16 @@ class Napoleon(BaseComputerPlayer):
         hand.remove(card)
 
     def respond(self, request, *args):
-        if request == Spy:
-            top_cards = args[0]
+        if request == 'Spy':
+            top_card_names = args[0]
             response = {}
-            for name, top_card in top_cards.items():
+            for name in top_card_names:
+                card = get_card_class(name)
                 response[name] = 'put_back'
                 if name == self.name:
-                    if top_card.Type in ('Victory', 'Curse'):
+                    if card.Type in ('Victory', 'Curse'):
                         response[name] = 'discard'
                 else:
-                    if top_card.Type not in ('Victory', 'Curse'):
+                    if card.Type not in ('Victory', 'Curse'):
                         response[name] = 'discard'
             return response

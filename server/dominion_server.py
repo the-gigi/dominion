@@ -7,7 +7,7 @@ from server.event_handler import EventHandler
 from server.player import Player
 from dominion import game_factory
 
-MAX_PLAYER_COUNT = 2
+MAX_PLAYER_COUNT = 4
 
 
 class DominionServer(Server, EventHandler):
