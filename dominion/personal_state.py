@@ -42,7 +42,7 @@ class PersonalState:
             discard_pile=listify(self.discard_pile.cards),
             draw_deck=self.draw_deck,
             supply=self.supply,
-            play_area=[],
+            play_area=listify(self.play_area),
             actions=self.actions,
             buys=self.buys,
             used_money=self.used_money
