@@ -11,7 +11,7 @@ class Player(object_model.Player):
         self.channel.Send(dict(action='play'))
 
     def respond(self, action, *args):
-        response = self.channel.Send(dict(action='play', args=args))
+        response = self.channel.Send(dict(action='respond', args=args))
         return response
 
     def on_game_event(self, event):
