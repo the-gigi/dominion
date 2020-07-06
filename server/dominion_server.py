@@ -25,9 +25,8 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
-
         # Remove unjoined players
-        self.players = {k:v for k,v in self.players.items() if v[0] != ''}
+        self.players = {k: v for k, v in self.players.items() if v[0] != ''}
         players_info = {p[1][0]: (p[1][1], p[1][2]) for p in self.players.items()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
@@ -35,8 +34,8 @@ class DominionServer(Server, EventHandler):
 
         # Send 'game start' event to all players with cards and player names
         player_names = [p[0] for p in self.players.values()]
+        card_names = [c.Name() for c in config.card_types]
         for p in self.players.values():
-            card_names = [c.Name() for c in config.card_types]
             p[2].Send(dict(action='on_game_start',
                            card_names=card_names,
                            player_names=player_names))
