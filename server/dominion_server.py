@@ -33,7 +33,7 @@ class DominionServer(Server, EventHandler):
             players_info[name] = (player, None)
 
         # Send 'game start' event to all players with cards and player names
-        player_names = [p[0] for p in self.players.values()]
+        player_names = [p[0] for p in self.players.values()] + [name for name, _ in computer_players]
         card_names = [c.Name() for c in config.card_types]
         for p in self.players.values():
             p[2].Send(dict(action='on_game_start',
