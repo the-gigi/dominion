@@ -101,12 +101,12 @@ class Game(object_model.Game,
         all_cards = player_state.hand + player_state.draw_deck.cards + player_state.discard_pile.cards
         return card_util.count_money(all_cards)
 
-    def _is_pile_empty(self, card_type):
+    def _is_pile_empty(self, card_name):
         """Check if a card pile is empty
 
         return True if the pile of the given card type is empty and False otherwise
         """
-        return self.piles[card_type] == 0
+        return self.piles[card_name] == 0
 
     def _verify_action(self, card_name):
         """verify that the player's card is an action, has the card in their hand, and has at least one action
@@ -118,13 +118,13 @@ class Game(object_model.Game,
         has_actions = self.player_state.actions > 0
         return is_action_card and is_card_in_hand and has_actions
 
-    def _verify_buy(self, card_type):
+    def _verify_buy(self, card_name):
         """verify the supply if not exhausted, player has enough money and has at least one buy"""
-        card_class = get_card_class(card_type)
+        card_class = get_card_class(card_name)
         if self.player_state.buys < 1:
             return False
 
-        if self._is_pile_empty(card_type):
+        if self._is_pile_empty(card_name):
             return False
         cm = card_util.count_money
         amount = cm(self.player_state.hand) + cm(self.player_state.play_area, False) - self.player_state.used_money
@@ -317,8 +317,8 @@ class Game(object_model.Game,
             victory = response if is_victory and in_hand else None
             return victory
 
-        if self._is_pile_empty(Silver):
-            self.piles[Silver] -= 1
+        if self._is_pile_empty('Silver'):
+            self.piles['Silver'] -= 1
             self.player_state.draw_deck.add_to_top([Silver()])
         for player, player_state in self.other_players:
             response = player.respond('Bureaucrat')
@@ -338,7 +338,6 @@ class Game(object_model.Game,
         Each player (including you) reveals the top card of his deck
         and either discards it or puts it back, your choice.
         """
-
         self.player_state.draw_cards(1)
         self.player_state.actions += 1
 
@@ -347,7 +346,10 @@ class Game(object_model.Game,
             player_state.reload_deck(1)
             top_card = player_state.draw_deck.cards[0]
             top_cards[player_state.name] = top_card
-        response = self.player.respond('Spy', [card.Name() for card in top_cards.values()])
+        top_card_names = [card.Name() for card in top_cards.values()]
+        response = self.player.respond('Spy', *top_card_names)
+        if response is None:
+            return
         for player_state in self.player_states:
             if player_state.name in response and response[player_state.name] == 'discard':
                 card = player_state.draw_deck.pop(1)
@@ -361,19 +363,18 @@ class Game(object_model.Game,
         """
         treasure_dict = {}
         for name, player_state in self.other_players:
+            player_state.draw_deck.reload(2)
             top_2 = player_state.draw_deck.peek(2)
             treasures = [c for c in top_2 if c.Type == 'Treasure']
             treasure_dict[name] = treasures
         response = self.player.respond('Thief', [card.Name() for cards in treasure_dict.values() for card in cards])
+        if response is None:
+            return
+
         for name, player_state in self.other_players:
             top_2 = player_state.draw_deck.pop(2)
             discard = player_state.discard_pile.add_to_top
             gain = self.player_state.discard_pile.add_to_top
-
-            if name not in response:
-                discard(top_2[0])
-                discard(top_2[1])
-                continue
 
             index, action = response[name]
             if index == 0:

@@ -27,7 +27,7 @@ class Napoleon(BaseComputerPlayer):
 
     def respond(self, request, *args):
         if request == 'Spy':
-            top_card_names = args[0]
+            top_card_names = args
             response = {}
             for name in top_card_names:
                 card = get_card_class(name)

@@ -26,4 +26,4 @@ class PlayerChannel(Channel):
         self.event_handler.on_done(self)
 
     def Network_respond(self, data):
-        self.event_handler.on_respond(self, data['response'])
+        self.event_handler.on_response(self, data['response'])

@@ -1,4 +1,7 @@
 import random
+from functools import partial
+
+import time
 
 from PodSixNet.Server import Server
 
@@ -6,6 +9,7 @@ from server import player_channel, config
 from server.event_handler import EventHandler
 from server.player import Player
 from dominion import game_factory
+
 
 MAX_PLAYER_COUNT = 4
 
@@ -15,6 +19,13 @@ class DominionServer(Server, EventHandler):
         super().__init__(player_channel.PlayerChannel)
         self.game_client = None
         self.players = {}
+        self.response = (None, False)
+
+    def wait(self, predicate_func):
+        while not predicate_func():
+            self.Pump()
+            time.sleep(0.0001)
+
 
     def attach_game_client(self, game_client):
         self.game_client = game_client
@@ -25,9 +36,12 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
+        def prepare_player_factory(func):
+            return partial(func, server=self)
+
         # Remove unjoined players
         self.players = {k: v for k, v in self.players.items() if v[0] != ''}
-        players_info = {p[1][0]: (p[1][1], p[1][2]) for p in self.players.items()}
+        players_info = {p[1][0]: (prepare_player_factory(p[1][1]), p[1][2]) for p in self.players.items()}
         computer_players = self.get_computer_players()
         for name, player in computer_players:
             players_info[name] = (player, None)
@@ -79,5 +93,5 @@ class DominionServer(Server, EventHandler):
     def on_done(self, channel):
         self.game_client.done()
 
-    def on_respond(self, channel, response):
-        pass
+    def on_response(self, channel, response):
+        self.response = (response, True)

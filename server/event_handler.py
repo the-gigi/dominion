@@ -23,5 +23,5 @@ class EventHandler(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def on_respond(self, channel, response):
+    def on_response(self, channel, response):
         pass
