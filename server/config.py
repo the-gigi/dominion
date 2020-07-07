@@ -5,6 +5,7 @@ from computer_players.the_guy import TheGuy
 from computer_players.napoleon import Napoleon
 
 card_types = [
+    Adventurer,
     Bureaucrat,
     Chancellor,
     CouncilRoom,
