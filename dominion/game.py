@@ -70,7 +70,7 @@ class Game(object_model.Game,
         print(message)
 
         for p in self.players:
-            p.on_game_event(message)
+            p[0].on_game_event(message)
         server.Pump()
 
     @property
@@ -364,7 +364,12 @@ class Game(object_model.Game,
         """
         treasure_dict = {}
         for name, player_state in self.other_players:
-            player_state.draw_deck.reload(2)
+            if player_state.draw_deck.count < 2:
+                n = 2 - player_state.draw_deck.count
+                player_state.discard_pile.shuffle()
+                top_n = player_state.discard_pile.pop(n)
+                player_state.draw_deck.add_to_bottom(top_n)
+
             top_2 = player_state.draw_deck.peek(2)
             treasures = [c for c in top_2 if c.Type == 'Treasure']
             treasure_dict[name] = treasures

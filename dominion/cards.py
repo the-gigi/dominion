@@ -32,6 +32,7 @@ class BaseCard:
             reaction=self.Reaction
         )
 
+
 class Estate(BaseCard):
     Type = 'Victory'
     Text = "1 VP"
