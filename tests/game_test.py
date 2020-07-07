@@ -452,6 +452,26 @@ class GameTest(unittest.TestCase):
                 self.assertEqual(len(player_state.hand), 1)
                 self.assertEqual(player_state.buys, 1)
 
+    def test_play_adventurer(self):
+        adventurer = Adventurer()
+        copper = Copper()
+        silver = Silver()
+        moat = Moat()
+        curse = Curse()
+        bureaucrat = Bureaucrat()
+        gold = Gold()
+
+        ps = self.game.player_state
+        ps.draw_deck.cards = [moat, curse, copper, bureaucrat, silver, gold]
+        ps.play_area = []
+        ps.hand = [adventurer]
+        ok = self.game.play_action_card(adventurer.Name())
+        self.assertTrue(ok)
+        self.assertEqual(ps.hand, [copper, silver])
+        self.assertEqual(ps.play_area, [adventurer])
+        self.assertEqual(sorted(ps.discard_pile.cards), sorted([moat, curse, bureaucrat]))
+        self.assertEqual(ps.draw_deck.cards, [gold])
+
     def test_is_pile_empty(self):
         """ """
         # self.fail()

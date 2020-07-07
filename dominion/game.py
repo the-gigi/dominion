@@ -395,6 +395,18 @@ class Game(object_model.Game,
                 discard(top_2[0])
                 discard(top_2[1])
 
+    def play_adventurer(self):
+        treasures = 0
+        deck = self.player_state.draw_deck
+        while treasures < 2:
+            self.player_state.reload_deck(1)
+            top_card = deck.pop(1)[0]
+            if top_card.Type == 'Treasure':
+                self.player_state.hand.append(top_card)
+                treasures += 1
+            else:
+                self.player_state.discard_pile.add_to_top([top_card])
+
     def buy(self, card_name):
         """ """
         if not self._verify_buy(card_name):

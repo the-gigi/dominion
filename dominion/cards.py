@@ -13,6 +13,14 @@ class BaseCard:
     def __repr__(self):
         return f'{type(self).__name__}: {id(self)}'
 
+    def __lt__(self, other):
+        """
+        store the dict repr of self in a var
+        store the dict repr of other in a var
+        return the comparison of the two vars
+        """
+        return self.Name() < other.Name()
+
     @classmethod
     def Name(cls):
         return cls.__name__
@@ -82,6 +90,16 @@ class Gold(BaseCard):
     Cost = 6
 
 
+class Adventurer(BaseCard):
+    Type = 'Action'
+    Text = """
+    Reveal cards from your deck until you reveal
+    two Treasure cards. Put those Treasure cards into
+    your hand and discard the other revealed cards.
+    """
+    Cost = 6
+
+
 class Bureaucrat(BaseCard):
     Type = 'Action'
     Text = """
@@ -91,7 +109,6 @@ class Bureaucrat(BaseCard):
     a hand with no Victory cards).
     """
     Cost = 4
-    Reaction = False
 
 
 class Chancellor(BaseCard):
@@ -103,7 +120,6 @@ class Chancellor(BaseCard):
     """
     Coins = 2
     Cost = 3
-    Reaction = False
 
 
 class CouncilRoom(BaseCard):
@@ -115,7 +131,6 @@ class CouncilRoom(BaseCard):
     Each other player draws a card.
     """
     Cost = 5
-    Reaction = False
 
 
 class Festival(BaseCard):
@@ -127,7 +142,6 @@ class Festival(BaseCard):
     """
     Coins = 2
     Cost = 5
-    Reaction = False
 
 
 class Library(BaseCard):
@@ -138,7 +152,6 @@ class Library(BaseCard):
     discard the set aside cards after you finish drawing.
     """
     Cost = 5
-    Reaction = False
 
 
 class Militia(BaseCard):
@@ -150,7 +163,6 @@ class Militia(BaseCard):
     """
     Coins = 2
     Cost = 4
-    Reaction = False
 
 
 class Moat(BaseCard):
@@ -175,7 +187,6 @@ class Spy(BaseCard):
     and either discards it or puts it back, your choice.
     """
     Cost = 4
-    Reaction = False
 
 
 class Thief(BaseCard):
@@ -187,7 +198,6 @@ class Thief(BaseCard):
     They discard the other revealed cards.
     """
     Cost = 4
-    Reaction = False
 
 
 class Village(BaseCard):
@@ -197,4 +207,3 @@ class Village(BaseCard):
     +2 Actions
     """
     Cost = 3
-    Reaction = False
