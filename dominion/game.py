@@ -43,7 +43,7 @@ class Game(object_model.Game,
                 server.Pump()
                 time.sleep(0.001)
             try:
-                self.notify_player()
+                self.notify_players()
                 self.current_player_done = False
                 self.player.play()
                 while server is not None and not self.current_player_done:
@@ -166,14 +166,15 @@ class Game(object_model.Game,
                     winners += [player_state.name]
         return winners
 
-    def notify_player(self):
-        personal_state = self.player_state.get_personal_state(copy.deepcopy(self.piles))
-        self.player.on_state_change(personal_state)
+    def notify_players(self):
+        for player, player_state in self.players:
+            personal_state = player_state.get_personal_state(copy.deepcopy(self.piles))
+            player.on_state_change(personal_state)
 
     def end_turn(self):
         """ """
         self.player_state.used_money = 0
-        self.notify_player()
+        self.notify_players()
 
     @property
     def is_over(self):
@@ -218,7 +219,7 @@ class Game(object_model.Game,
         self.player_state.play_area.append(played_card)
 
         self.player_state.actions -= 1
-        self.notify_player()
+        self.notify_players()
         return True
 
     def play_moat(self):
@@ -301,7 +302,7 @@ class Game(object_model.Game,
 
             player_state.hand = hand
             player_state.discard_pile.add_to_top(discarded)
-            self.notify_player()
+            self.notify_players()
 
     def play_bureaucrat(self):
         """
@@ -399,7 +400,7 @@ class Game(object_model.Game,
         self.piles[card_name] -= 1
         self.player_state.discard_pile.add_to_top([card_class()])
         self.player_state.buys -= 1
-        self.notify_player()
+        self.notify_players()
 
     def done(self):
         """ """
