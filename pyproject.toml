@@ -8,6 +8,8 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "3.8.2"
 PodSixNet = "^0.11.0"
+pillow = "^7.2.0"
+numpy = "^1.19.0"
 
 
 [tool.poetry.dev-dependencies]
