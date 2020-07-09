@@ -20,12 +20,16 @@ def generate_pic(filename):
 
 
 for f in glob('*.png'):
-    if f.endswith('_gray.png'):
+    if f.endswith('_gray.png') or f.endswith('_pic.png'):
+        continue
+
+    filename = f.replace('.png', '_pic.png')
+    if os.path.isfile(filename):
         continue
 
     pic = generate_pic(f)
     pic.show()
-    filename = f.replace('.png', '_pic.png')
+
     pic.save(filename)
 
 

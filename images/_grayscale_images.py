@@ -5,7 +5,7 @@ from PIL import Image, ImageOps
 from glob import glob
 
 for ext in 'png jpg'.split():
-    for f in glob(f'*_pic.{ext}'):
+    for f in glob(f'*.{ext}'):
         if f.endswith(f'_gray.{ext}'):
             continue
 

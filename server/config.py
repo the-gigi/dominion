@@ -5,16 +5,16 @@ from computer_players.the_guy import TheGuy
 from computer_players.napoleon import Napoleon
 
 card_types = [
-    Adventurer,
+    #Adventurer,
     Bureaucrat,
-    Chancellor,
+    #Chancellor,
     CouncilRoom,
     Festival,
     Library,
     Militia,
     Moat,
-    Spy,
-    Thief,
+    #Spy,
+    #Thief,
     Village]
 
 computer_players = [

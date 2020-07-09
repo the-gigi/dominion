@@ -5,17 +5,20 @@ from computer_players.the_guy import TheGuy
 from computer_players.napoleon import Napoleon
 
 card_types = [
-    Adventurer,
+    #Adventurer,
     Bureaucrat,
-    Chancellor,
+    #Chancellor,
     CouncilRoom,
     Festival,
     Library,
+    Market,
     Militia,
     Moat,
-    Spy,
-    Thief,
-    Village]
+    Smithy,
+    #Spy,
+    #Thief,
+    Village,
+    Witch]
 
 players_info = dict(Vicky=(Victor, None),
                     The_Rock=(Rockefeller, None),
