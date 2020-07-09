@@ -10,7 +10,6 @@ from server.event_handler import EventHandler
 from server.player import Player
 from dominion import game_factory
 
-
 MAX_PLAYER_COUNT = 4
 
 
@@ -26,7 +25,6 @@ class DominionServer(Server, EventHandler):
             self.Pump()
             time.sleep(0.0001)
 
-
     def attach_game_client(self, game_client):
         self.game_client = game_client
 
@@ -36,6 +34,7 @@ class DominionServer(Server, EventHandler):
 
     def start_game(self):
         """ """
+
         def prepare_player_factory(func):
             return partial(func, server=self)
 

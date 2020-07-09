@@ -43,7 +43,7 @@ class Game(object_model.Game,
                 server.Pump()
                 time.sleep(0.001)
             try:
-                self.notify_players()
+                self.send_personal_state()
                 self.current_player_done = False
                 self.player.play()
                 while server is not None and not self.current_player_done:
@@ -166,7 +166,11 @@ class Game(object_model.Game,
                     winners += [player_state.name]
         return winners
 
-    def notify_players(self):
+    def send_game_event(self, event):
+        for player, _ in self.players:
+            player.on_game_event(event)
+
+    def send_personal_state(self):
         for player, player_state in self.players:
             personal_state = player_state.get_personal_state(copy.deepcopy(self.piles))
             player.on_state_change(personal_state)
@@ -174,7 +178,7 @@ class Game(object_model.Game,
     def end_turn(self):
         """ """
         self.player_state.used_money = 0
-        self.notify_players()
+        self.send_personal_state()
 
     @property
     def is_over(self):
@@ -203,6 +207,7 @@ class Game(object_model.Game,
         if not self._verify_action(card_name):
             return False
 
+        self.send_game_event(f'{self.player.name} played {card_name}'  )
         lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
         handler = getattr(self, 'play_' + lower_card_name)
         handler()
@@ -219,7 +224,7 @@ class Game(object_model.Game,
         self.player_state.play_area.append(played_card)
 
         self.player_state.actions -= 1
-        self.notify_players()
+        self.send_personal_state()
         return True
 
     # def play_adventurer(self):
@@ -317,7 +322,7 @@ class Game(object_model.Game,
             return response
 
         for player, player_state in self.other_players:
-            if Moat in player_state.hand:
+            if Moat in set(type(c) for c in player_state.hand):
                 continue
             response = player.respond('Militia')
             hand = choose_hand()
@@ -327,7 +332,7 @@ class Game(object_model.Game,
 
             player_state.hand = hand
             player_state.discard_pile.add_to_top(discarded)
-            self.notify_players()
+            self.send_personal_state()
 
     def play_bureaucrat(self):
         """
@@ -452,7 +457,8 @@ class Game(object_model.Game,
         self.piles[card_name] -= 1
         self.player_state.discard_pile.add_to_top([card_class()])
         self.player_state.buys -= 1
-        self.notify_players()
+        self.send_game_event(f'{self.player.name} bought {card_name}')
+        self.send_personal_state()
 
     def done(self):
         """ """
