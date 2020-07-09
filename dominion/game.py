@@ -222,22 +222,17 @@ class Game(object_model.Game,
         self.notify_players()
         return True
 
-    def play_moat(self):
-        """
-        The active player draws 2 cards and adds them to their hand.
-
-        Counter - When another player plays an Attack card, you may first
-        reveal this from your hand, to be unaffected by it.
-        """
-        self.player_state.draw_cards(2)
-
-    def play_chancellor(self):
-        """
-        +$2
-
-        You may immediately put your deck into your discard pile.
-        """
-        # TO DO - Ask player if they want to put their deck into their discard pile
+    # def play_adventurer(self):
+    #     treasures = 0
+    #     deck = self.player_state.draw_deck
+    #     while treasures < 2:
+    #         self.player_state.reload_deck(1)
+    #         top_card = deck.pop(1)[0]
+    #         if top_card.Type == 'Treasure':
+    #             self.player_state.hand.append(top_card)
+    #             treasures += 1
+    #         else:
+    #             self.player_state.discard_pile.add_to_top([top_card])
 
     def play_festival(self):
         """
@@ -247,6 +242,34 @@ class Game(object_model.Game,
         """
         self.player_state.actions += 2
         self.player_state.buys += 1
+
+    def play_market(self):
+        """
+        +1 Card
+        +1 Action
+        +1 Buy
+        +$1
+        """
+        self.player_state.draw_cards(1)
+        self.player_state.actions += 1
+        self.player_state.buys += 1
+
+    def play_moat(self):
+        """
+        The active player draws 2 cards and adds them to their hand.
+
+        Counter - When another player plays an Attack card, you may first
+        reveal this from your hand, to be unaffected by it.
+        """
+        self.player_state.draw_cards(2)
+
+    # def play_chancellor(self):
+    #     """
+    #     +$2
+    #
+    #     You may immediately put your deck into your discard pile.
+    #     """
+    #     # TO DO - Ask player if they want to put their deck into their discard pile
 
     def play_village(self):
         """
@@ -294,6 +317,8 @@ class Game(object_model.Game,
             return response
 
         for player, player_state in self.other_players:
+            if Moat in player_state.hand:
+                continue
             response = player.respond('Militia')
             hand = choose_hand()
             if hand is None:
@@ -332,80 +357,90 @@ class Game(object_model.Game,
             for p in rest:
                 p.on_game_event(event)
 
-    def play_spy(self):
-        """+1 Card
-        +1 Action
-
-        Each player (including you) reveals the top card of his deck
-        and either discards it or puts it back, your choice.
+    def play_smithy(self):
         """
-        self.player_state.draw_cards(1)
-        self.player_state.actions += 1
-
-        top_cards = {}
-        for player_state in self.player_states:
-            player_state.reload_deck(1)
-            top_card = player_state.draw_deck.cards[0]
-            top_cards[player_state.name] = top_card
-        top_card_names = [card.Name() for card in top_cards.values()]
-        response = self.player.respond('Spy', *top_card_names)
-        if response is None:
-            return
-        for player_state in self.player_states:
-            if player_state.name in response and response[player_state.name] == 'discard':
-                card = player_state.draw_deck.pop(1)
-                player_state.discard_pile.cards += card
-
-    def play_thief(self):
-        """ Each other player reveals the top 2 cards of his deck.
-        If they revealed any Treasure cards, they trash one of them that you choose.
-        You may gain any or all of these trashed cards.
-        They discard the other revealed cards.
+        +3 Cards
         """
-        treasure_dict = {}
-        for name, player_state in self.other_players:
-            if player_state.draw_deck.count < 2:
-                n = 2 - player_state.draw_deck.count
-                player_state.discard_pile.shuffle()
-                top_n = player_state.discard_pile.pop(n)
-                player_state.draw_deck.add_to_bottom(top_n)
+        self.player_state.draw_cards(3)
 
-            top_2 = player_state.draw_deck.peek(2)
-            treasures = [c for c in top_2 if c.Type == 'Treasure']
-            treasure_dict[name] = treasures
-        response = self.player.respond('Thief', [card.Name() for cards in treasure_dict.values() for card in cards])
-        if response is None:
-            return
+    # def play_spy(self):
+    #     """+1 Card
+    #     +1 Action
+    #
+    #     Each player (including you) reveals the top card of his deck
+    #     and either discards it or puts it back, your choice.
+    #     """
+    #     self.player_state.draw_cards(1)
+    #     self.player_state.actions += 1
+    #
+    #     top_cards = {}
+    #     for player_state in self.player_states:
+    #         player_state.reload_deck(1)
+    #         top_card = player_state.draw_deck.cards[0]
+    #         top_cards[player_state.name] = top_card
+    #     top_card_names = [card.Name() for card in top_cards.values()]
+    #     response = self.player.respond('Spy', *top_card_names)
+    #     if response is None:
+    #         return
+    #     for player_state in self.player_states:
+    #         if player_state.name in response and response[player_state.name] == 'discard':
+    #             card = player_state.draw_deck.pop(1)
+    #             player_state.discard_pile.cards += card
+    #
+    # def play_thief(self):
+    #     """ Each other player reveals the top 2 cards of his deck.
+    #     If they revealed any Treasure cards, they trash one of them that you choose.
+    #     You may gain any or all of these trashed cards.
+    #     They discard the other revealed cards.
+    #     """
+    #     treasure_dict = {}
+    #     for name, player_state in self.other_players:
+    #         if player_state.draw_deck.count < 2:
+    #             n = 2 - player_state.draw_deck.count
+    #             player_state.discard_pile.shuffle()
+    #             top_n = player_state.discard_pile.pop(n)
+    #             player_state.draw_deck.add_to_bottom(top_n)
+    #
+    #         top_2 = player_state.draw_deck.peek(2)
+    #         treasures = [c for c in top_2 if c.Type == 'Treasure']
+    #         treasure_dict[name] = treasures
+    #     response = self.player.respond('Thief', [card.Name() for cards in treasure_dict.values() for card in cards])
+    #     if response is None:
+    #         return
+    #
+    #     for name, player_state in self.other_players:
+    #         top_2 = player_state.draw_deck.pop(2)
+    #         discard = player_state.discard_pile.add_to_top
+    #         gain = self.player_state.discard_pile.add_to_top
+    #
+    #         index, action = response[name]
+    #         if index == 0:
+    #             discard(top_2[1])
+    #             if action == 'gain':
+    #                 gain(top_2[0])
+    #         elif index == 1:
+    #             discard(top_2[0])
+    #             if action == 'gain':
+    #                 gain(top_2[1])
+    #         else:
+    #             discard(top_2[0])
+    #             discard(top_2[1])
 
-        for name, player_state in self.other_players:
-            top_2 = player_state.draw_deck.pop(2)
-            discard = player_state.discard_pile.add_to_top
-            gain = self.player_state.discard_pile.add_to_top
+    def play_witch(self):
+        """
+        +2 Cards
 
-            index, action = response[name]
-            if index == 0:
-                discard(top_2[1])
-                if action == 'gain':
-                    gain(top_2[0])
-            elif index == 1:
-                discard(top_2[0])
-                if action == 'gain':
-                    gain(top_2[1])
-            else:
-                discard(top_2[0])
-                discard(top_2[1])
+        Each other player gains a Curse
+        """
+        self.player_state.draw_cards(2)
+        for _, ps in self.other_players:
+            if Moat in set(type(c) for c in ps.hand):
+                continue
 
-    def play_adventurer(self):
-        treasures = 0
-        deck = self.player_state.draw_deck
-        while treasures < 2:
-            self.player_state.reload_deck(1)
-            top_card = deck.pop(1)[0]
-            if top_card.Type == 'Treasure':
-                self.player_state.hand.append(top_card)
-                treasures += 1
-            else:
-                self.player_state.discard_pile.add_to_top([top_card])
+            if self.piles['Curse'] == 0:
+                break
+            ps.discard_pile.add_to_top([Curse()])
+            self.piles['Curse'] -= 1
 
     def buy(self, card_name):
         """ """
