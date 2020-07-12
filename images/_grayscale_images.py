@@ -11,8 +11,8 @@ for ext in 'png jpg'.split():
 
         img = Image.open(f).convert('LA')
         new_filename = f.replace(f'.{ext}', f'_gray.{ext}')
-        # if os.path.exists(new_filename):
-        #     continue
+        if os.path.exists(new_filename):
+            continue
         img2 = ImageOps.grayscale(img)
         img2.show()
         img2.save(new_filename)
