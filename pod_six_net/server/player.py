@@ -1,4 +1,4 @@
-from dominion import object_model
+from dominion.object_model import object_model
 
 
 class Player(object_model.Player):

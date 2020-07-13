@@ -1,6 +1,6 @@
 from PodSixNet.Channel import Channel
 
-from server.event_handler import EventHandler
+from pod_six_net.server.event_handler import EventHandler
 
 
 class PlayerChannel(Channel):

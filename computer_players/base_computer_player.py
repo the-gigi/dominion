@@ -1,9 +1,16 @@
+from dominion import card_util
 from dominion.card_util import count_money, get_card_class
 from dominion.cards import *
-from dominion.object_model import BasePlayer
+from dominion.object_model.object_model import Player, GameClient
 
 
-class BaseComputerPlayer(BasePlayer):
+class BaseComputerPlayer(Player):
+    def __init__(self, name, game_client: GameClient):
+        self.name = name
+        self.game_client = game_client
+        self.events = []
+        self._state = None
+
     def play_no_brainers(self, hand):
         play = self.game_client.play_action_card
         to_remove = []
@@ -68,5 +75,21 @@ class BaseComputerPlayer(BasePlayer):
         self.buy_stuff(hand)
         self.game_client.done()
 
-    def respond(self, request, *args):
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def all_cards(self):
+        hand = card_util.as_dict(self.state.hand)
+        draw_deck = card_util.as_dict(self.state.draw_deck.cards)
+        return dict(**hand, **draw_deck, **self.state.discard_pile)
+
+    def on_game_event(self, event):
+        self.events.append(event)
+
+    def on_state_change(self, state):
+        self._state = state
+
+    def respond(self, action, *args):
         return

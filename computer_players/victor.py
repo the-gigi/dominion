@@ -1,9 +1,9 @@
+from computer_players.base_computer_player import BaseComputerPlayer
 from dominion.card_util import count_money
-from dominion.object_model import BasePlayer
 from dominion.cards import *
 
 
-class Victor(BasePlayer):
+class Victor(BaseComputerPlayer):
     def play(self):
         """
         Victor only buys the largest possible victory card

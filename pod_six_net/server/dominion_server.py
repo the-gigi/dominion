@@ -5,9 +5,9 @@ import time
 
 from PodSixNet.Server import Server
 
-from server import player_channel, config
-from server.event_handler import EventHandler
-from server.player import Player
+from pod_six_net.server import player_channel, config
+from pod_six_net.server.event_handler import EventHandler
+from pod_six_net.server.player import Player
 from dominion import game_factory
 
 MAX_PLAYER_COUNT = 4
@@ -32,18 +32,33 @@ class DominionServer(Server, EventHandler):
         channel.attach_event_handler(self)
         self.players[addr] = ('', Player, channel)
 
-    def start_game(self):
-        """ """
+    def _prepare_player_info(self):
+        """More himan readable version of:
+
+        {p[1][0]: (prepare_player_factory(p[1][1]), (p[1][2],)) for p in self.players.items()}
+        """
 
         def prepare_player_factory(func):
             return partial(func, server=self)
 
+        players_info = {}
+        for p in self.players.values():
+            name = p[0]
+            player_factory = p[1]
+            channel = p[2]
+            args = (channel,)
+            players_info[name] = (player_factory, args)
+        return players_info
+
+    def start_game(self):
+        """ """
+
         # Remove unjoined players
         self.players = {k: v for k, v in self.players.items() if v[0] != ''}
-        players_info = {p[1][0]: (prepare_player_factory(p[1][1]), p[1][2]) for p in self.players.items()}
+        players_info = self._prepare_player_info()
         computer_players = self.get_computer_players()
         for name, player in computer_players:
-            players_info[name] = (player, None)
+            players_info[name] = (player, ())
 
         # Send 'game start' event to all players with cards and player names
         player_names = [p[0] for p in self.players.values()] + [name for name, _ in computer_players]

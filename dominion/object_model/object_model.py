@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-from dominion import card_util
-
 
 class GameClient(metaclass=ABCMeta):
     @abstractmethod
@@ -14,21 +12,6 @@ class GameClient(metaclass=ABCMeta):
 
     @abstractmethod
     def done(self):
-        pass
-
-
-class Game(metaclass=ABCMeta):
-    @abstractmethod
-    def find_winners(self):
-        pass
-
-    @abstractmethod
-    def end_turn(self):
-        pass
-
-    @property
-    @abstractmethod
-    def is_over(self):
         pass
 
 
@@ -59,31 +42,3 @@ class Player(metaclass=ABCMeta):
     @abstractmethod
     def on_state_change(self, state):
         pass
-
-
-class BasePlayer(Player):
-    def __init__(self, name, game_client: GameClient, channel):
-        self.name = name
-        self.game_client = game_client
-        self.events = []
-        self._state = None
-
-    @property
-    def state(self):
-        # return self.game_client.state
-        return self._state
-
-    @property
-    def all_cards(self):
-        hand = card_util.as_dict(self.state.hand)
-        draw_deck = card_util.as_dict(self.state.draw_deck.cards)
-        return dict(**hand, **draw_deck, **self.state.discard_pile)
-
-    def on_game_event(self, event):
-        self.events.append(event)
-
-    def on_state_change(self, state):
-        self._state = state
-
-    def respond(self, action, *args):
-        return

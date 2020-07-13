@@ -2,13 +2,16 @@ import copy
 import re
 import time
 
-from dominion import card_util, cards, object_model
+from dominion import card_util, cards
+from .object_model import object_model
 from dominion.card_util import get_card_class
 from dominion.cards import *
 
 
-class Game(object_model.Game,
-           object_model.GameClient):
+# class Game(object_model.Game,
+#            object_model.GameClient):
+class Game(object_model.GameClient):
+
     """Game represents the specific game domain
 
     In this case Dominion
@@ -30,6 +33,10 @@ class Game(object_model.Game,
     @property
     def player(self) -> object_model.Player:
         return self.players[self.active_player_index][0]
+
+    @property
+    def player_name(self) -> str:
+        return self.players[self.active_player_index][1].name
 
     @property
     def other_players(self):
@@ -71,7 +78,6 @@ class Game(object_model.Game,
 
         for p in self.players:
             p[0].on_game_event(message)
-        server.Pump()
 
     @property
     def player_state(self):
@@ -186,7 +192,7 @@ class Game(object_model.Game,
 
         return True if the game is over and False otherwise
         """
-        if self.piles[cards.Province.Name()] == 0:
+        if self.piles['Province'] == 0:
             return True
         empty_piles = 0
         # empty_piles = sum(1 if v == 0 else 0 for v in self.piles.values())
@@ -207,7 +213,7 @@ class Game(object_model.Game,
         if not self._verify_action(card_name):
             return False
 
-        self.send_game_event(f'{self.player.name} played {card_name}'  )
+        self.send_game_event(f'{self.player_name} played {card_name}'  )
         lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
         handler = getattr(self, 'play_' + lower_card_name)
         handler()

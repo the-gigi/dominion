@@ -1,6 +1,5 @@
 from PodSixNet.Connection import connection, ConnectionListener
-
-from dominion import object_model
+from dominion.object_model import object_model
 
 
 class Client(ConnectionListener,

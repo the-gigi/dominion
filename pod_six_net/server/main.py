@@ -1,6 +1,6 @@
 from time import sleep
 
-from server.dominion_server import DominionServer
+from pod_six_net.server.dominion_server import DominionServer
 
 
 def main():

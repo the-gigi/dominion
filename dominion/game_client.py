@@ -1,4 +1,4 @@
-from dominion import object_model
+from dominion.object_model import object_model
 
 
 class GameClient(object_model.GameClient):

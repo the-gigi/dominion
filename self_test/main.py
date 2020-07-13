@@ -1,3 +1,4 @@
+from dominion.game_factory import start_game
 from dominion.cards import *
 from computer_players.rockefeller import Rockefeller
 from computer_players.victor import Victor
@@ -25,3 +26,12 @@ players_info = dict(Vicky=(Victor, None),
                     Guy=(TheGuy, None),
                     Dynamite=(Napoleon, None),
                     Dynamite2=(Napoleon, None))
+
+
+def main():
+    """ """
+    start_game(card_types, players_info)
+
+
+if __name__ == '__main__':
+    main()
