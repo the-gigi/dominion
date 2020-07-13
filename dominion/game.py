@@ -45,7 +45,11 @@ class Game(object_model.GameClient):
     def run(self, players, server=None):
         self.players = players
 
+
+        turn = 0
         while not self.is_over:
+            turn += 1
+            print('***** turn ', turn)
             if server is not None:
                 server.Pump()
                 time.sleep(0.001)
@@ -463,8 +467,10 @@ class Game(object_model.GameClient):
         self.piles[card_name] -= 1
         self.player_state.discard_pile.add_to_top([card_class()])
         self.player_state.buys -= 1
-        self.send_game_event(f'{self.player.name} bought {card_name}')
+        self.send_game_event(f'{self.player_name} bought {card_name}')
         self.send_personal_state()
+
+        return True
 
     def done(self):
         """ """

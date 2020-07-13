@@ -11,7 +11,7 @@ class BaseCard:
         self.Image = f'images/{self.Name().lower()}.jpg'
 
     def __repr__(self):
-        return f'{type(self).__name__}: {id(self)}'
+        return f'{type(self).__name__}'
 
     def __lt__(self, other):
         """

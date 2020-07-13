@@ -24,8 +24,7 @@ card_types = [
 players_info = dict(Vicky=(Victor, None),
                     The_Rock=(Rockefeller, None),
                     Guy=(TheGuy, None),
-                    Dynamite=(Napoleon, None),
-                    Dynamite2=(Napoleon, None))
+                    Dynamite=(Napoleon, None))
 
 
 def main():

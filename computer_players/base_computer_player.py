@@ -21,6 +21,10 @@ class BaseComputerPlayer(Player):
             elif isinstance(card, Festival):
                 play(card.Name())
                 to_remove.append(card)
+            elif isinstance(card, Market):
+                play(card.Name())
+                to_remove.append(card)
+
         for card in to_remove:
             hand.remove(card)
 
@@ -30,7 +34,7 @@ class BaseComputerPlayer(Player):
     def buy_card(self, money, card_name, condition=lambda: True):
         card_class = get_card_class(card_name)
 
-        if money >= card_class.Cost and self.state.supply[card_class.Name()] > 0 and condition():
+        if money >= card_class.Cost and self.state.supply[card_name] > 0 and condition():
             ok = self.game_client.buy(card_name)
             return ok
 
@@ -64,12 +68,14 @@ class BaseComputerPlayer(Player):
 
     def play_card(self, card, hand):
         self.game_client.play_action_card(card.Name())
+        print('###### played ', card.Name())
         hand.remove(card)
 
     def play(self):
         """
         """
         hand = self.state.hand
+        print(f'@@@@ play(), name: {self.name}, hand: {hand}')
         self.play_no_brainers(hand)
         self.play_action_cards(hand)
         self.buy_stuff(hand)

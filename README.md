@@ -21,16 +21,16 @@ $ poetry install
 ```
 
 
-# Running the game
+# Running the game (self-test)
 
 ```
-poetry run python main.py
+$ poetry run python self-test/main.py
 ```
 
 # Testing
 
 ```
-python3 -m unittest discover -s . -p '*_test.py' -v
+$ poetry run python -m unittest discover -s . -p '*_test.py' -v
 ```
 
 # Concepts
