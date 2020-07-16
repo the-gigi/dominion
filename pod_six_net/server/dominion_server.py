@@ -8,7 +8,7 @@ from PodSixNet.Server import Server
 from pod_six_net.server import player_channel, config
 from pod_six_net.server.event_handler import EventHandler
 from pod_six_net.server.player import Player
-from dominion import game_factory
+from dominion_game_engine import game_factory
 
 MAX_PLAYER_COUNT = 4
 
@@ -47,7 +47,7 @@ class DominionServer(Server, EventHandler):
             player_factory = p[1]
             channel = p[2]
             args = (channel,)
-            players_info[name] = (player_factory, args)
+            players_info[name] = (prepare_player_factory(player_factory), args)
         return players_info
 
     def start_game(self):

@@ -1,8 +1,8 @@
 import copy
 
-from dominion.card_stack import CardStack
-from dominion.cards import *
-from dominion.personal_state import PersonalState
+from dominion_game_engine.card_stack import CardStack
+from dominion_game_engine.cards import *
+from dominion_game_engine.personal_state import PersonalState
 
 
 class PlayerState:

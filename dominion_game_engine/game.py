@@ -2,14 +2,11 @@ import copy
 import re
 import time
 
-from dominion import card_util, cards
-from .object_model import object_model
-from dominion.card_util import get_card_class
-from dominion.cards import *
+from dominion.object_model import object_model
+from dominion_game_engine import card_util
+from dominion_game_engine.card_util import get_card_class
+from dominion_game_engine.cards import *
 
-
-# class Game(object_model.Game,
-#            object_model.GameClient):
 class Game(object_model.GameClient):
 
     """Game represents the specific game domain
@@ -353,10 +350,17 @@ class Game(object_model.GameClient):
         """
 
         def choose_victory(response):
-            is_victory = response.Type == "Victory"
-            in_hand = response in player_state.hand
-            victory = response if is_victory and in_hand else None
-            return victory
+
+            if response is None or response.Type != 'Victory':
+                for c in player_state.hand:
+                    if c.Type == 'Victory':
+                        return c
+                return None
+
+            for c in player_state.hand:
+                if isinstance(c, response):
+                    return c
+            return None
 
         if self._is_pile_empty('Silver'):
             self.piles['Silver'] -= 1
@@ -367,10 +371,6 @@ class Game(object_model.GameClient):
             if victory is not None:
                 player_state.draw_deck.add_to_top([victory])
                 player_state.hand.remove(victory)
-            rest = (p for p in self.other_players + self.player if p != player)
-            event = victory if victory else player_state.hand
-            for p in rest:
-                p.on_game_event(event)
 
     def play_smithy(self):
         """

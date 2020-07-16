@@ -1,6 +1,6 @@
 import random
 
-from dominion import card_util
+from dominion_game_engine import card_util
 
 
 class CardStack:

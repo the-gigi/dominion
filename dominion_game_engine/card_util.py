@@ -1,9 +1,9 @@
 from collections import defaultdict
 from typing import Dict
 
-from dominion import cards
+from dominion_game_engine import cards
 import inspect
-from dominion.cards import *
+from dominion_game_engine.cards import *
 
 
 def get_card_types():

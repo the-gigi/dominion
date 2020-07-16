@@ -1,6 +1,6 @@
 from computer_players.base_computer_player import BaseComputerPlayer
-from dominion.card_util import count_money
-from dominion.cards import *
+from dominion_game_engine.card_util import count_money
+from dominion_game_engine.cards import *
 
 
 class Victor(BaseComputerPlayer):

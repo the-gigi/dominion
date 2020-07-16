@@ -1,4 +1,4 @@
-from dominion.cards import *
+from dominion_game_engine.cards import *
 from computer_players.rockefeller import Rockefeller
 from computer_players.victor import Victor
 from computer_players.the_guy import TheGuy

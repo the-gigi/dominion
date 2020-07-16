@@ -1,6 +1,6 @@
-from dominion import card_util
-from dominion.card_util import count_money, get_card_class
-from dominion.cards import *
+from dominion_game_engine import card_util
+from dominion_game_engine.card_util import count_money, get_card_class
+from dominion_game_engine.cards import *
 from dominion.object_model.object_model import Player, GameClient
 
 

@@ -1,4 +1,4 @@
-from dominion.card_util import *
+from dominion_game_engine.card_util import *
 
 
 class PersonalState:

@@ -1,9 +1,9 @@
 from collections import Mapping
 
-from dominion.card_util import setup_piles
-from dominion.game import Game
-from dominion.game_client import GameClient
-from dominion.player_state import PlayerState
+from dominion_game_engine.card_util import setup_piles
+from dominion_game_engine.game import Game
+from dominion_game_engine.game_client import GameClient
+from dominion_game_engine.player_state import PlayerState
 
 
 def create_player(name, player_class, game, *args):

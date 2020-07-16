@@ -1,7 +1,5 @@
 from computer_players.base_computer_player import BaseComputerPlayer
-from dominion.card_util import get_card_class
-from dominion.player_state import *
-import random
+from dominion_game_engine.cards import *
 
 
 class Napoleon(BaseComputerPlayer):

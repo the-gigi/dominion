@@ -77,6 +77,14 @@ version = "0.16"
 
 [[package]]
 category = "main"
+description = "abstract classes for implementing dominion-object-model players and clients"
+name = "dominion-object-model"
+optional = false
+python-versions = ">=3.8"
+version = "1.0.2"
+
+[[package]]
+category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -331,7 +339,7 @@ python-versions = "*"
 version = "0.5.1"
 
 [metadata]
-content-hash = "1e3ea97fe72eee08fb5f247743a447db344fa944ca635ee8aeb14d37fb5e52db"
+content-hash = "56c26bf387c4fca811e6721aca2f70664b631bd6b52502c68cb744957182e14e"
 python-versions = "3.8.2"
 
 [metadata.files]
@@ -405,6 +413,9 @@ cryptography = [
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
     {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
+]
+dominion-object-model = [
+    {file = "dominion_object_model-1.0.2-py3-none-any.whl", hash = "sha256:5db29134b742defd7d751c6a3f7bd24621e9413b76902018630ec7ae47f7e39a"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
