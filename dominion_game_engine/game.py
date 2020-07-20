@@ -7,12 +7,13 @@ from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
 from dominion_game_engine.cards import *
 
-class Game(object_model.GameClient):
 
+class Game(object_model.GameClient):
     """Game represents the specific game domain
 
     In this case Dominion
     """
+
     def __init__(self, piles):
         # The state of the game
         self.piles = piles
@@ -42,20 +43,20 @@ class Game(object_model.GameClient):
     def run(self, players, server=None):
         self.players = players
 
-
         turn = 0
         while not self.is_over:
             turn += 1
-            print('***** turn ', turn)
-            if server is not None:
+            print('***** turn ', turn, self.player_name)
+            if server is not None and hasattr(server, 'Pump'):
                 server.Pump()
                 time.sleep(0.001)
             try:
                 self.send_personal_state()
                 self.current_player_done = False
                 self.player.play()
-                while server is not None and not self.current_player_done:
-                    server.Pump()
+                while not self.current_player_done:
+                    if server is not None and hasattr(server, 'Pump'):
+                        server.Pump()
                     time.sleep(0.001)
                 self.end_turn()
             except Exception as e:
@@ -185,6 +186,8 @@ class Game(object_model.GameClient):
     def end_turn(self):
         """ """
         self.player_state.used_money = 0
+        # artificial delay to prevent out of order state notifications
+        time.sleep(0.5)
         self.send_personal_state()
 
     @property
@@ -214,7 +217,6 @@ class Game(object_model.GameClient):
         if not self._verify_action(card_name):
             return False
 
-        self.send_game_event(f'{self.player_name} played {card_name}'  )
         lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
         handler = getattr(self, 'play_' + lower_card_name)
         handler()
@@ -226,11 +228,16 @@ class Game(object_model.GameClient):
                 played_card = card
                 break
 
+        if played_card is None:
+            print(f'{self.player_name} tried to play a card {card_name} not in their hand')
+            return False
+
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(played_card)
         self.player_state.play_area.append(played_card)
-
         self.player_state.actions -= 1
+
+        self.send_game_event(f'{self.player_name} played {card_name}')
         self.send_personal_state()
         return True
 
@@ -474,5 +481,5 @@ class Game(object_model.GameClient):
 
     def done(self):
         """ """
-        self.current_player_done = True
         self.player_state.done()
+        self.current_player_done = True

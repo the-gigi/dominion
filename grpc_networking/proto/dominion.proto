@@ -2,9 +2,10 @@ syntax = "proto3";
 
 service DominionServer {
     rpc Join(PlayerInfo) returns (stream Message) {}
-    rpc PlayActionCard(Card) returns(Response) {}
+    rpc Start(PlayerInfo) returns (Response) {}
+    rpc PlayCard(Card) returns(Response) {}
     rpc Buy(Card) returns(Response) {}
-    rpc EndTurn(PlayerInfo) returns(Response) {}
+    rpc Done(PlayerInfo) returns(Response) {}
 }
 
 message PlayerInfo {
@@ -21,5 +22,6 @@ message Message {
 }
 
 message Response {
-    bool ok = 1;
+    bool ok      = 1;
+    string error = 2;
 }

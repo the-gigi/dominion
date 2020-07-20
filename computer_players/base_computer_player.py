@@ -95,6 +95,7 @@ class BaseComputerPlayer(Player):
         self.events.append(event)
 
     def on_state_change(self, state):
+        # print(f'[{self.name}] on_state_change(), hand: {card_util.as_dict(state.hand)}')
         self._state = state
 
     def respond(self, action, *args):

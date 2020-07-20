@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0e\x64ominion.proto\"\x1a\n\nPlayerInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x14\n\x04\x43\x61rd\x12\x0c\n\x04name\x18\x01 \x01(\t\"%\n\x07Message\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"\x16\n\x08Response\x12\n\n\x02ok\x18\x01 \x01(\x08\x32\x99\x01\n\x0e\x44ominionServer\x12!\n\x04Join\x12\x0b.PlayerInfo\x1a\x08.Message\"\x00\x30\x01\x12$\n\x0ePlayActionCard\x12\x05.Card\x1a\t.Response\"\x00\x12\x19\n\x03\x42uy\x12\x05.Card\x1a\t.Response\"\x00\x12#\n\x07\x45ndTurn\x12\x0b.PlayerInfo\x1a\t.Response\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0e\x64ominion.proto\"\x1a\n\nPlayerInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x14\n\x04\x43\x61rd\x12\x0c\n\x04name\x18\x01 \x01(\t\"%\n\x07Message\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"%\n\x08Response\x12\n\n\x02ok\x18\x01 \x01(\x08\x12\r\n\x05\x65rror\x18\x02 \x01(\t2\xb3\x01\n\x0e\x44ominionServer\x12!\n\x04Join\x12\x0b.PlayerInfo\x1a\x08.Message\"\x00\x30\x01\x12!\n\x05Start\x12\x0b.PlayerInfo\x1a\t.Response\"\x00\x12\x1e\n\x08PlayCard\x12\x05.Card\x1a\t.Response\"\x00\x12\x19\n\x03\x42uy\x12\x05.Card\x1a\t.Response\"\x00\x12 \n\x04\x44one\x12\x0b.PlayerInfo\x1a\t.Response\"\x00\x62\x06proto3'
 )
 
 
@@ -143,6 +143,13 @@ _RESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='error', full_name='Response.error', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -156,7 +163,7 @@ _RESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=107,
-  serialized_end=129,
+  serialized_end=144,
 )
 
 DESCRIPTOR.message_types_by_name['PlayerInfo'] = _PLAYERINFO
@@ -202,8 +209,8 @@ _DOMINIONSERVER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=132,
-  serialized_end=285,
+  serialized_start=147,
+  serialized_end=326,
   methods=[
   _descriptor.MethodDescriptor(
     name='Join',
@@ -216,9 +223,19 @@ _DOMINIONSERVER = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='PlayActionCard',
-    full_name='DominionServer.PlayActionCard',
+    name='Start',
+    full_name='DominionServer.Start',
     index=1,
+    containing_service=None,
+    input_type=_PLAYERINFO,
+    output_type=_RESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='PlayCard',
+    full_name='DominionServer.PlayCard',
+    index=2,
     containing_service=None,
     input_type=_CARD,
     output_type=_RESPONSE,
@@ -228,7 +245,7 @@ _DOMINIONSERVER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='Buy',
     full_name='DominionServer.Buy',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=_CARD,
     output_type=_RESPONSE,
@@ -236,9 +253,9 @@ _DOMINIONSERVER = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='EndTurn',
-    full_name='DominionServer.EndTurn',
-    index=3,
+    name='Done',
+    full_name='DominionServer.Done',
+    index=4,
     containing_service=None,
     input_type=_PLAYERINFO,
     output_type=_RESPONSE,
