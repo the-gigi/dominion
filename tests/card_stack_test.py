@@ -1,7 +1,7 @@
-from dominion.card_stack import CardStack
+from dominion_object_model.card_stack import CardStack
 import unittest
 
-from dominion.cards import *
+from dominion_object_model.cards import *
 
 
 class TestGame(unittest.TestCase):

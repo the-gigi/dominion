@@ -7,12 +7,18 @@ from functools import partial
 from threading import Thread
 
 from dominion_game_engine import game_factory
-from grpc_networking.proto.dominion_pb2 import Message, Response
-from grpc_networking.proto.dominion_pb2_grpc import DominionServerServicer
-from grpc_networking.server import config
-from grpc_networking.server.player import Player
+from dominion_grpc_proto.dominion_pb2 import Message, Response
+from dominion_grpc_proto.dominion_pb2_grpc import DominionServerServicer
+
+try:
+    from grpc_networking.server import config
+    from grpc_networking.server.player import Player
+except ImportError:
+    import config
+    from player import Player
 
 MAX_PLAYER_COUNT = 4
+
 
 @dataclass
 class PlayerInfo:
@@ -69,8 +75,8 @@ class DominionServer(DominionServerServicer):
         card_names = [c.Name() for c in config.card_types]
         for p in self.players.values():
             data = dict(event='game start',
-                              card_names=card_names,
-                              player_names=player_names)
+                        card_names=card_names,
+                        player_names=player_names)
             p.queue.put(Message(type='on_game_event',
                                 data=json.dumps(data)))
 

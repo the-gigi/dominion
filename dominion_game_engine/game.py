@@ -2,7 +2,7 @@ import copy
 import re
 import time
 
-from dominion.object_model import object_model
+from dominion_object_model import object_model
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
 from dominion_game_engine.cards import *
@@ -187,7 +187,7 @@ class Game(object_model.GameClient):
         """ """
         self.player_state.used_money = 0
         # artificial delay to prevent out of order state notifications
-        time.sleep(0.5)
+        time.sleep(0.1)
         self.send_personal_state()
 
     @property

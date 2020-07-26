@@ -77,6 +77,14 @@ version = "0.16"
 
 [[package]]
 category = "main"
+description = "gRPC protobuf definitions + generated Python code"
+name = "dominion-grpc-proto"
+optional = false
+python-versions = ">=3.8"
+version = "0.1.0"
+
+[[package]]
+category = "main"
 description = "abstract classes for implementing dominion-object-model players and clients"
 name = "dominion-object-model"
 optional = false
@@ -390,7 +398,7 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [metadata]
-content-hash = "c64b2e1e1750dfc1d75e4729dc8858057688c8ce72552e29563c6cf5db3279f4"
+content-hash = "84c5b908851c141ad18ccba50d9fb44d04027aeb456f4582cda089c0b3141de9"
 python-versions = "3.8.2"
 
 [metadata.files]
@@ -464,6 +472,9 @@ cryptography = [
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
     {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
+]
+dominion-grpc-proto = [
+    {file = "dominion_grpc_proto-0.1.0-py3-none-any.whl", hash = "sha256:3284844a871de7f716319d89b00567b5eeced314aeb3c96701393af2532161f2"},
 ]
 dominion-object-model = [
     {file = "dominion_object_model-1.0.2-py3-none-any.whl", hash = "sha256:5db29134b742defd7d751c6a3f7bd24621e9413b76902018630ec7ae47f7e39a"},

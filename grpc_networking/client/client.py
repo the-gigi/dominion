@@ -2,9 +2,9 @@ import json
 
 import grpc
 
-from dominion.object_model import object_model
-from grpc_networking.proto import dominion_pb2_grpc
-from grpc_networking.proto.dominion_pb2 import PlayerInfo, Card
+from dominion_object_model import object_model
+from dominion_grpc_proto import dominion_pb2_grpc
+from dominion_grpc_proto.dominion_pb2 import PlayerInfo, Card
 
 
 class Client(object_model.GameClient, object_model.Player):

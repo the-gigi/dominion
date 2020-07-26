@@ -1,4 +1,4 @@
-from dominion.object_model import BasePlayer
+from dominion_object_model.object_model import BasePlayer
 
 
 class Simpleton(BasePlayer):

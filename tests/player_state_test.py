@@ -1,7 +1,7 @@
-from dominion.card_stack import CardStack
-from dominion.card_util import *
-from dominion.cards import *
-from dominion.player_state import PlayerState
+from dominion_object_model.card_stack import CardStack
+from dominion_object_model.card_util import *
+from dominion_object_model.cards import *
+from dominion_object_model.player_state import PlayerState
 
 import unittest
 

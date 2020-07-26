@@ -2,8 +2,12 @@ from concurrent import futures
 
 import grpc
 
-from grpc_networking.server.dominion_server import DominionServer
-from grpc_networking.proto import dominion_pb2_grpc
+try:
+    from grpc_networking.server.dominion_server import DominionServer
+except ImportError:
+    from dominion_server import DominionServer
+
+from dominion_grpc_proto import dominion_pb2_grpc
 
 
 def main():

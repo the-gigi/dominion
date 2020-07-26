@@ -1,7 +1,7 @@
 import json
 
-from dominion.object_model import object_model
-from grpc_networking.proto.dominion_pb2 import Message
+from dominion_object_model import object_model
+from dominion_grpc_proto.dominion_pb2 import Message
 
 
 class Player(object_model.Player):
