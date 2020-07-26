@@ -18,6 +18,7 @@ websockets = "^8.1"
 grpcio = "^1.30.0"
 grpcio-tools = "^1.30.0"
 dominion-grpc-proto = "^0.2.0"
+dominion_grpc_client = "^0.1.0"
 
 
 [tool.poetry.dev-dependencies]
