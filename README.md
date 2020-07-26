@@ -1,7 +1,31 @@
 # Overview
 
 This project is a Python implementation of the well-known card game [Dominion](https://en.wikipedia.org/wiki/Dominion_%28card_game%29)
+
+
+# Running with Docker
+
+This is the simplest way to run the server
+
+```
+docker run -d -p 50051:50051 --name dominion g1g1/dominion:1.0.0
+``` 
+
+To see the progress of the game check out the logs:
+
+```
+docker logs -f dominion
+```
+
+When the game ends remove the dominion container:
+
+```
+docker rm -f dominion
+```
+  
 # Installation
+
+If you want to run the server locally you have some installation to do
 
 ## Pre-requisites
 
@@ -20,8 +44,7 @@ $ poetry env use 3.8.2
 $ poetry install
 ```
 
-
-# Running the game (self-test)
+# Running the self-test (self-test)
 
 ```
 $ poetry run python self-test/main.py
@@ -31,6 +54,18 @@ $ poetry run python self-test/main.py
 
 ```
 $ poetry run python -m unittest discover -s . -p '*_test.py' -v
+```
+
+# Building the Docker image
+
+```
+$ docker build . -t g1g1/dominion:1.0.0
+```
+
+# Pushing the Docker image to DockerHub
+
+````
+$ docker push
 ```
 
 # Concepts

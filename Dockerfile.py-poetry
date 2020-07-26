@@ -1,0 +1,6 @@
+# Simple Dockerfile to serve as base image for Python projects that need poetry
+#
+# The resulting image is available as g1g1/py-poetry
+
+FROM python:3.8-slim
+RUN pip install poetry

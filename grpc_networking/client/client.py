@@ -13,7 +13,7 @@ class DummyPlayer(object_model.Player):
         pass
 
     def on_game_event(self, event):
-        pass
+        print(event)
 
     def on_state_change(self, state):
         pass

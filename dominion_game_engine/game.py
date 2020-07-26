@@ -73,9 +73,11 @@ class Game(object_model.GameClient):
 
         winners = self.find_winners()
         if len(winners) == 1:
-            message = f'🎉 {winners[0]} won the game!!!'
+            message = f'{winners[0]} won the game!!!'
         else:
-            message = f'🎉 The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!'
+            message = f'The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!'
+
+        message = '🎉 ' + message
         print(message)
 
         for p in self.players:
