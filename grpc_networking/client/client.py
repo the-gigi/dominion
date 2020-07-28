@@ -20,4 +20,5 @@ class DummyPlayer(object_model.Player):
 
 
 if __name__ == '__main__':
-    Client('dummy', DummyPlayer).run()
+    #Client('dummy', DummyPlayer).run()
+    Client('dummy', DummyPlayer).run(host='35.202.145.215')
