@@ -82,73 +82,114 @@ of this type remain in the pile)
 
 ### Player hand
 
-The player hand is an unordered collection of cards. The human player may organize and order them for, but that is
-for human display only. It doesn't affect the game state or the other players in any way. The only relevant
+The player hand is an unordered collection of cards. The human player may organize and order them for, but that is for human display only. 
+
+It doesn't affect the game state or the other players in any way. The only relevant
 information is what cards are in the player's hand.
 
 ### Play area
 
-When a player plays an action card the card moves out of their hand to the play area until the end of turn.
+When a player plays an action card the card moves out of their hand to the play area until the end of turn. Before a player buys something they may play treasure cards from their hand, which goes to the play area as well. 
 
 ### Draw deck
 
-The draw deck is a stack of cards that the player draws their hands from at the beginning of their turn and sometimes more
-cards during their turn or other players' turns. Cards are sometimes put back on top of the draw deck or pushed to the
+The draw deck is a stack of cards that the player draws their hand from at the beginning of their turn and sometimes more cards during their turn or other players' turns. Cards are sometimes put back on top of the draw deck or pushed to the
 bottom of the deck.
 
 ### Player Discard pile
 
-The discard pile is another stack of cards. When the draw deck is exhausted the discard pile is shuffled and all of its
-cards are added to the draw deck. 
+The discard pile is another stack of cards. When the draw deck is exhausted the discard pile is shuffled and all of its cards are added to the draw deck. 
 
 ### Trash
 
-The trash is where cards that are removed from the game go. If the rules allow recovering trashed cards then the trash
-needs to keep the cards as a collection or stack.
+The trash is where cards that are removed from the game go. If the rules allow recovering trashed cards then the trash needs to keep the cards as a collection or stack.
 
 ### Unused
 
 Dominion has many cards and only some of them are used in each game.
 All cards that are not used in the current game are considered to be
-in the unused zone
+in the unused zone.
 
 ## Game Manager
 
 The game manager is an entity that manages the game state, enforces the game rules and
-controls the workflow of the game. In particular it allows actors to take valid actions
+controls the workflow of the game. In particular it allows actors to perform only valid actions
 based on initiative.
 
 ## Actors
 
-Actors are entities that cn take actions. In dominion the only actors are players.
+Actors are entities that can take actions. In dominion the only actors are players.
 There are human and computer players, but conceptually both are actors. Specifically,
 the game engine doesn't distinguish between them and treats all actors exactly the same.
 
 ## Initiative
 
 The initiative is the ability to take action at a given moment, Dominion is a turn-based game.
-Players get the initiative on after the other. In some situations, other players can react to
+Players get the initiative one after the other. In some situations, other players can react to
 the active player's action.
 
 # Architecture
 
-## Game engine
+Dominion is organized in 3 packages:
 
-The game engine is responsible for all the generic aspects of teh game that can be applied to many similar games:
+1. doiminion_game_engine
+2. grpc_networking
+3. computer_players
+
+The **dominion_game_engine** package fulfills the rol of the game manager concept.
+The **grpc_networking** package exposes a gRPC interface to the Dominion game engine
+The **computer_players** package contains implemntation of AI dominion players. 
+
+It also relies on two other Python packages (available on PyPI):
+
+1. [dominion-object-model]()
+2. [dominion-grpc-proto]()
+
+The **dominion-object-model** package contains abstract classes and types that are shared by the server and clients such as the Player and GameClient interfces.
+
+The **dominion-grpc-proto** package contain the gRPC service definition of the Dominion game engine as well as generated gRPC Python client stubs that Python clients can use to connect to the server, join games and play.  
+
+Let's dive into each package:
+
+## Dominion Game engine
+
+The Dominion game engine is the conceptual game manager it is responsible for the integraity of the game and to manage the player and the workflow of the game. These aspect include:
 
 - managing the players
 - transitioning from player to player when turns end
 - check for end of game 
 
-## Game
+It has the following modules:
+
+- card_stack
+- card_util
+- cards
+- game
+- game_client
+- game_factory
+- personal_state
+- player_state
+
+Let's understand the role of each module and how it relates to other modules.
+
+### card_stack
+
+### card_util
+### cards
+
+### game
 
 The game object is where all the domain-specific knowledge exists.
 
-## Player State
+### game_client
 
-The game state is the data that the game object operates on.
+### game_factory
 
-### Personal Player State
+## player_state
+
+The player state is the data that the game object operates on.
+
+## personal_state
 
 The personal game state is the state that each player is allowed to see.
 The game frequently syncs the personal game state to reflect the real game state
