@@ -82,7 +82,7 @@ description = "Dominion gRPC client library"
 name = "dominion-grpc-client"
 optional = false
 python-versions = ">=3.8"
-version = "0.2.0"
+version = "0.4.0"
 
 [[package]]
 category = "main"
@@ -410,7 +410,7 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [metadata]
-content-hash = "1a6e066d8848eff1b90e5667630c0ee37d158bdd823c993a7c09c8af85bca0c3"
+content-hash = "78831fb782e1c2ab6c54b75aff58d9ec68b88453903219f2d0938644a824a708"
 python-versions = "^3.8.2"
 
 [metadata.files]
@@ -486,7 +486,7 @@ docutils = [
     {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
 ]
 dominion-grpc-client = [
-    {file = "dominion_grpc_client-0.2.0-py3-none-any.whl", hash = "sha256:210329a070a218b48578e3760db1df8dbff2fe277d79cbbf48c07f291ae8add2"},
+    {file = "dominion_grpc_client-0.4.0-py3-none-any.whl", hash = "sha256:bbd9444ca53f52ce14e0a9ccebb44ae176e8bae459be528ff9da28fdc94f499f"},
 ]
 dominion-grpc-proto = [
     {file = "dominion_grpc_proto-0.3.0-py3-none-any.whl", hash = "sha256:b1643213f737bf6e1a65fe2e562dfbc2e7a1fecfac1164e72d7e0ddb0832d175"},
