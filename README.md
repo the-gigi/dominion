@@ -64,7 +64,7 @@ $ docker build . -t g1g1/dominion:1.0.0
 
 # Pushing the Docker image to DockerHub
 
-````
+```
 $ docker push
 ```
 
