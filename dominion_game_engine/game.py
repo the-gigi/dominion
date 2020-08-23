@@ -1,7 +1,10 @@
 import copy
 import re
+from typing import List
+
 import time
 
+from dominion_game_engine.hand import has_card_type, has_card_types, select_by_type
 from dominion_object_model import object_model
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
@@ -319,29 +322,30 @@ class Game(object_model.GameClient):
         Each player discards down to 3 cards in his hand.
         """
 
-        def choose_hand():
+        def choose_hand(response):
             """The expected response is a set of 3 cards from the player's hand
 
             If the response is different return None
             """
-            if isinstance(response, Moat):
-                if response in player_state.hand:
+            h = player_state.hand
+            if response == 'Moat':
+                if has_card_type(h, 'Moat'):
                     return None
 
-            if not isinstance(response, set) or len(response) != 3:
+            if not isinstance(response, List) or len(response) < min(len(h), 3):
                 return player_state.hand[:3]
 
-            for card in response:
-                if card not in player_state.hand:
-                    return player_state.hand[:3]
+            if not has_card_types(hand, response):
+                return player_state.hand[:3]
 
-            return response
+            new_hand = select_by_type(hand, response)
+            return new_hand
 
         for player, player_state in self.other_players:
             if Moat in set(type(c) for c in player_state.hand):
                 continue
             response = player.respond('Militia')
-            hand = choose_hand()
+            hand = choose_hand(response)
             if hand is None:
                 break
             discarded = [c for c in player_state.hand if c not in hand]
