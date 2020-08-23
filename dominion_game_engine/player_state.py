@@ -2,6 +2,7 @@ import copy
 
 from dominion_game_engine.card_stack import CardStack
 from dominion_game_engine.cards import *
+from dominion_game_engine.hand import Hand
 from dominion_game_engine.personal_state import PersonalState
 
 

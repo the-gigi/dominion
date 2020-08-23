@@ -124,3 +124,12 @@ class DominionServer(DominionServerServicer):
     def Done(self, req, ctx):
         self.game_client.done()
         return Response(ok=True)
+
+    def Respond(self, response, ctx):
+        peer = ctx.peer()
+        if peer not in self.players:
+            print('Unknown player:', peer)
+            return Response(ok=False)
+
+        Player.response = response
+        return Response(ok=True)
