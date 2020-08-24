@@ -109,7 +109,7 @@ class DominionServer(DominionServerServicer):
             print('Unknown player:', peer)
             return Response(ok=False)
 
-        self.game_client.play_action_card(card)
+        self.game_client.play_action_card(card.name)
         return Response(ok=True)
 
     def Buy(self, card, ctx):
@@ -118,7 +118,7 @@ class DominionServer(DominionServerServicer):
             print('Unknown player:', peer)
             return Response(ok=False, error='Unknown player')
 
-        self.game_client.buy(card)
+        self.game_client.buy(card.name)
         return Response(ok=True)
 
     def Done(self, req, ctx):
