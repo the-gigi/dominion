@@ -26,11 +26,14 @@ def select_by_type(hand, card_types: List[str]):
     sorted_card_types = sorted(card_types)
     i = 0
     for t in sorted_card_types:
+        while sorted_hand[i].Type < t:
+            i += 1
+
         c = sorted_hand[i]
-        if sorted_hand[i].Type == t:
+        if c.Type == t:
             selected.append(c)
             i += 1
-        if sorted_hand[i].Type > t:
+        else:
             raise RuntimeError(f'type {t} missing')
 
     return selected

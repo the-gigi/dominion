@@ -322,7 +322,7 @@ class Game(object_model.GameClient):
         Each player discards down to 3 cards in his hand.
         """
 
-        def choose_hand(response):
+        def choose_hand(response, player_state):
             """The expected response is a set of 3 cards from the player's hand
 
             If the response is different return None
@@ -332,7 +332,7 @@ class Game(object_model.GameClient):
                 if has_card_type(h, 'Moat'):
                     return None
 
-            if not isinstance(response, List) or len(response) < min(len(h), 3):
+            if not isinstance(response, List) or len(response) > min(len(h), 3):
                 return player_state.hand[:3]
 
             if not has_card_types(hand, response):
@@ -345,9 +345,9 @@ class Game(object_model.GameClient):
             if Moat in set(type(c) for c in player_state.hand):
                 continue
             response = player.respond('Militia')
-            hand = choose_hand(response)
+            hand = choose_hand(response, player_state)
             if hand is None:
-                break
+                continue
             discarded = [c for c in player_state.hand if c not in hand]
 
             player_state.hand = hand
