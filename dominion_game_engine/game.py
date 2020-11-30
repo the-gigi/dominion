@@ -4,7 +4,7 @@ from typing import List
 
 import time
 
-from dominion_game_engine.hand import has_card_type, has_card_types, select_by_type
+from dominion_game_engine.hand import has_card_type, has_card_types, select_by_name
 from dominion_object_model import object_model
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
@@ -335,10 +335,10 @@ class Game(object_model.GameClient):
             if not isinstance(response, List) or len(response) > min(len(h), 3):
                 return player_state.hand[:3]
 
-            if not has_card_types(hand, response):
+            if not has_card_types(h, response):
                 return player_state.hand[:3]
 
-            new_hand = select_by_type(hand, response)
+            new_hand = select_by_name(h, response)
             return new_hand
 
         for player, player_state in self.other_players:
