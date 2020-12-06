@@ -4,7 +4,7 @@ from typing import List
 
 import time
 
-from dominion_game_engine.hand import has_card_type, has_card_types, select_by_name
+from dominion_game_engine.hand import has_card_type, has_card_types, select_by_name, remove_by_name
 from dominion_object_model import object_model
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
@@ -458,7 +458,7 @@ class Game(object_model.GameClient):
         """
         +2 Cards
 
-        Each other player gains a Curse
+        Each other player gains a Curse.
         """
         self.player_state.draw_cards(2)
         for _, ps in self.other_players:
@@ -469,6 +469,27 @@ class Game(object_model.GameClient):
                 break
             ps.discard_pile.add_to_top([Curse()])
             self.piles['Curse'] -= 1
+
+    def play_cellar(self):
+        """
+        +1 Action
+
+        Discard any number of cards, then draw that many.
+        """
+        self.player_state.actions += 1
+
+        cards_to_discard = self.player.respond('Cellar')
+        if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
+            return
+
+        if not has_card_types(self.player_state.hand, cards_to_discard):
+            return
+
+        # discard the selected cards
+        remove_by_name(self.player_state.hand, cards_to_discard)
+
+        # draw new cards
+        self.player_state.draw_cards(len(cards_to_discard))
 
     def buy(self, card_name):
         """ """
