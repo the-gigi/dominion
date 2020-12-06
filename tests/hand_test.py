@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from dominion_game_engine.cards import Village, Market
+from dominion_game_engine.cards import Village, Market, Estate
 from dominion_game_engine.hand import has_card_types, has_card_type, select_by_name, remove_by_name
 
 
@@ -13,25 +13,20 @@ class HandTest(unittest.TestCase):
         self.hand = [self.village1, self.market, self.village2]
 
     def test_has_card_type(self):
-        self.assertFalse(has_card_type(self.hand, 'WITCH'))
-        self.assertFalse(has_card_type(self.hand, 'VILLAGE'))
-        self.assertFalse(has_card_type(self.hand, 'MARKET'))
+        self.assertTrue(has_card_type(self.hand, 'Action'))
+        self.assertFalse(has_card_type(self.hand, 'Victory'))
+        self.assertFalse(has_card_type(self.hand, 'Treasure'))
+        self.assertFalse(has_card_type(self.hand, 'Curse'))
 
     def test_has_card_types(self):
-        # Non-existent card type - should return False
-        self.assertFalse(has_card_types(self.hand, ['WITCH']))
+        self.assertTrue(has_card_types(self.hand, ['Action', 'Action', 'Action']))
+        self.assertFalse(has_card_types(self.hand, ['Action']))
+        self.assertFalse(has_card_types(self.hand, ['Treasure']))
+        self.assertFalse(has_card_types(self.hand, ['Action', 'Treasure']))
 
-        # Too many card types - should return False
-        self.assertFalse(has_card_types(self.hand, ['MARKET', 'MARKET']))
+        self.hand.append(Estate())
 
-        # Subset of cards - should return True
-        self.assertFalse(has_card_types(self.hand, ['VILLAGE', 'VILLAGE']))
-
-        # Correct number of same card - should return True
-        self.assertFalse(has_card_types(self.hand, ['VILLAGE', 'VILLAGE']))
-
-        # Multiple correct card types - should return True
-        self.assertFalse(has_card_types(self.hand, ['VILLAGE', 'MARKET']))
+        self.assertFalse(has_card_types(self.hand, ['Action', 'Victory']))
 
     def test_select_by_name(self):
         selected = select_by_name(self.hand, ['Witch'])
