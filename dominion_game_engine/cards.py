@@ -13,12 +13,10 @@ class BaseCard:
     def __repr__(self):
         return f'{type(self).__name__}'
 
+    def __eq__ (self, other):
+        return self.Name() == other.Name()
+
     def __lt__(self, other):
-        """
-        store the dict repr of self in a var
-        store the dict repr of other in a var
-        return the comparison of the two vars
-        """
         return self.Name() < other.Name()
 
     @classmethod
