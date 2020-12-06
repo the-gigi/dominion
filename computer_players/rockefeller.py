@@ -8,6 +8,3 @@ class Rockefeller(BaseComputerPlayer):
                 return True
 
         return False
-
-    def respond(self, request, *args):
-        return
