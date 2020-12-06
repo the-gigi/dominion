@@ -7,17 +7,19 @@ class BaseCard:
     Reaction = False
 
     def __init__(self):
-        # self.Name = self.__class__.__name__
         self.Image = f'images/{self.Name().lower()}.jpg'
 
     def __repr__(self):
         return f'{type(self).__name__}'
 
-    def __eq__ (self, other):
+    def __eq__(self, other):
         return self.Name() == other.Name()
 
     def __lt__(self, other):
         return self.Name() < other.Name()
+
+    def __hash__(self):
+        return id(self)
 
     @classmethod
     def Name(cls):
@@ -118,6 +120,15 @@ class Bureaucrat(BaseCard):
 #     """
 #     Coins = 2
 #     Cost = 3
+
+class Cellar(BaseCard):
+    Type = 'Action'
+    Text = """
+    +1 Action
+    
+    Discard any number of cards, then draw that many.
+    """
+    Cost = 2
 
 
 class CouncilRoom(BaseCard):
