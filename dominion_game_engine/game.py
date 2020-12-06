@@ -4,7 +4,7 @@ from typing import List
 
 import time
 
-from dominion_game_engine.hand import has_card_type, has_card_types, select_by_name, remove_by_name
+from dominion_game_engine.hand import has_card_type, has_card_types, select_by_name, remove_by_name, has_card_names
 from dominion_object_model import object_model
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import get_card_class
@@ -482,7 +482,7 @@ class Game(object_model.GameClient):
         if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
             return
 
-        if not has_card_types(self.player_state.hand, cards_to_discard):
+        if not has_card_names(self.player_state.hand, cards_to_discard):
             return
 
         # discard the selected cards
