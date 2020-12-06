@@ -1,9 +1,8 @@
-from dominion_object_model.card_stack import CardStack
-from dominion_object_model.card_util import *
-from dominion_object_model.cards import *
-from dominion_object_model.player_state import PlayerState
-
 import unittest
+
+from dominion_game_engine.card_util import *
+from dominion_game_engine.cards import *
+from dominion_game_engine.player_state import PlayerState
 
 
 class TestPlayerState(unittest.TestCase):

@@ -1,8 +1,8 @@
-from dominion_object_model.card_util import get_card_types, setup_piles
-from dominion_object_model.game import Game
-from dominion_object_model.cards import *
-from dominion_object_model.player_state import PlayerState
-from dominion_object_model.card_stack import *
+from dominion_game_engine.card_util import get_card_types, setup_piles
+from dominion_game_engine.game import Game
+from dominion_game_engine.cards import *
+from dominion_game_engine.player_state import PlayerState
+from dominion_game_engine.card_stack import *
 from dominion_object_model.object_model import Player
 
 import unittest
