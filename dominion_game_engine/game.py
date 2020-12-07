@@ -222,10 +222,6 @@ class Game(object_model.GameClient):
         if not self._verify_action(card_name):
             return False
 
-        lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
-        handler = getattr(self, 'play_' + lower_card_name)
-        handler()
-
         # find the played card in the player's hand
         played_card = None
         for card in self.player_state.hand:
@@ -236,6 +232,10 @@ class Game(object_model.GameClient):
         if played_card is None:
             print(f'{self.player_name} tried to play a card {card_name} not in their hand')
             return False
+
+        lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
+        handler = getattr(self, 'play_' + lower_card_name)
+        handler()
 
         # move the card from the player's hand to the play area
         self.player_state.hand.remove(played_card)
@@ -486,10 +486,58 @@ class Game(object_model.GameClient):
             return
 
         # discard the selected cards
-        remove_by_name(self.player_state.hand, cards_to_discard)
+        discarded = remove_by_name(self.player_state.hand, cards_to_discard)
+        self.player_state.discard_pile.add_to_top(discarded)
 
         # draw new cards
         self.player_state.draw_cards(len(cards_to_discard))
+
+    def play_chapel(self):
+        """
+        Trash up to 4 cards from your hand.
+        """
+        cards_to_trash = self.player.respond('Cellar')
+        if not isinstance(cards_to_trash, List) or len(cards_to_trash) == 0 or len(cards_to_trash) > 4:
+            return
+
+        if not has_card_names(self.player_state.hand, cards_to_trash):
+            return
+
+        # trash the selected cards
+        remove_by_name(self.player_state.hand, cards_to_trash)
+
+    def play_harbinger(self):
+        """
+        Trash up to 4 cards from your hand.
+        """
+        self.player_state.draw_cards(1)
+        self.player_state.actions += 2
+
+        card_to_put_on_deck = self.player.respond('Harbinger')
+        if not card_to_put_on_deck:
+            return
+
+        card = None
+        for c in self.player_state.discard_pile.cards:
+            if c.Name() == card_to_put_on_deck:
+                card = c
+                self.player_state.draw_deck.add_to_top(card)
+                break
+
+        if card is not None:
+            self.player_state.discard_pile.cards.remove(card)
+
+    def play_moneylender(self):
+        """
+        You may trash a Copper from your hand for +$3.
+        """
+        if not has_card_names(self.player_state.hand, 'Copper'):
+            return
+
+        # Trash the money lender card
+        remove_by_name(self.player_state.hand, 'Copper')
+        # Add 3 money
+        self.player_state.used_money -= 3
 
     def buy(self, card_name):
         """ """

@@ -54,8 +54,11 @@ def select_by_name(hand, card_names: List[str]) -> List[BaseCard]:
 
 
 def remove_by_name(hand, card_names: List[str]):
+    removed = []
     for card_name in card_names:
         for card in hand:
             if card.Name() == card_name:
                 hand.remove(card)
+                removed.append(card)
                 break
+    return removed

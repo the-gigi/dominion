@@ -93,7 +93,6 @@ class PlayerState:
                              buys=self.buys,
                              used_money=self.used_money)
 
-
     @property
     def personal_state(self):
         return self._personal_state

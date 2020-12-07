@@ -121,6 +121,15 @@ class Bureaucrat(BaseCard):
 #     Coins = 2
 #     Cost = 3
 
+
+class Chapel(BaseCard):
+    Type = 'Action'
+    Text = """
+    Trash up to 4 cards from your hand.
+    """
+    Cost = 2
+
+
 class Cellar(BaseCard):
     Type = 'Action'
     Text = """
@@ -151,6 +160,17 @@ class Festival(BaseCard):
     """
     Coins = 2
     Cost = 5
+
+
+class Harbinger(BaseCard):
+    Type = 'Action'
+    Text = """
+    +1 Card
+    +1 Action
+    
+    Look through your discard pile. You may put a card from it onto your deck.    
+    """
+    Cost = 3
 
 
 class Library(BaseCard):
@@ -195,6 +215,15 @@ class Moat(BaseCard):
 
     When another player plays an Attack card, you may first
     reveal this from your hand, to be unaffected by it.     
+    """
+    Cost = 2
+    Reaction = True
+
+
+class MoneyLender(BaseCard):
+    Type = 'Action'
+    Text = """
+    You may trash a Copper from your hand for +$3.
     """
     Cost = 2
     Reaction = True

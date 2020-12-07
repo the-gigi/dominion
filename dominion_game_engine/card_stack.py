@@ -1,6 +1,8 @@
 import random
+from typing import List
 
 from dominion_game_engine import card_util
+from dominion_game_engine.cards import BaseCard
 
 
 class CardStack:
@@ -34,20 +36,20 @@ class CardStack:
         self.invariant()
         return self.cards[:n]
 
-    def add_to_top(self, cards):
+    def add_to_top(self, cards: List[BaseCard]):
         """Add the cards to the top of the stack """
         self.invariant()
         self.cards = cards + self.cards
         self.invariant()
 
-    def add_to_bottom(self, cards):
+    def add_to_bottom(self, cards: List[BaseCard]):
         """Add the cards to the bottom of the stack """
         self.invariant()
         self.cards += cards
         self.invariant()
 
     @property
-    def count(self):
+    def count(self) -> int:
         return len(self.cards)
 
     def __eq__(self, other):
