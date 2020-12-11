@@ -16,7 +16,7 @@ spec:
         app: dominion
     spec:
       containers:
-        - name: news-manager
+        - name: dominion
           image: g1g1/dominion:1.0.0
           imagePullPolicy: Always
           ports:
