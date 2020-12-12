@@ -20,13 +20,13 @@ class HandTest(unittest.TestCase):
 
     def test_has_card_types(self):
         self.assertTrue(has_card_types(self.hand, ['Action', 'Action', 'Action']))
-        self.assertFalse(has_card_types(self.hand, ['Action']))
+        self.assertTrue(has_card_types(self.hand, ['Action']))
         self.assertFalse(has_card_types(self.hand, ['Treasure']))
         self.assertFalse(has_card_types(self.hand, ['Action', 'Treasure']))
 
         self.hand.append(Estate())
 
-        self.assertFalse(has_card_types(self.hand, ['Action', 'Victory']))
+        self.assertTrue(has_card_types(self.hand, ['Action', 'Victory']))
 
     def test_select_by_name(self):
         selected = select_by_name(self.hand, ['Witch'])

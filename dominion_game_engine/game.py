@@ -222,9 +222,10 @@ class Game(object_model.GameClient):
         if not self._verify_action(card_name):
             return False
 
+        ps = self.player_state
         # find the played card in the player's hand
         played_card = None
-        for card in self.player_state.hand:
+        for card in ps.hand:
             if card.Name() == card_name:
                 played_card = card
                 break
@@ -238,9 +239,12 @@ class Game(object_model.GameClient):
         handler()
 
         # move the card from the player's hand to the play area
-        self.player_state.hand.remove(played_card)
-        self.player_state.play_area.append(played_card)
-        self.player_state.actions -= 1
+        try:
+            ps.hand.remove(played_card)
+        except Exception as e:
+            ps.hand.remove(played_card)
+        ps.play_area.append(played_card)
+        ps.actions -= 1
 
         self.send_game_event(f'{self.player_name} played {card_name}')
         self.send_personal_state()
@@ -335,15 +339,19 @@ class Game(object_model.GameClient):
             if not isinstance(response, List) or len(response) > min(len(h), 3):
                 return player_state.hand[:3]
 
-            if not has_card_types(h, response):
+            if not has_card_names(h, response):
                 return player_state.hand[:3]
 
             new_hand = select_by_name(h, response)
             return new_hand
 
         for player, player_state in self.other_players:
-            if Moat in set(type(c) for c in player_state.hand):
+            if Moat in set(c.Name() for c in player_state.hand):
                 continue
+
+            if len(player_state.hand) <= 3:
+                continue
+
             response = player.respond('Militia')
             hand = choose_hand(response, player_state)
             if hand is None:

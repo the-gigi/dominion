@@ -49,8 +49,8 @@ class DominionServer(DominionServerServicer):
             q.put(Message(type='error', data='already joined'))
         pi = PlayerInfo(name, queue.Queue(), peer)
         self.players[peer] = pi
-        pi.queue.put(Message(type='ack', data=json.dumps(dict(name=pi.name))))
         print(f'Player {name} joined!')
+        pi.queue.put(Message(type='ack', data=json.dumps(dict(name=pi.name))))
         return pi.queue
 
     def _prepare_player_info(self):
@@ -90,6 +90,7 @@ class DominionServer(DominionServerServicer):
 
     # DominionServer proto service
     def Join(self, player_info, ctx):
+        print('Join()', player_info)
         q = self._join(player_info, ctx)
         print(f'[{player_info.name}] Waiting for message to send on queue {id(q)}')
         while True:

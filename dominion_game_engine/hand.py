@@ -14,7 +14,7 @@ def has_card_types(hand, card_types: List[str]) -> bool:
     hand_counter = Counter(c.Type for c in hand)
     req_counter = Counter(card_types)
     for card_type, count in req_counter.items():
-        if count < hand_counter[card_type] or hand_counter[card_type] == 0:
+        if count > hand_counter[card_type]:
             return False
 
     return True
@@ -24,7 +24,7 @@ def has_card_names(hand, card_names: List[str]) -> bool:
     hand_counter = Counter(c.Name() for c in hand)
     req_counter = Counter(card_names)
     for card_name, count in req_counter.items():
-        if count < hand_counter[card_name] or hand_counter[card_name] == 0:
+        if count > hand_counter[card_name]:
             return False
 
     return True
