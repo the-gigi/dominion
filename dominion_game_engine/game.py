@@ -521,6 +521,9 @@ class Game(object_model.GameClient):
         self.player_state.draw_cards(1)
         self.player_state.actions += 2
 
+        if len(self.player_state.discard_pile) == 0:
+            return
+
         card_to_put_on_deck = self.player.respond('Harbinger')
         if not card_to_put_on_deck:
             return
