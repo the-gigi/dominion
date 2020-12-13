@@ -52,6 +52,9 @@ class CardStack:
     def count(self) -> int:
         return len(self.cards)
 
+    def __len__(self):
+        return len(self.cards)
+
     def __eq__(self, other):
         """
         store the dict repr of self in a var
