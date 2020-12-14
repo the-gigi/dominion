@@ -487,6 +487,7 @@ class Game(object_model.GameClient):
         self.player_state.actions += 1
 
         cards_to_discard = self.player.respond('Cellar')
+        print('***** play_cellar(), cards_to_discard', cards_to_discard)
         if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
             return
 

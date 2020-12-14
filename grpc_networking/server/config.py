@@ -19,10 +19,11 @@ card_types = [
     Witch]
 
 computer_players = [
-    ('Vicky', Victor),
+    #('Vicky', Victor),
     ('Rocky', Rockefeller),
-    ('Guy', TheGuy),
-    ('Dynamite', Napoleon),
-    ('Zuck', StayAtHomeSon),
-
+    #('Guy', TheGuy),
+    #('Dynamite', Napoleon),
+    #('Zuck', StayAtHomeSon),
 ]
+
+max_player_count = 2

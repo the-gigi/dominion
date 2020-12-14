@@ -8,7 +8,10 @@ from dominion_game_engine.player_state import PlayerState
 
 def create_player(name, player_class, game, *args):
     game_client = GameClient(game)
-    return player_class(name, game_client, *args)
+    try:
+        return player_class(name, game_client, *args)
+    except Exception as e:
+        raise
 
 
 def start_game(card_types, players_info: Mapping, server=None):
