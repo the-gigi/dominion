@@ -140,6 +140,5 @@ class DominionServer(DominionServerServicer):
             print('Unknown player:', peer)
             return Response(ok=False)
 
-        print('^^^^ DominionServer.Respond()', response)
         Player.response = response
         return Response(ok=True)

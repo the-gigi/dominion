@@ -75,7 +75,6 @@ class BaseComputerPlayer(Player):
         """
         """
         hand = self.state.hand
-        print(f'@@@@ play(), name: {self.name}, hand: {hand}')
         self.play_no_brainers(hand)
         self.play_action_cards(hand)
         self.buy_stuff(hand)

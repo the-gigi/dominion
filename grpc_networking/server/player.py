@@ -18,10 +18,13 @@ class Player(object_model.Player):
         self._main_queue.put(Message(type='play'))
 
     def _adapt_response(self, response):
+        if response.payload is None:
+            return
+
         action = response.card.name
         payload = json.loads(response.payload)
-        if action == 'Militia':
-            return payload
+        # if action in ('Militia', 'Cellar', 'Harbinger'):
+        #     return payload
         return payload
 
     def respond(self, action, *args):
@@ -32,11 +35,9 @@ class Player(object_model.Player):
             time.sleep(0.1)
         response = self._adapt_response(Player.response)
         Player.response = None
-        print(f'**** UIPlayer.respond({action}, {args}) ->', response )
         return response
 
     def on_game_event(self, event):
-        print('**** on_game_event()', json.dumps(event))
         self._main_queue.put(Message(type='on_game_event', data=json.dumps(event)))
 
     def on_state_change(self, state):
