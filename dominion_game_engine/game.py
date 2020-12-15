@@ -517,10 +517,13 @@ class Game(object_model.GameClient):
 
     def play_harbinger(self):
         """
-        Trash up to 4 cards from your hand.
+        +1 Card
+        +1 Action
+
+        Look through your discard pile. You may put a card from it onto your deck.
         """
         self.player_state.draw_cards(1)
-        self.player_state.actions += 2
+        self.player_state.actions += 1
 
         if len(self.player_state.discard_pile) == 0:
             return
@@ -533,7 +536,7 @@ class Game(object_model.GameClient):
         for c in self.player_state.discard_pile.cards:
             if c.Name() == card_to_put_on_deck:
                 card = c
-                self.player_state.draw_deck.add_to_top(card)
+                self.player_state.draw_deck.add_to_top([card])
                 break
 
         if card is not None:

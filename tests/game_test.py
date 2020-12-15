@@ -23,15 +23,18 @@ class DummyPlayer(Player):
 
 
 class GameTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         card_types = get_card_types().values()
         self.names = ['tester1', 'tester2', 'tester3', 'tester4']
         piles = setup_piles(card_types, len(self.names))
 
-
         players_states = [PlayerState(n, piles) for n in self.names]
         self.game = Game(piles)
         self.game.players = [(DummyPlayer(), p) for p in players_states]
+        self.original_respond = self.game.player.respond
+
+    def tearDown(self) -> None:
+        self.game.player.respond = self.original_respond
 
     def test_init(self):
         pass
@@ -451,6 +454,39 @@ class GameTest(unittest.TestCase):
             else:
                 self.assertEqual(len(player_state.hand), 1)
                 self.assertEqual(player_state.buys, 1)
+
+    def test_play_harbinger(self):
+        harbinger = Harbinger()
+        silver = Silver()
+        moat = Moat()
+        gold = Gold()
+        village = Village()
+
+        ps = self.game.player_state
+        ps.draw_deck.cards = [moat]
+        ps.discard_pile.cards = [village, gold]
+        ps.play_area = []
+        ps.hand = [harbinger, silver]
+
+        # mock the response to return the gold from the discard pile
+        self.game.player.respond = lambda action: 'Gold'
+
+        # call play action card
+        ok = self.game.play_action_card(harbinger.Name())
+        self.assertTrue(ok)
+
+        # The player still has 1 action from the harbinger
+        self.assertEqual(ps.actions, 1)
+
+        # The harbinger from the hand is now in the play area
+        self.assertEqual(ps.play_area, [harbinger])
+        # The moat from the draw deck is in the hand along with the silver
+        self.assertEqual(set(ps.hand), {moat, silver})
+
+        # The gold from the discard pile is on top of the draw deck now
+        self.assertEqual(ps.discard_pile.cards, [village])
+        self.assertEqual(ps.draw_deck.cards, [gold])
+
 
     # def test_play_adventurer(self):
     #     adventurer = Adventurer()
