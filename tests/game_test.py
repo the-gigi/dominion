@@ -461,9 +461,10 @@ class GameTest(unittest.TestCase):
         moat = Moat()
         gold = Gold()
         village = Village()
+        market = Market()
 
         ps = self.game.player_state
-        ps.draw_deck.cards = [moat]
+        ps.draw_deck.cards = [moat, market]
         ps.discard_pile.cards = [village, gold]
         ps.play_area = []
         ps.hand = [harbinger, silver]
@@ -485,7 +486,7 @@ class GameTest(unittest.TestCase):
 
         # The gold from the discard pile is on top of the draw deck now
         self.assertEqual(ps.discard_pile.cards, [village])
-        self.assertEqual(ps.draw_deck.cards, [gold])
+        self.assertEqual(ps.draw_deck.cards, [gold, market])
 
 
     # def test_play_adventurer(self):
