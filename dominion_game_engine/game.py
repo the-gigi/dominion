@@ -27,6 +27,8 @@ class Game(object_model.GameClient):
         self.players = []
         self.current_player_done = False
 
+        self.waiting_for_response = False
+
     @property
     def player_states(self):
         return [p[1] for p in self.players]
@@ -212,6 +214,13 @@ class Game(object_model.GameClient):
                     return True
         return False
 
+    def _respond(self, player, action, *args):
+        """ """
+        self.waiting_for_response = True
+        response = player.respond(action, *args)
+        self.waiting_for_response = False
+        return response
+
     # GameClient interface
     def play_action_card(self, card_name):
         """
@@ -219,6 +228,9 @@ class Game(object_model.GameClient):
         Depending on the card, take its action
         Move the card from the player's hand to the play area
         """
+        if self.waiting_for_response:
+            return
+
         if not self._verify_action(card_name):
             return False
 
@@ -352,7 +364,7 @@ class Game(object_model.GameClient):
             if len(player_state.hand) <= 3:
                 continue
 
-            response = player.respond('Militia')
+            response = self._respond(player, 'Militia')
             hand = choose_hand(response, player_state)
             if hand is None:
                 continue
@@ -387,7 +399,7 @@ class Game(object_model.GameClient):
             self.piles['Silver'] -= 1
             self.player_state.draw_deck.add_to_top([Silver()])
         for player, player_state in self.other_players:
-            response = player.respond('Bureaucrat')
+            response = self._respond(player, 'Bureaucrat')
             victory = choose_victory(response)
             if victory is not None:
                 player_state.draw_deck.add_to_top([victory])
@@ -486,8 +498,7 @@ class Game(object_model.GameClient):
         """
         self.player_state.actions += 1
 
-        cards_to_discard = self.player.respond('Cellar')
-        print('***** play_cellar(), cards_to_discard', cards_to_discard)
+        cards_to_discard = self._respond(self.player, 'Cellar')
         if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
             return
 
@@ -505,7 +516,7 @@ class Game(object_model.GameClient):
         """
         Trash up to 4 cards from your hand.
         """
-        cards_to_trash = self.player.respond('Cellar')
+        cards_to_trash = self._respond(self.player, 'Chapel')
         if not isinstance(cards_to_trash, List) or len(cards_to_trash) == 0 or len(cards_to_trash) > 4:
             return
 
@@ -528,7 +539,7 @@ class Game(object_model.GameClient):
         if len(self.player_state.discard_pile) == 0:
             return
 
-        card_to_put_on_deck = self.player.respond('Harbinger')
+        card_to_put_on_deck = self._respond(self.player, 'Harbinger')
         if not card_to_put_on_deck:
             return
 
@@ -556,6 +567,9 @@ class Game(object_model.GameClient):
 
     def buy(self, card_name):
         """ """
+        if self.waiting_for_response:
+            return
+
         if not self._verify_buy(card_name):
             return False
 
@@ -571,5 +585,7 @@ class Game(object_model.GameClient):
 
     def done(self):
         """ """
+        if self.waiting_for_response:
+            return
         self.player_state.done()
         self.current_player_done = True
