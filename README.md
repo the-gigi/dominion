@@ -1,6 +1,6 @@
 # Overview
 
-This project is a Python implementation of the well-known card game [Dominion](https://en.wikipedia.org/wiki/Dominion_%28card_game%29)
+This project is a Python implementation of the renowned card game [Dominion](https://en.wikipedia.org/wiki/Dominion_%28card_game%29)
 
 
 # Running with Docker
@@ -44,10 +44,10 @@ $ poetry env use 3.8.2
 $ poetry install
 ```
 
-# Running the self-test (self-test)
+# Running the self-test
 
 ```
-$ poetry run python self-test/main.py
+$ poetry run python self_test/main.py
 ```
 
 # Testing
