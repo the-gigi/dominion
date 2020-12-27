@@ -260,6 +260,25 @@ class Smithy(BaseCard):
 #     Cost = 4
 
 
+class ThroneRoom(BaseCard):
+    Type = 'Action'
+    Text = """
+    You may play an Action card from your hand twice.    
+    """
+    Cost = 4
+
+
+class Vassal(BaseCard):
+    Type = 'Action'
+    Text = """
+    +$2
+
+    Discard the top card of your deck.
+    If it is an Action card, you may play it.
+    """
+    Cost = 3
+
+
 class Village(BaseCard):
     Type = 'Action'
     Text = """
@@ -285,15 +304,3 @@ class Workshop(BaseCard):
     Gain a card costing up to $4
     """
     Cost = 3
-
-
-class Vassal(BaseCard):
-    Type = 'Action'
-    Text = """
-    +$2
-
-    Discard the top card of your deck.
-    If it is an Action card, you may play it.
-    """
-    Cost = 3
-
