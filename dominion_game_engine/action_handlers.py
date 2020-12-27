@@ -4,6 +4,7 @@ from dominion_game_engine.card_util import get_card_class
 from dominion_game_engine.hand import has_card_type, select_by_name, remove_by_name, has_card_names
 from dominion_game_engine.cards import *
 
+
 # def play_adventurer(game):
 #     treasures = 0
 #     deck = game.player_state.draw_deck
@@ -17,36 +18,73 @@ from dominion_game_engine.cards import *
 #             game.player_state.discard_pile.add_to_top([top_card])
 
 
-def play_festival(game):
+def play_bandit(game):
     """
-    +2 Actions
-    +1 Buy
-    +$2
+    Gain a gold.
+
+    Each other player reveals the top 2 cards of their deck,
+    trashes a revealed Treasure other than Copper, and discards the rest.
     """
-    game.player_state.actions += 2
-    game.player_state.buys += 1
+
+    def choose_treasure(response):
+        top_two = [c for c in player_state.draw_deck[:2]]
+        trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
+        # No non-copper treasures. nothing to choose from
+        if not trash_candidates:
+            return
+
+        # One non-copper treasure. No choice
+        if len(trash_candidates) == 1:
+            return next(iter(trash_candidates))
+
+        # Two candidates. See if response matches and return it
+        if response in trash_candidates:
+            return response
+
+        # If not pick first
+        return next(iter(trash_candidates))
+
+    if not game._is_pile_empty('Gold'):
+        game.piles['Gold'] -= 1
+        game.player_state.discard_pile.add_to_top([Gold()])
+    for player, player_state in game.other_players:
+        response = game._respond(player, 'Bandit')
+        treasure = choose_treasure(response)
+        if treasure is not None:
+            player_state.draw_deck.pop(treasure)
+            other = player_state.draw_deck.pop
+            player_state.discard_pile.add_to_top(other)
 
 
-def play_market(game):
+def play_bureaucrat(game):
     """
-    +1 Card
-    +1 Action
-    +1 Buy
-    +$1
+        Gain a silver card; put it on top of your deck.
+        Each other player reveals a Victory card from
+        his hand and puts it on top of his deck (or reveals
+        a hand with no Victory cards).
     """
-    game.player_state.draw_cards(1)
-    game.player_state.actions += 1
-    game.player_state.buys += 1
 
+    def choose_victory(response):
+        if response is None or response.Type != 'Victory':
+            for c in player_state.hand:
+                if c.Type == 'Victory':
+                    return c
+            return None
 
-def play_moat(game):
-    """
-    The active player draws 2 cards and adds them to their hand.
+        for c in player_state.hand:
+            if isinstance(c, response):
+                return c
+        return None
 
-    Counter - When another player plays an Attack card, you may first
-    reveal this from your hand, to be unaffected by it.
-    """
-    game.player_state.draw_cards(2)
+    if not game._is_pile_empty('Silver'):
+        game.piles['Silver'] -= 1
+        game.player_state.draw_deck.add_to_top([Silver()])
+    for player, player_state in game.other_players:
+        response = game._respond(player, 'Bureaucrat')
+        victory = choose_victory(response)
+        if victory is not None:
+            player_state.draw_deck.add_to_top([victory])
+            player_state.hand.remove(victory)
 
 
 # def play_chancellor(game):
@@ -57,13 +95,43 @@ def play_moat(game):
 #     """
 #     # TO DO - Ask player if they want to put their deck into their discard pile
 
-def play_village(game):
+
+def play_chapel(game):
     """
-    +1 Card
-    +2 Actions
+    Trash up to 4 cards from your hand.
     """
-    game.player_state.draw_cards(1)
-    game.player_state.actions += 2
+    cards_to_trash = game._respond(game.player, 'Chapel')
+    if not isinstance(cards_to_trash, List) or len(cards_to_trash) == 0 or len(cards_to_trash) > 4:
+        return
+
+    if not has_card_names(game.player_state.hand, cards_to_trash):
+        return
+
+    # trash the selected cards
+    remove_by_name(game.player_state.hand, cards_to_trash)
+
+
+def play_cellar(game):
+    """
+    +1 Action
+
+    Discard any number of cards, then draw that many.
+    """
+    game.player_state.actions += 1
+
+    cards_to_discard = game._respond(game.player, 'Cellar')
+    if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
+        return
+
+    if not has_card_names(game.player_state.hand, cards_to_discard):
+        return
+
+    # discard the selected cards
+    discarded = remove_by_name(game.player_state.hand, cards_to_discard)
+    game.player_state.discard_pile.add_to_top(discarded)
+
+    # draw new cards
+    game.player_state.draw_cards(len(cards_to_discard))
 
 
 def play_council_room(game):
@@ -77,6 +145,56 @@ def play_council_room(game):
     game.player_state.buys += 1
     for player_state in game.player_states:
         player_state.draw_cards(1)
+
+
+def play_festival(game):
+    """
+    +2 Actions
+    +1 Buy
+    +$2
+    """
+    game.player_state.actions += 2
+    game.player_state.buys += 1
+
+
+def play_harbinger(game):
+    """
+    +1 Card
+    +1 Action
+
+    Look through your discard pile. You may put a card from it onto your deck.
+    """
+    game.player_state.draw_cards(1)
+    game.player_state.actions += 1
+
+    if len(game.player_state.discard_pile) == 0:
+        return
+
+    card_to_put_on_deck = game._respond(game.player, 'Harbinger')
+    if not card_to_put_on_deck:
+        return
+
+    card = None
+    for c in game.player_state.discard_pile.cards:
+        if c.Name() == card_to_put_on_deck:
+            card = c
+            game.player_state.draw_deck.add_to_top([card])
+            break
+
+    if card is not None:
+        game.player_state.discard_pile.cards.remove(card)
+
+
+def play_market(game):
+    """
+    +1 Card
+    +1 Action
+    +1 Buy
+    +$1
+    """
+    game.player_state.draw_cards(1)
+    game.player_state.actions += 1
+    game.player_state.buys += 1
 
 
 def play_militia(game):
@@ -123,36 +241,27 @@ def play_militia(game):
         game.send_personal_state()
 
 
-def play_bureaucrat(game):
+def play_moneylender(game):
     """
-        Gain a silver card; put it on top of your deck.
-        Each other player reveals a Victory card from
-        his hand and puts it on top of his deck (or reveals
-        a hand with no Victory cards).
+    You may trash a Copper from your hand for +$3.
     """
+    if not has_card_names(game.player_state.hand, 'Copper'):
+        return
 
-    def choose_victory(response):
+    # Trash the money lender card
+    remove_by_name(game.player_state.hand, 'Copper')
+    # Add 3 money
+    game.player_state.used_money -= 3
 
-        if response is None or response.Type != 'Victory':
-            for c in player_state.hand:
-                if c.Type == 'Victory':
-                    return c
-            return None
 
-        for c in player_state.hand:
-            if isinstance(c, response):
-                return c
-        return None
+def play_moat(game):
+    """
+    The active player draws 2 cards and adds them to their hand.
 
-    if game._is_pile_empty('Silver'):
-        game.piles['Silver'] -= 1
-        game.player_state.draw_deck.add_to_top([Silver()])
-    for player, player_state in game.other_players:
-        response = game._respond(player, 'Bureaucrat')
-        victory = choose_victory(response)
-        if victory is not None:
-            player_state.draw_deck.add_to_top([victory])
-            player_state.hand.remove(victory)
+    Counter - When another player plays an Attack card, you may first
+    reveal this from your hand, to be unaffected by it.
+    """
+    game.player_state.draw_cards(2)
 
 
 def play_smithy(game):
@@ -225,101 +334,6 @@ def play_smithy(game):
 #             discard(top_2[0])
 #             discard(top_2[1])
 
-def play_witch(game):
-    """
-    +2 Cards
-
-    Each other player gains a Curse.
-    """
-    game.player_state.draw_cards(2)
-    for _, ps in game.other_players:
-        if Moat in set(type(c) for c in ps.hand):
-            continue
-
-        if game.piles['Curse'] == 0:
-            break
-        ps.discard_pile.add_to_top([Curse()])
-        game.piles['Curse'] -= 1
-
-
-def play_cellar(game):
-    """
-    +1 Action
-
-    Discard any number of cards, then draw that many.
-    """
-    game.player_state.actions += 1
-
-    cards_to_discard = game._respond(game.player, 'Cellar')
-    if not isinstance(cards_to_discard, List) or len(cards_to_discard) == 0:
-        return
-
-    if not has_card_names(game.player_state.hand, cards_to_discard):
-        return
-
-    # discard the selected cards
-    discarded = remove_by_name(game.player_state.hand, cards_to_discard)
-    game.player_state.discard_pile.add_to_top(discarded)
-
-    # draw new cards
-    game.player_state.draw_cards(len(cards_to_discard))
-
-
-def play_chapel(game):
-    """
-    Trash up to 4 cards from your hand.
-    """
-    cards_to_trash = game._respond(game.player, 'Chapel')
-    if not isinstance(cards_to_trash, List) or len(cards_to_trash) == 0 or len(cards_to_trash) > 4:
-        return
-
-    if not has_card_names(game.player_state.hand, cards_to_trash):
-        return
-
-    # trash the selected cards
-    remove_by_name(game.player_state.hand, cards_to_trash)
-
-
-def play_harbinger(game):
-    """
-    +1 Card
-    +1 Action
-
-    Look through your discard pile. You may put a card from it onto your deck.
-    """
-    game.player_state.draw_cards(1)
-    game.player_state.actions += 1
-
-    if len(game.player_state.discard_pile) == 0:
-        return
-
-    card_to_put_on_deck = game._respond(game.player, 'Harbinger')
-    if not card_to_put_on_deck:
-        return
-
-    card = None
-    for c in game.player_state.discard_pile.cards:
-        if c.Name() == card_to_put_on_deck:
-            card = c
-            game.player_state.draw_deck.add_to_top([card])
-            break
-
-    if card is not None:
-        game.player_state.discard_pile.cards.remove(card)
-
-
-def play_moneylender(game):
-    """
-    You may trash a Copper from your hand for +$3.
-    """
-    if not has_card_names(game.player_state.hand, 'Copper'):
-        return
-
-    # Trash the money lender card
-    remove_by_name(game.player_state.hand, 'Copper')
-    # Add 3 money
-    game.player_state.used_money -= 3
-
 
 def play_throne_room(game):
     """
@@ -337,6 +351,23 @@ def play_throne_room(game):
             raise RuntimeError('Something went wrong during throne room!')
         ps.hand.append(card)
         game.play_action_card(card_name)
+
+
+def play_witch(game):
+    """
+    +2 Cards
+
+    Each other player gains a Curse.
+    """
+    game.player_state.draw_cards(2)
+    for _, ps in game.other_players:
+        if Moat in set(type(c) for c in ps.hand):
+            continue
+
+        if game.piles['Curse'] == 0:
+            break
+        ps.discard_pile.add_to_top([Curse()])
+        game.piles['Curse'] -= 1
 
 
 def play_workshop(game):
@@ -368,3 +399,12 @@ def play_vassal(game):
         game.player_state.draw_cards(1)
         game.player_state.actions += 1
         game.play_action_card(card_name)
+
+
+def play_village(game):
+    """
+    +1 Card
+    +2 Actions
+    """
+    game.player_state.draw_cards(1)
+    game.player_state.actions += 2
