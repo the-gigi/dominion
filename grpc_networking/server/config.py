@@ -9,17 +9,16 @@ card_types = [
     Bureaucrat,
     CouncilRoom,
     Festival,
-    Cellar,
-    Harbinger,
     Market,
     Militia,
     Moat,
     Smithy,
     Village,
-    Witch]
+    Workshop,
+    Vassal]
 
 computer_players = [
-    #('Vicky', Victor),
+    ('Vicky', Victor),
     ('Rocky', Rockefeller),
     #('Guy', TheGuy),
     #('Dynamite', Napoleon),

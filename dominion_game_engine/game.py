@@ -565,6 +565,35 @@ class Game(object_model.GameClient):
         # Add 3 money
         self.player_state.used_money -= 3
 
+    def play_workshop(self):
+        """
+        Gain a card costing up to $4
+        """
+        card_name = self._respond(self.player, 'Workshop')
+        card_class = get_card_class(card_name)
+        if self.piles.get(card_name, 0) == 0 or card_class.Cost > 4:
+            return
+
+        self.piles[card_name] -= 1
+
+        self.player_state.discard_pile.add_to_top([card_class()])
+        self.send_game_event(f'{self.player_name} gained {card_name}')
+
+    def play_vassal(self):
+        """
+        +$2
+
+        Discard the top card of your deck.
+        If it is an Action card, you may play it.
+        """
+        self.player_state.reload_deck(1)
+        card_name = self.player_state.draw_deck[0]
+        play_card = self._respond(self.player, 'Vassal', card_name)
+        if play_card:
+            self.player_state.draw_cards(1)
+            self.player_state.actions += 1
+            self.play_action_card(card_name)
+
     def buy(self, card_name):
         """ """
         if self.waiting_for_response:

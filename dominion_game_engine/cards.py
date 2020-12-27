@@ -277,3 +277,23 @@ class Witch(BaseCard):
     Each other player gains a Curse
     """
     Cost = 5
+
+
+class Workshop(BaseCard):
+    Type = 'Action'
+    Text = """
+    Gain a card costing up to $4
+    """
+    Cost = 3
+
+
+class Vassal(BaseCard):
+    Type = 'Action'
+    Text = """
+    +$2
+
+    Discard the top card of your deck.
+    If it is an Action card, you may play it.
+    """
+    Cost = 3
+
