@@ -8,7 +8,7 @@ This project is a Python implementation of the renowned card game [Dominion](htt
 This is the simplest way to run the server
 
 ```
-docker run -d -p 50051:50051 --name dominion g1g1/dominion:1.0.0
+docker run -d -p 55555:55555 --name dominion g1g1/dominion:1.0.0
 ``` 
 
 To see the progress of the game check out the logs:
@@ -153,11 +153,11 @@ Let's dive into each package:
 
 ## Dominion Game engine
 
-The Dominion game engine is the conceptual game manager it is responsible for the integraity of the game and to manage the player and the workflow of the game. These aspect include:
+The Dominion game engine is the conceptual game manager. It is responsible for the integrity of the game and for managing the players and the workflow of the game. These aspect include:
 
 - managing the players
 - transitioning from player to player when turns end
-- check for end of game 
+- checking for end of game 
 
 It has the following modules:
 

@@ -8,5 +8,5 @@ RUN poetry install --no-root
 COPY . ./
 RUN poetry install
 
-EXPOSE 50051
+EXPOSE 55555
 CMD PYTHONPATH=$PWD poetry run python grpc_networking/server/main.py
