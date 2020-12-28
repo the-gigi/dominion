@@ -56,6 +56,7 @@ class Game(object_model.GameClient):
                 self.send_personal_state()
                 self.current_player_done = False
                 self.player.play()
+                self.send_personal_state()
                 while not self.current_player_done:
                     if server is not None and hasattr(server, 'Pump'):
                         server.Pump()

@@ -16,10 +16,9 @@ class BaseComputerPlayer(Player):
     def play_no_brainers(self, hand):
         play = self.game_client.play_action_card
         while no_brainers := set(hand) & self._no_brainers:
-            if has_card_names(hand, 'ThroneRoom'):
-                play(next(iter(no_brainers)))
-                continue
-
+            # if has_card_names(hand, 'ThroneRoom'):
+            #     play(next(iter(no_brainers)))
+            #     continue
             for card in no_brainers:
                 play(card.Name())
                 hand.remove(card)
@@ -94,11 +93,12 @@ class BaseComputerPlayer(Player):
         self._state = state
 
     def respond(self, action, *args):
-        if action != 'ThroneRoom':
-            return
-
-        no_brainers = set(self.state.hand) & self._no_brainers
-        if not no_brainers:
-            return
-
-        return next(iter(no_brainers)).Name()
+        """ """
+        # if action != 'ThroneRoom':
+        #     return
+        #
+        # no_brainers = set(self.state.hand) & self._no_brainers
+        # if not no_brainers:
+        #     return
+        #
+        # return next(iter(no_brainers)).Name()

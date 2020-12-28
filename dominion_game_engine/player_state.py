@@ -29,12 +29,6 @@ class PlayerState:
         # How much money did the player used in the current turn
         self.used_money = 0
 
-        self._personal_state = PersonalState(hand=copy.deepcopy(self.hand),
-                                             discard_pile=copy.deepcopy(self.discard_pile),
-                                             draw_deck=self.draw_deck.as_dict(),
-                                             supply=copy.deepcopy(supply),
-                                             play_area=[])
-
     def dump(self):
         print('Name:', self.name)
         print(self.hand)
@@ -57,10 +51,12 @@ class PlayerState:
         self.draw_deck.shuffle()
 
     def reload_deck(self, n):
+        before = self.draw_deck.count + self.discard_pile.count
         if self.draw_deck.count < n:
             self.discard_pile.shuffle()
             self.draw_deck.cards += self.discard_pile.cards
             self.discard_pile = CardStack()
+        assert (self.draw_deck.count + self.discard_pile.count == before)
 
     def draw_cards(self, n):
         """Draw the top n cards from the draw deck and add them to the hand"""
@@ -84,15 +80,12 @@ class PlayerState:
         print(f'{self.name}: done')
 
     def get_personal_state(self, supply) -> PersonalState:
-        return PersonalState(hand=copy.deepcopy(self.hand),
-                             discard_pile=copy.deepcopy(self.discard_pile),
-                             draw_deck=self.draw_deck.as_dict(),
-                             supply=copy.deepcopy(supply),
-                             play_area=self.play_area[:],
-                             actions=self.actions,
-                             buys=self.buys,
-                             used_money=self.used_money)
-
-    @property
-    def personal_state(self):
-        return self._personal_state
+        ps = PersonalState(hand=copy.deepcopy(self.hand),
+                           discard_pile=copy.deepcopy(self.discard_pile),
+                           draw_deck=self.draw_deck.as_dict(),
+                           supply=copy.deepcopy(supply),
+                           play_area=self.play_area[:],
+                           actions=self.actions,
+                           buys=self.buys,
+                           used_money=self.used_money)
+        return ps

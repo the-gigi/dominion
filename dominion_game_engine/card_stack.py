@@ -1,4 +1,6 @@
 import random
+from functools import reduce
+
 from typing import List
 
 from dominion_game_engine import card_util
@@ -6,12 +8,16 @@ from dominion_game_engine.cards import BaseCard
 
 
 class CardStack:
+    all_stacks = []
+
     def __init__(self, cards=()):
         self.cards = list(cards)
+        self.all_stacks.append(self)
 
     def invariant(self):
-        # Verifies that there are only unique cards in a stack of cards (no copies of cards).
-        assert(len(self.cards) == len(set(self.cards)))
+        # Verifies that there are only unique cards in all stack of cards (no copies of cards).
+        all_cards = [s.cards for s in self.all_stacks]
+        assert(len(all_cards) == len(set(id(c) for c in all_cards)))
 
     def shuffle(self):
         """Shuffle the cards in the stack and return the stack"""

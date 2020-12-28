@@ -9,7 +9,7 @@ from dominion_game_engine.cards import *
 class TheGuy(BaseComputerPlayer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.card_counter = Counter
+        self.card_counter = Counter()
 
     def play_action_cards(self, hand):
         def has_card(card_class):
@@ -22,6 +22,9 @@ class TheGuy(BaseComputerPlayer):
         for i in range(self.state.actions):
             if has_card(Witch) and self.state.supply['Curse'] > 0:
                 self.play_card(get_card(Witch), hand)
+
+            if has_card(Bandit):
+                self.play_card(get_card(Bandit), hand)
             elif has_card(CouncilRoom):
                 self.play_card(get_card(CouncilRoom), hand)
             elif has_card(Militia):
@@ -71,7 +74,7 @@ class TheGuy(BaseComputerPlayer):
                 self.card_counter['Militia'] += 1
                 break
 
-            if self.buy_card(money, 'ThroneRoom', lambda: self.card_counter['ThroneRoom'] < 2):
+            if self.buy_card(money, 'ThroneRoom', lambda: self.card_counter['ThroneRoom'] < 1):
                 self.card_counter['ThroneRoom'] += 1
                 break
 
@@ -85,7 +88,7 @@ class TheGuy(BaseComputerPlayer):
                     self.card_counter['Silver'] += 1
                     break
 
-            if self.buy_card(money, 'Moat', lambda: self.card_counter['Moat'] < 3):
+            if self.buy_card(money, 'Moat', lambda: self.card_counter['Moat'] < 2):
                 self.card_counter['Moat'] += 1
                 break
 

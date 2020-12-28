@@ -38,7 +38,15 @@ def play_bandit(game):
         game.piles['Gold'] -= 1
         game.player_state.discard_pile.add_to_top([Gold()])
     for player, player_state in game.other_players:
-        top_two = [c for c in player_state.draw_deck.peek(2)]
+        before = (player_state.discard_pile, player_state.draw_deck)
+        player_state.reload_deck(2)
+        after = (player_state.discard_pile, player_state.draw_deck)
+        try:
+            top_two = [c for c in player_state.draw_deck.peek(2)]
+        except Exception as e:
+            print('BEFORE', *before)
+            print('AFTER', *after)
+            top_two = [c for c in player_state.draw_deck.peek(2)]
         trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
         # No non-copper treasures. nothing to choose from
         if not trash_candidates:
@@ -51,8 +59,8 @@ def play_bandit(game):
             response = game._respond(player, 'Bandit', trash_candidates)
             treasure = choose_treasure(response, trash_candidates)
 
-        player_state.draw_deck.pop(treasure)
-        other = player_state.draw_deck.pop
+        player_state.draw_deck.cards.remove(treasure)
+        other = player_state.draw_deck.pop(1)
         player_state.discard_pile.add_to_top(other)
 
 
