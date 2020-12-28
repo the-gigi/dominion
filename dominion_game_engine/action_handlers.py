@@ -38,7 +38,7 @@ def play_bandit(game):
         game.piles['Gold'] -= 1
         game.player_state.discard_pile.add_to_top([Gold()])
     for player, player_state in game.other_players:
-        top_two = [c for c in player_state.draw_deck[:2]]
+        top_two = [c for c in player_state.draw_deck.peek(2)]
         trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
         # No non-copper treasures. nothing to choose from
         if not trash_candidates:
