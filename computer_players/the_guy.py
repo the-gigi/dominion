@@ -1,3 +1,4 @@
+from collections import Counter
 from random import randint
 
 from computer_players.base_computer_player import BaseComputerPlayer
@@ -8,16 +9,7 @@ from dominion_game_engine.cards import *
 class TheGuy(BaseComputerPlayer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.witches = 0
-        self.militias = 0
-        self.throne_rooms = 0
-        self.moats = 0
-        self.villages = 0
-        self.silvers = 0
-        self.golds = 0
-        self.provinces = 0
-        self.duchies = 0
-        self.estates = 0
+        self.card_counter = Counter
 
     def play_action_cards(self, hand):
         def has_card(card_class):
@@ -45,19 +37,23 @@ class TheGuy(BaseComputerPlayer):
             supply = self.state.supply
 
             if self.buy_card(money, 'Province'):
-                self.provinces += 1
+                self.card_counter['Province'] += 1
                 break
 
             if self.buy_card(money, 'Gold'):
-                self.golds += 1
+                self.card_counter['Gold'] += 1
                 break
 
             if self.buy_card(money, 'Duchy', lambda: supply['Province'] < 4):
-                self.duchies += 1
+                self.card_counter['Duchy'] += 1
                 break
 
-            if self.buy_card(money, 'Witch', lambda: self.witches < 2):
-                self.witches += 1
+            if self.buy_card(money, 'Witch', lambda: self.card_counter['Witch'] < 2):
+                self.card_counter['Witch'] += 1
+                break
+
+            if self.buy_card(money, 'Bandit', lambda: self.card_counter['Bandit'] < 2):
+                self.card_counter['Bandit'] += 1
                 break
 
             selector = randint(0, 5)
@@ -71,26 +67,26 @@ class TheGuy(BaseComputerPlayer):
                 if self.buy_card(money, 'CouncilRoom'):
                     break
 
-            if self.buy_card(money, 'Militia', lambda: self.militias < 2):
-                self.militias += 1
+            if self.buy_card(money, 'Militia', lambda: self.card_counter['Militia'] < 2):
+                self.card_counter['Militia'] += 1
                 break
 
-            if self.buy_card(money, 'ThroneRoom', lambda: self.throne_rooms < 2):
-                self.throne_rooms += 1
+            if self.buy_card(money, 'ThroneRoom', lambda: self.card_counter['ThroneRoom'] < 2):
+                self.card_counter['ThroneRoom'] += 1
                 break
 
             selector = randint(0, 5)
-            if selector == 0 and self.villages < 2 and self.silvers > 2:
+            if selector == 0 and self.card_counter['Village'] < 2 and self.card_counter['Silver'] > 2:
                 if self.buy_card(money, 'Village'):
-                    self.villages += 1
+                    self.card_counter['Village'] += 1
                     break
             else:
                 if self.buy_card(money, 'Silver'):
-                    self.silvers += 1
+                    self.card_counter['Silver'] += 1
                     break
 
-            if self.buy_card(money, 'Moat', lambda: self.moats < 3):
-                self.moats += 1
+            if self.buy_card(money, 'Moat', lambda: self.card_counter['Moat'] < 3):
+                self.card_counter['Moat'] += 1
                 break
 
     def respond(self, request, *args):
