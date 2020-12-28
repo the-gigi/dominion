@@ -1,6 +1,7 @@
 from dominion_game_engine import card_util
 from dominion_game_engine.card_util import count_money, get_card_class
 from dominion_game_engine.cards import *
+from dominion_game_engine.hand import has_card_names
 from dominion_object_model.object_model import Player, GameClient
 
 
@@ -10,23 +11,18 @@ class BaseComputerPlayer(Player):
         self.game_client = game_client
         self.events = []
         self._state = None
+        self._no_brainers = {Village, Festival, Market}
 
     def play_no_brainers(self, hand):
         play = self.game_client.play_action_card
-        to_remove = []
-        for card in hand:
-            if isinstance(card, Village):
-                play(card.Name())
-                to_remove.append(card)
-            elif isinstance(card, Festival):
-                play(card.Name())
-                to_remove.append(card)
-            elif isinstance(card, Market):
-                play(card.Name())
-                to_remove.append(card)
+        while no_brainers := set(hand) & self._no_brainers:
+            if has_card_names(hand, 'ThroneRoom'):
+                play(next(iter(no_brainers)))
+                continue
 
-        for card in to_remove:
-            hand.remove(card)
+            for card in no_brainers:
+                play(card.Name())
+                hand.remove(card)
 
     def play_action_cards(self, hand):
         pass
@@ -98,4 +94,11 @@ class BaseComputerPlayer(Player):
         self._state = state
 
     def respond(self, action, *args):
-        return
+        if action != 'ThroneRoom':
+            return
+
+        no_brainers = set(self.state.hand) & self._no_brainers
+        if not no_brainers:
+            return
+
+        return next(iter(no_brainers)).Name()

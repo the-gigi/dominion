@@ -26,17 +26,7 @@ def play_bandit(game):
     trashes a revealed Treasure other than Copper, and discards the rest.
     """
 
-    def choose_treasure(response):
-        top_two = [c for c in player_state.draw_deck[:2]]
-        trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
-        # No non-copper treasures. nothing to choose from
-        if not trash_candidates:
-            return
-
-        # One non-copper treasure. No choice
-        if len(trash_candidates) == 1:
-            return next(iter(trash_candidates))
-
+    def choose_treasure(response, trash_candidates):
         # Two candidates. See if response matches and return it
         if response in trash_candidates:
             return response
@@ -48,12 +38,22 @@ def play_bandit(game):
         game.piles['Gold'] -= 1
         game.player_state.discard_pile.add_to_top([Gold()])
     for player, player_state in game.other_players:
-        response = game._respond(player, 'Bandit')
-        treasure = choose_treasure(response)
-        if treasure is not None:
-            player_state.draw_deck.pop(treasure)
-            other = player_state.draw_deck.pop
-            player_state.discard_pile.add_to_top(other)
+        top_two = [c for c in player_state.draw_deck[:2]]
+        trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
+        # No non-copper treasures. nothing to choose from
+        if not trash_candidates:
+            continue
+
+        # One non-copper treasure. No choice
+        elif len(trash_candidates) == 1:
+            treasure = next(iter(trash_candidates))
+        else:
+            response = game._respond(player, 'Bandit', trash_candidates)
+            treasure = choose_treasure(response, trash_candidates)
+
+        player_state.draw_deck.pop(treasure)
+        other = player_state.draw_deck.pop
+        player_state.discard_pile.add_to_top(other)
 
 
 def play_bureaucrat(game):

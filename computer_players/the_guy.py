@@ -10,6 +10,7 @@ class TheGuy(BaseComputerPlayer):
         super().__init__(*args, **kwargs)
         self.witches = 0
         self.militias = 0
+        self.throne_rooms = 0
         self.moats = 0
         self.villages = 0
         self.silvers = 0
@@ -72,6 +73,10 @@ class TheGuy(BaseComputerPlayer):
 
             if self.buy_card(money, 'Militia', lambda: self.militias < 2):
                 self.militias += 1
+                break
+
+            if self.buy_card(money, 'ThroneRoom', lambda: self.throne_rooms < 2):
+                self.throne_rooms += 1
                 break
 
             selector = randint(0, 5)

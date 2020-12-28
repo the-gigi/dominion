@@ -24,6 +24,7 @@ from computer_players.napoleon import Napoleon
 
 card_types = [
     #Adventurer,
+    Bandit,
     #Bureaucrat,
     #Chancellor,
     Cellar,
@@ -36,8 +37,10 @@ card_types = [
     Smithy,
     #Spy,
     #Thief,
+    ThroneRoom,
     Village,
-    Witch]
+    Witch,
+    Workshop]
 
 
 players_info = dict(Vicky=(Victor, None),
