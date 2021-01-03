@@ -38,6 +38,7 @@ class TheGuy(BaseComputerPlayer):
         for i in range(buys):
             money = count_money(hand + self.state.play_area, False) - self.state.used_money
             supply = self.state.supply
+            empty_piles = sum(1 for v in supply.values() if v == 0)
 
             if self.buy_card(money, 'Province'):
                 self.card_counter['Province'] += 1
@@ -47,7 +48,7 @@ class TheGuy(BaseComputerPlayer):
                 self.card_counter['Gold'] += 1
                 break
 
-            if self.buy_card(money, 'Duchy', lambda: supply['Province'] < 4):
+            if self.buy_card(money, 'Duchy', lambda: supply['Province'] < 4 or empty_piles > 1):
                 self.card_counter['Duchy'] += 1
                 break
 
