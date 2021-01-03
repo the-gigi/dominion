@@ -55,12 +55,10 @@ class PlayerState:
         self.draw_deck.shuffle()
 
     def reload_deck(self, n):
-        before = self.draw_deck.count + self.discard_pile.count
         if self.draw_deck.count < n:
             self.discard_pile.shuffle()
             self.draw_deck.cards += self.discard_pile.cards
             self.discard_pile = CardStack()
-        assert (self.draw_deck.count + self.discard_pile.count == before)
 
     def draw_cards(self, n):
         """Draw the top n cards from the draw deck and add them to the hand"""

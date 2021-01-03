@@ -11,6 +11,7 @@ card_types = [
     Bureaucrat,
     CouncilRoom,
     Festival,
+    Library,
     Market,
     Militia,
     Mine,
