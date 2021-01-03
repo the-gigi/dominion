@@ -6,9 +6,6 @@ class BaseCard:
     Points = 0
     Reaction = False
 
-    def __init__(self):
-        self.Image = f'images/{self.Name().lower()}.jpg'
-
     def __repr__(self):
         return f'{type(self).__name__}'
 
@@ -20,6 +17,9 @@ class BaseCard:
 
     def __hash__(self):
         return id(self)
+
+    def __str__(self):
+        return json.dumps()
 
     @classmethod
     def Name(cls):

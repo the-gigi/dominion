@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from typing import Dict
 
@@ -5,9 +6,16 @@ from dominion_game_engine import cards
 import inspect
 from dominion_game_engine.cards import *
 
+card_attributes = [k for k,v in BaseCard.__dict__.items() if not k.startswith('__') and not callable(v) and k != 'Name']
+
 
 def get_card_types():
     return {cls.__name__: cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard}
+
+
+def serialize_card_types():
+    card_types = get_card_types()
+    return {name: {a: getattr(card_type, a) for a in card_attributes} for name, card_type in card_types.items()}
 
 
 def get_card_class(card_name):

@@ -6,7 +6,7 @@ import queue
 from functools import partial
 from threading import Thread
 
-from dominion_game_engine import game_factory
+from dominion_game_engine import game_factory, card_util
 from dominion_grpc_proto.dominion_pb2 import Message, Response
 from dominion_grpc_proto.dominion_pb2_grpc import DominionServerServicer
 
@@ -73,9 +73,11 @@ class DominionServer(DominionServerServicer):
         # Send 'game start' event to all players with cards and player names
         player_names = [p.name for p in self.players.values()] + [name for name, _ in computer_players]
         card_names = [c.Name() for c in config.card_types]
+        card_types = card_util.serialize_card_types()
         for pi in self.players.values():
             data = dict(event='game start',
                         card_names=card_names,
+                        card_types=card_types,
                         player_names=player_names)
             pi.main_queue.put(Message(type='on_game_event',
                                       data=json.dumps(data)))
