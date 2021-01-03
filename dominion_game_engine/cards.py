@@ -18,9 +18,6 @@ class BaseCard:
     def __hash__(self):
         return id(self)
 
-    def __str__(self):
-        return json.dumps()
-
     @classmethod
     def Name(cls):
         return cls.__name__
@@ -217,6 +214,15 @@ class Militia(BaseCard):
     """
     Coins = 2
     Cost = 4
+
+
+class Mine(BaseCard):
+    Type = 'Action'
+    Text = """
+    You may trash a Treasure from your hand. 
+    Gain a Treasure to your hand costing up to $3 more than it.
+    """
+    Cost = 5
 
 
 class Moat(BaseCard):

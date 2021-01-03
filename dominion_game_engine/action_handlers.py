@@ -247,25 +247,9 @@ def play_militia(game):
         hand_cards = [hash(c) for c in hand]
         discarded = [c for c in player_state.hand if id(c) not in hand_cards]
 
-        before = player_state.all_cards
         player_state.hand = hand
         player_state.discard_pile.add_to_top(discarded)
-        after = player_state.all_cards
-        assert before == after
         game.send_personal_state()
-
-
-def play_moneylender(game):
-    """
-    You may trash a Copper from your hand for +$3.
-    """
-    if not has_card_names(game.player_state.hand, 'Copper'):
-        return
-
-    # Trash the money lender card
-    remove_by_name(game.player_state.hand, 'Copper')
-    # Add 3 money
-    game.player_state.used_money -= 3
 
 
 def play_moat(game):
@@ -276,6 +260,45 @@ def play_moat(game):
     reveal this from your hand, to be unaffected by it.
     """
     game.player_state.draw_cards(2)
+
+
+def play_mine(game):
+    """
+    You may trash a Treasure from your hand.
+    Gain a Treasure to your hand costing up to $3 more than it.
+
+    """
+    if not any(c.Type == 'Treasure' for c in game.player_state.hand):
+        return
+
+    response = game._respond(game.player, 'Mine')
+    hand_treasures = [c for c in game.player_state.hand if c in ('Copper', 'Silver')]
+    if response not in hand_treasures:
+        return
+
+    next_treasure = Silver() if response == 'Copper' else Gold()
+
+    exhausted = game.piles[str(next_treasure)] == 0
+    if exhausted:
+        return
+
+    # Trash the current treasure
+    remove_by_name(game.player_state.hand, [response])
+    # Add next treasure to the hand
+    game.player_state.hand.append(next_treasure)
+
+
+def play_moneylender(game):
+    """
+    You may trash a Copper from your hand for +$3.
+    """
+    if not has_card_names(game.player_state.hand, ['Copper']):
+        return
+
+    # Trash the money lender card
+    remove_by_name(game.player_state.hand, ['Copper'])
+    # Add 3 money
+    game.player_state.used_money -= 3
 
 
 def play_smithy(game):
