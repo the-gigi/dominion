@@ -246,6 +246,18 @@ class MoneyLender(BaseCard):
     Reaction = True
 
 
+class Sentry(BaseCard):
+    Type = 'Action'
+    Text = """
+    +1 Card 
+    +1 Action
+    Look at the top 2 cards of your deck. 
+    Trash and/or discard any number of them. 
+    Put the rest back on top in any order.
+    """
+    Cost = 5
+
+
 class Smithy(BaseCard):
     Type = 'Action'
     Text = """

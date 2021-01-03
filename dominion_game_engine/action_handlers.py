@@ -63,7 +63,7 @@ def play_bandit(game):
         player_state.draw_deck.cards.remove(treasure)
         other = player_state.draw_deck.pop(1)
         player_state.discard_pile.add_to_top(other)
-        assert(player_state.all_cards.count == total_cards - 1)
+        assert (player_state.all_cards.count == total_cards - 1)
 
 
 def play_bureaucrat(game):
@@ -299,6 +299,40 @@ def play_moneylender(game):
     remove_by_name(game.player_state.hand, ['Copper'])
     # Add 3 money
     game.player_state.used_money -= 3
+
+
+def play_sentry(game):
+    """
+    +1 Card
+    +1 Action
+    Look at the top 2 cards of your deck.
+    Trash and/or discard any number of them.
+    Put the rest back on top in any order.
+    """
+    game.player_state.draw_cards(1)
+    game.player_state.actions += 1
+    game.player_state.reload_deck(2)
+    top_two = [c.Name() for c in game.player_state.draw_deck.peek(2)]
+    response = game._respond(game.player, 'Sentry', game.player_state[2])
+    trash, discard, rest = response
+    if len(trash + discard + rest) != 2:
+        return
+
+    if sorted(top_two) != sorted(trash + discard + rest):
+        return
+
+    top_two = sorted(game.player_state.draw_deck.pop(2))
+    for d in sorted(discard):
+        for c in top_two:
+            if d == c.Name():
+                game.player_state.discard_pile.append(c)
+    new_top_two = []
+    for i in range(len(rest)):
+        for c in top_two:
+            if c.Name == rest[i]:
+                new_top_two.append(top_two[i])
+
+    game.player_state.draw_deck = new_top_two + game.player_state.draw_deck
 
 
 def play_smithy(game):
