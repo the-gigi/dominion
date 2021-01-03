@@ -488,7 +488,6 @@ class GameTest(unittest.TestCase):
         self.assertEqual(ps.discard_pile.cards, [village])
         self.assertEqual(ps.draw_deck.cards, [gold, market])
 
-
     # def test_play_adventurer(self):
     #     adventurer = Adventurer()
     #     copper = Copper()

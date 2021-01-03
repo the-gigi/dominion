@@ -44,10 +44,10 @@ card_types = [
     Workshop]
 
 players_info = dict(Vicky=(Victor, None),
-                    Guy=(TheGuy, None),
-                    The_Rock=(Rockefeller, None),
-                    # Dynamite=(Napoleon, None),
-                    # Zak_Galafinakis=(StayAtHomeSon, None),
+                    #Guy=(TheGuy, None),
+                    #The_Rock=(Rockefeller, None),
+                    Dynamite=(Napoleon, None),
+                    #Zak_Galafinakis=(StayAtHomeSon, None),
                     Robin=(RobinHood, None),
                     )
 

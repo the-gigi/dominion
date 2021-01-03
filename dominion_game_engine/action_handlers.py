@@ -59,9 +59,11 @@ def play_bandit(game):
             response = game._respond(player, 'Bandit', trash_candidates)
             treasure = choose_treasure(response, trash_candidates)
 
+        total_cards = len(player_state.all_cards.cards)
         player_state.draw_deck.cards.remove(treasure)
         other = player_state.draw_deck.pop(1)
         player_state.discard_pile.add_to_top(other)
+        assert(player_state.all_cards.count == total_cards - 1)
 
 
 def play_bureaucrat(game):
@@ -242,10 +244,14 @@ def play_militia(game):
         hand = choose_hand(response, player_state)
         if hand is None:
             continue
-        discarded = [c for c in player_state.hand if c not in hand]
+        hand_cards = [hash(c) for c in hand]
+        discarded = [c for c in player_state.hand if id(c) not in hand_cards]
 
+        before = player_state.all_cards
         player_state.hand = hand
         player_state.discard_pile.add_to_top(discarded)
+        after = player_state.all_cards
+        assert before == after
         game.send_personal_state()
 
 

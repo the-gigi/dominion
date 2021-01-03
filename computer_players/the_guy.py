@@ -33,8 +33,8 @@ class TheGuy(BaseComputerPlayer):
                 self.play_card(get_card(Moat), hand)
 
     def buy_stuff(self, hand):
+        min_wealth = 10
         buys = self.state.buys
-
         for i in range(buys):
             money = count_money(hand + self.state.play_area, False) - self.state.used_money
             supply = self.state.supply
@@ -51,35 +51,38 @@ class TheGuy(BaseComputerPlayer):
                 self.card_counter['Duchy'] += 1
                 break
 
-            if self.buy_card(money, 'Witch', lambda: self.card_counter['Witch'] < 2):
-                self.card_counter['Witch'] += 1
-                break
+            # calculate wealth (ignore coppers)
+            wealth = self.card_counter['Silver'] + self.card_counter['Gold']
+            if wealth > min_wealth:
+                if self.buy_card(money, 'Witch', lambda: self.card_counter['Witch'] < 2):
+                    self.card_counter['Witch'] += 1
+                    break
 
-            if self.buy_card(money, 'Bandit', lambda: self.card_counter['Bandit'] < 2):
-                self.card_counter['Bandit'] += 1
-                break
+                if self.buy_card(money, 'Bandit', lambda: self.card_counter['Bandit'] < 2):
+                    self.card_counter['Bandit'] += 1
+                    break
+
+                selector = randint(0, 5)
+                if selector < 4:
+                    if self.buy_card(money, 'Festival'):
+                        break
+                elif selector == 4:
+                    if self.buy_card(money, 'Market'):
+                        break
+                elif selector == 5 and money > 15:
+                    if self.buy_card(money, 'CouncilRoom'):
+                        break
+
+                if self.buy_card(money, 'Militia', lambda: self.card_counter['Militia'] < 2 and money > 15):
+                    self.card_counter['Militia'] += 1
+                    break
+
+                if self.buy_card(money, 'ThroneRoom', lambda: self.card_counter['ThroneRoom'] < 1 and money > 15):
+                    self.card_counter['ThroneRoom'] += 1
+                    break
 
             selector = randint(0, 5)
-            if selector < 4:
-                if self.buy_card(money, 'Festival'):
-                    break
-            elif selector == 4:
-                if self.buy_card(money, 'Market'):
-                    break
-            elif selector == 5:
-                if self.buy_card(money, 'CouncilRoom'):
-                    break
-
-            if self.buy_card(money, 'Militia', lambda: self.card_counter['Militia'] < 2):
-                self.card_counter['Militia'] += 1
-                break
-
-            if self.buy_card(money, 'ThroneRoom', lambda: self.card_counter['ThroneRoom'] < 1):
-                self.card_counter['ThroneRoom'] += 1
-                break
-
-            selector = randint(0, 5)
-            if selector == 0 and self.card_counter['Village'] < 2 and self.card_counter['Silver'] > 2:
+            if selector == 0 and self.card_counter['Village'] < 2 and money > min_wealth:
                 if self.buy_card(money, 'Village'):
                     self.card_counter['Village'] += 1
                     break

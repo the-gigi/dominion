@@ -66,8 +66,11 @@ class Game(object_model.GameClient):
                 print(e)
                 raise
             supply = self.piles
-            points = self.count_player_points(self.player_state)
-            print(f'points: {points}')
+            print(f'cards: {self.player_state.all_cards}, total: {self.player_state.all_cards.count}')
+            print(f'hand: {self.player_state.hand}')
+            print(f'draw_deck: {self.player_state.draw_deck}')
+            print(f'discard_pile: {self.player_state.discard_pile}')
+            print(f'points: {self.count_player_points(self.player_state)}')
             print(
                 f'supply - provinces: {supply["Province"]}, duchies: {supply["Duchy"]}, estates: {supply["Estate"]}, silver: {supply["Silver"]}')
             print('-' * 20)
@@ -224,6 +227,7 @@ class Game(object_model.GameClient):
         Depending on the card, take its action
         Move the card from the player's hand to the play area
         """
+        print(f'{self.player_name} played {card_name}')
         if self.waiting_for_response:
             return
 
@@ -244,7 +248,10 @@ class Game(object_model.GameClient):
 
         lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
         handler = getattr(action_handlers, 'play_' + lower_card_name)
+
+        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
         handler(self)
+        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
 
         # move the card from the player's hand to the play area
         try:

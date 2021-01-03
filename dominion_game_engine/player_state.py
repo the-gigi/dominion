@@ -35,6 +35,10 @@ class PlayerState:
         print(repr(self.discard_pile))
         print(repr(self.draw_deck))
 
+    @property
+    def all_cards(self):
+        return CardStack(self.hand + self.draw_deck.cards + self.discard_pile.cards)
+
     def _cleanup(self):
         """Discard hand and play area
         """
