@@ -13,13 +13,15 @@ card_types = [
     Festival,
     Market,
     Militia,
+    Mine,
     Moat,
+    Remodel,
+    Sentry,
     Smithy,
     Village,
     Workshop,
     Vassal,
-    Mine,
-    Sentry]
+]
 
 computer_players = [
     ('Vicky', Victor),

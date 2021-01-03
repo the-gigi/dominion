@@ -255,6 +255,15 @@ class MoneyLender(BaseCard):
     Reaction = True
 
 
+class Remodel(BaseCard):
+    Type = 'Action'
+    Text = """
+    Trash a card from your hand.
+    Gain a card costing up to $2 more than it.
+    """
+    Cost = 4
+
+
 class Sentry(BaseCard):
     Type = 'Action'
     Text = """

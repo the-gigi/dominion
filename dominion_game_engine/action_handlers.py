@@ -316,6 +316,29 @@ def play_moneylender(game):
     game.player_state.used_money -= 3
 
 
+def play_remodel(game):
+    """
+    Trash a card from your hand.
+    Gain a card costing up to $2 more than it.
+    """
+    trash, gain = game._respond(game.player, 'Remodel')
+    if not game.player_state.hand.has_card_names([trash]):
+        return
+
+    if game.piles.get(gain, 0) == 0:
+        return
+
+    trash_card_class = get_card_class(trash)
+    gain_card_class = get_card_class(gain)
+
+    if trash_card_class.Cost < gain_card_class.Cost - 2:
+        return
+
+    game.player_state.hand.remove_by_name([trash])
+    game.piles[gain] -= 1
+    game.player_state.discard_pile.append(gain_card_class())
+
+
 def play_sentry(game):
     """
     +1 Card
