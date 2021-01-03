@@ -6,6 +6,7 @@ from computer_players.napoleon import Napoleon
 from computer_players.stay_at_home_son import StayAtHomeSon
 
 card_types = [
+    Bandit,
     Bureaucrat,
     CouncilRoom,
     Festival,
@@ -15,7 +16,9 @@ card_types = [
     Smithy,
     Village,
     Workshop,
-    Vassal]
+    Vassal,
+    Mine,
+    Sentry]
 
 computer_players = [
     ('Vicky', Victor),
