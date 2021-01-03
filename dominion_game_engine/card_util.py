@@ -18,7 +18,7 @@ def serialize_card_types():
 
 
 def get_card_class(card_name):
-    return get_card_types()[card_name]
+    return get_card_types().get(card_name, None)
 
 
 def as_dict(cards):

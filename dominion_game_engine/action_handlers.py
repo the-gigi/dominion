@@ -18,6 +18,27 @@ from dominion_game_engine.cards import *
 #             game.player_state.discard_pile.add_to_top([top_card])
 
 
+def play_artisan(game):
+    """
+    Gain a card to your hand costing up to $5.
+    Put a card from your hand onto your deck.
+    """
+    gain, put_onto_deck = game._respond(game.player, 'Artisan')
+    if game.piles.get(gain, 0) == 0:
+        return
+
+    card_class = get_card_class(gain)
+    if card_class is None or card_class.Cost > 5:
+        return
+
+    if put_onto_deck not in [gain] + [c.Name() for c in game.player_state.hand]:
+        return
+
+    game.piles[gain] -= 1
+    new_card = card_class()
+    game.player_state.hand.append(new_card)
+
+
 def play_bandit(game):
     """
     Gain a gold.
@@ -41,12 +62,8 @@ def play_bandit(game):
         before = (player_state.discard_pile, player_state.draw_deck)
         player_state.reload_deck(2)
         after = (player_state.discard_pile, player_state.draw_deck)
-        try:
-            top_two = [c for c in player_state.draw_deck.peek(2)]
-        except Exception as e:
-            print('BEFORE', *before)
-            print('AFTER', *after)
-            top_two = [c for c in player_state.draw_deck.peek(2)]
+
+        top_two = [c for c in player_state.draw_deck.peek(2)]
         trash_candidates = set(x for x in top_two if x.Name() in ('Silver', 'Gold'))
         # No non-copper treasures. nothing to choose from
         if not trash_candidates:
@@ -59,11 +76,9 @@ def play_bandit(game):
             response = game._respond(player, 'Bandit', trash_candidates)
             treasure = choose_treasure(response, trash_candidates)
 
-        total_cards = len(player_state.all_cards.cards)
         player_state.draw_deck.cards.remove(treasure)
         other = player_state.draw_deck.pop(1)
         player_state.discard_pile.add_to_top(other)
-        assert (player_state.all_cards.count == total_cards - 1)
 
 
 def play_bureaucrat(game):

@@ -97,6 +97,15 @@ class Gold(BaseCard):
 #     Cost = 6
 
 
+class Artisan(BaseCard):
+    Type = 'Action'
+    Text = """
+    Gain a card to your hand costing up to $5.
+    Put a card from your hand onto your deck.
+    """
+    Cost = 6
+
+
 class Bandit(BaseCard):
     Type = 'Action'
     Text = """

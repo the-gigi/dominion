@@ -6,6 +6,7 @@ from computer_players.napoleon import Napoleon
 from computer_players.stay_at_home_son import StayAtHomeSon
 
 card_types = [
+    Artisan,
     Bandit,
     Bureaucrat,
     CouncilRoom,
