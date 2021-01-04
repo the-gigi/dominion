@@ -324,6 +324,7 @@ class Vassal(BaseCard):
     If it is an Action card, you may play it.
     """
     Cost = 3
+    Coins = 2
 
 
 class Village(BaseCard):

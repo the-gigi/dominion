@@ -542,12 +542,16 @@ def play_vassal(game):
     If it is an Action card, you may play it.
     """
     game.player_state.reload_deck(1)
-    card_name = game.player_state.draw_deck[0]
-    play_card = game._respond(game.player, 'Vassal', card_name)
-    if play_card:
-        game.player_state.draw_cards(1)
-        game.player_state.actions += 1
-        game.play_action_card(card_name)
+    card = game.player_state.draw_deck.cards.pop(0)
+    if card.Type == 'Action':
+        play_card = game._respond(game.player, 'Vassal', card.Name())
+        if play_card:
+            game.player_state.hand.append(card)
+            game.player_state.actions += 1
+            game.play_action_card(card.Name())
+            return
+
+    game.player_state.discard_pile.add_to_top([card])
 
 
 def play_village(game):
