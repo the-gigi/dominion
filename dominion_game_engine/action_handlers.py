@@ -49,8 +49,9 @@ def play_bandit(game):
 
     def choose_treasure(response, trash_candidates):
         # Two candidates. See if response matches and return it
-        if response in trash_candidates:
-            return response
+        for candidate in trash_candidates:
+            if candidate.Name() == response:
+                return candidate
 
         # If not pick first
         return next(iter(trash_candidates))
@@ -73,7 +74,7 @@ def play_bandit(game):
         elif len(trash_candidates) == 1:
             treasure = next(iter(trash_candidates))
         else:
-            response = game._respond(player, 'Bandit', trash_candidates)
+            response = game._respond(player, 'Bandit', [x.Name() for x in trash_candidates])
             treasure = choose_treasure(response, trash_candidates)
 
         player_state.draw_deck.cards.remove(treasure)
