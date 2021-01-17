@@ -328,7 +328,7 @@ def play_mine(game):
         return
 
     response = game._respond(game.player, 'Mine')
-    hand_treasures = [c for c in game.player_state.hand if c in ('Copper', 'Silver')]
+    hand_treasures = [c.Name() for c in game.player_state.hand if c.Name() in ('Copper', 'Silver')]
     if response not in hand_treasures:
         return
 
@@ -392,7 +392,7 @@ def play_sentry(game):
     game.player_state.actions += 1
     game.player_state.reload_deck(2)
     top_two = [c.Name() for c in game.player_state.draw_deck.peek(2)]
-    response = game._respond(game.player, 'Sentry', game.player_state[2])
+    response = game._respond(game.player, 'Sentry', top_two)
     trash, discard, rest = response
     if len(trash + discard + rest) != 2:
         return
@@ -411,7 +411,7 @@ def play_sentry(game):
             if c.Name == rest[i]:
                 new_top_two.append(top_two[i])
 
-    game.player_state.draw_deck = new_top_two + game.player_state.draw_deck
+    game.player_state.draw_deck.cards = new_top_two + game.player_state.draw_deck.cards
 
 
 def play_smithy(game):
