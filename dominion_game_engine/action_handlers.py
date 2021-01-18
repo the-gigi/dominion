@@ -393,23 +393,26 @@ def play_sentry(game):
     game.player_state.reload_deck(2)
     top_two = [c.Name() for c in game.player_state.draw_deck.peek(2)]
     response = game._respond(game.player, 'Sentry', top_two)
-    trash, discard, rest = response
-    if len(trash + discard + rest) != 2:
-        return
+    trash, discard = response
 
-    if sorted(top_two) != sorted(trash + discard + rest):
-        return
+    # make sure all cards in the trash + discard are in the top_two
+    # also accounts for when trash + discard have duplicates of a card but top_two doesn't
+    check_list = top_two[:]
+    for card_name in trash + discard:
+        if card_name not in check_list:
+            return
+        check_list.remove(card_name)
 
     top_two = sorted(game.player_state.draw_deck.pop(2))
-    for d in sorted(discard):
-        for c in top_two:
-            if d == c.Name():
-                game.player_state.discard_pile.append(c)
     new_top_two = []
-    for i in range(len(rest)):
-        for c in top_two:
-            if c.Name == rest[i]:
-                new_top_two.append(top_two[i])
+    for card_name in top_two:
+        if card_name in discard:
+            discard.remove(card_name)
+            game.player_state.discard_pile.append(card_name)
+        elif card_name in trash:
+            trash.remove(card_name)
+        else:
+            new_top_two.append(card_name)
 
     game.player_state.draw_deck.cards = new_top_two + game.player_state.draw_deck.cards
 
@@ -490,7 +493,14 @@ def play_throne_room(game):
     You may play an Action card from your hand twice.
     """
     ps = game.player_state
+    if 'Action' not in set(c.Name() for c in ps.hand):
+        return
+
     card_name = game._respond(game.player, 'ThroneRoom')
+
+    card_class = get_card_class(card_name)
+    if card_class.Type() != 'Action':
+        return
 
     # Play the requested action action card for the first time
     result = game.play_action_card(card_name)
