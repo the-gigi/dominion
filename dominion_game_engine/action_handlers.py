@@ -405,14 +405,15 @@ def play_sentry(game):
 
     top_two = sorted(game.player_state.draw_deck.pop(2))
     new_top_two = []
-    for card_name in top_two:
+    for card in top_two:
+        card_name = card.Name()
         if card_name in discard:
             discard.remove(card_name)
-            game.player_state.discard_pile.append(card_name)
+            game.player_state.discard_pile.cards.append(card)
         elif card_name in trash:
             trash.remove(card_name)
         else:
-            new_top_two.append(card_name)
+            new_top_two.append(card)
 
     game.player_state.draw_deck.cards = new_top_two + game.player_state.draw_deck.cards
 
@@ -493,20 +494,20 @@ def play_throne_room(game):
     You may play an Action card from your hand twice.
     """
     ps = game.player_state
-    if 'Action' not in set(c.Name() for c in ps.hand):
+    if 'Action' not in set(c.Type for c in ps.hand):
         return
 
     card_name = game._respond(game.player, 'ThroneRoom')
-
     card_class = get_card_class(card_name)
-    if card_class.Type() != 'Action':
+    if card_class.Type != 'Action':
         return
 
     # Play the requested action action card for the first time
     result = game.play_action_card(card_name)
     if result:
         # Return the action card from the play area to the hand and play it again
-        card = ps.pop()
+        card = ps.play_area.pop()
+        ps.actions += 1
         if card.Name() != card_name:
             raise RuntimeError('Something went wrong during throne room!')
         ps.hand.append(card)
