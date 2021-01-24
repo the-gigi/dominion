@@ -38,6 +38,9 @@ def play_artisan(game):
     new_card = card_class()
     game.player_state.hand.append(new_card)
 
+    put_onto_deck = remove_by_name(game.player_state.hand, [put_onto_deck])
+    game.player_state.draw_deck.add_to_top(put_onto_deck)
+
 
 def play_bandit(game):
     """
