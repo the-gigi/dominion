@@ -220,39 +220,41 @@ def play_library(game):
     any Action cards drawn this way, as you draw them;
     discard the set aside cards after you finish drawing.
     """
-
-    def verify(card_names):
-        if len(card_names) != expected_count:
-            return False
-        i = 0
-        for card in card_names:
-            while card != ps.draw_deck[i].Name():
-                if ps.draw_deck[i].Type != 'Action':
-                    return False
-                i += 1
-        return True
-
     ps = game.player_state
-    ps.reload_deck(ps.draw_deck.count + 1)
-    candidate_names = [c.Name() for c in ps.draw_deck]
+    # get all cards as candidates
+    ps.reload_deck(ps.draw_deck.count + ps.discard_pile.count)
+    candidate_names = [c.Name() for c in ps.draw_deck.cards]
     card_names = game._respond(game.player, 'Library', *candidate_names)
 
-    expected_count = 7 - len(game.player_state.hand)
-    if not verify(card_names):
+    # library is still in hand at this point, so we subtract from 8 instead of 7
+    expected_count = 8 - len(game.player_state.hand)
+    if len(card_names) != expected_count:
         game.player_state.draw_cards(expected_count)
         return
 
     # Move selected cards to hand. discard skipped action cards
-    for card_name in card_names:
-        if game.player_state.draw_deck[0].Name() == card_name:
-            ps.draw_cards(1)
+    cards_drawn = 0
+    card_name = None
+    while cards_drawn < expected_count and game.player_state.draw_deck.count:
+        if (card_names):
+            top_card = game.player_state.draw_deck.cards[0]
+
+            if card_name is None:
+                card_name = card_names.pop(0)
+            if top_card.Name() == card_name:
+                ps.draw_cards(1)
+                cards_drawn += 1
+                card_name = None
+            # only Action cards can be skipped
+            elif top_card.Type != 'Action':
+                ps.draw_cards(1)
+                cards_drawn += 1
+            else:
+                discard = ps.draw_deck.pop(1)
+                ps.discard_pile.add_to_top(discard)
         else:
-            discard = ps.draw_deck.pop()
-            ps.discard_pile.add_to_top(discard)
-
-
-
-
+            ps.draw_cards(1)
+            cards_drawn += 1
 
 def play_market(game):
     """
