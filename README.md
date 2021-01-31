@@ -47,7 +47,7 @@ $ poetry install
 # Running the self-test
 
 ```
-$ PYTHONPATH=$(pwd); poetry run python self_test/main.py
+$ PYTHONPATH=$PWD poetry run python self_test/main.py
 ```
 
 # Testing
@@ -64,8 +64,10 @@ $ docker build . -t g1g1/dominion:1.0.0
 
 # Pushing the Docker image to DockerHub
 
+Only Gigi can do it since it's pushing the g1g1 repository on DockerHub.
+
 ```
-$ docker push
+$ docker push g1g1/dominion:1.0.0
 ```
 
 # Concepts
