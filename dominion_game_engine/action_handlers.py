@@ -500,14 +500,17 @@ def play_throne_room(game):
     """
     ps = game.player_state
     if 'Action' not in set(c.Type for c in ps.hand):
+        print('ThroneRoom: No actions cards in hand')
         return
 
     card_name = game._respond(game.player, 'ThroneRoom')
     card_class = get_card_class(card_name)
     if card_class.Type != 'Action':
+        print(f'ThroneRoom: {card_class.Name()} is not an action card')
         return
 
     # Play the requested action action card for the first time
+    ps.actions += 1
     result = game.play_action_card(card_name)
     if result:
         # Return the action card from the play area to the hand and play it again

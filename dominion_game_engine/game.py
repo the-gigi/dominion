@@ -229,9 +229,11 @@ class Game(object_model.GameClient):
         """
         print(f'{self.player_name} played {card_name}')
         if self.waiting_for_response:
+            print(f'Can\'t play {card_name}, waiting for response')
             return
 
         if not self._verify_action(card_name):
+            print(f'Can\'t play {card_name}, could not verify action')
             return False
 
         ps = self.player_state
@@ -249,10 +251,6 @@ class Game(object_model.GameClient):
         lower_card_name = re.sub(r'(?<!^)(?=[A-Z])', '_', card_name).lower()
         handler = getattr(action_handlers, 'play_' + lower_card_name)
 
-        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
-        handler(self)
-        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
-
         # move the card from the player's hand to the play area
         try:
             ps.hand.remove(played_card)
@@ -260,6 +258,12 @@ class Game(object_model.GameClient):
             ps.hand.remove(played_card)
         ps.play_area.append(played_card)
         ps.actions -= 1
+
+        self.send_personal_state()
+
+        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
+        handler(self)
+        assert len(ps.draw_deck) + len(ps.discard_pile) > 0
 
         self.send_game_event(f'{self.player_name} played {card_name}')
         self.send_personal_state()
