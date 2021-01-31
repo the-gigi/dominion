@@ -47,7 +47,7 @@ $ poetry install
 # Running the self-test
 
 ```
-$ poetry run python self_test/main.py
+$ PYTHONPATH=$(pwd); poetry run python self_test/main.py
 ```
 
 # Testing
