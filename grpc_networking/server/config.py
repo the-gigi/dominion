@@ -28,11 +28,11 @@ card_types = [
 
 computer_players = [
     ('Archy', RobinHood),
-    # ('Vicky', Victor),
-    # ('Rocky', Rockefeller),
-    #('Guy', TheGuy),
-    #('Dynamite', Napoleon),
-    #('Zuck', StayAtHomeSon),
+    ('Vicky', Victor),
+    ('Rocky', Rockefeller),
+    ('Guy', TheGuy),
+    ('Dynamite', Napoleon),
+    ('Zuck', StayAtHomeSon),
 ]
 
 max_player_count = 2
