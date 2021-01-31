@@ -1,3 +1,4 @@
+import random
 from collections import defaultdict
 from typing import Dict
 
@@ -5,11 +6,18 @@ from dominion_game_engine import cards
 import inspect
 from dominion_game_engine.cards import *
 
-card_attributes = [k for k,v in BaseCard.__dict__.items() if not k.startswith('__') and not callable(v) and k != 'Name']
+card_attributes = [k for k, v in BaseCard.__dict__.items() if
+                   not k.startswith('__') and not callable(v) and k != 'Name']
 
 
 def get_card_types():
     return {cls.__name__: cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard}
+
+
+def choose_kingdom_cards():
+    """Choose the 10 kingdom cards for the game
+    """
+    return random.sample([v for v in get_card_types().values() if v.Type == 'Action'], 10)
 
 
 def serialize_card_types():
