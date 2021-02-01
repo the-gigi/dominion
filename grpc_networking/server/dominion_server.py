@@ -43,14 +43,27 @@ class DominionServer(DominionServerServicer):
         while name in names:
             name += str(random.randint(1, 9))
 
+        # Create peer
         peer = ctx.peer()
+
+        # If player already joined, bail out
         if peer in self.players:
             q = self.players[peer].queue
             q.put(Message(type='error', data='already joined'))
-        pi = PlayerInfo(name, queue.Queue(), queue.Queue(), peer)
-        self.players[peer] = pi
+            return
+
         print(f'Player {name} joined!')
-        pi.main_queue.put(Message(type='ack', data=json.dumps(dict(name=pi.name))))
+        # Notify other players
+        for pi in self.players.values():
+            data = dict(event='player joined',
+                        name=name)
+            pi.main_queue.put(Message(type='on_game_event',
+                                      data=json.dumps(data)))
+
+        pi = PlayerInfo(name, queue.Queue(), queue.Queue(), peer)
+        other_players = [p.name for p in self.players.values()]
+        pi.main_queue.put(Message(type='ack', data=json.dumps(dict(name=pi.name, players=other_players))))
+        self.players[peer] = pi
         return pi.main_queue, pi.response_queue
 
     def _prepare_player_info(self):
