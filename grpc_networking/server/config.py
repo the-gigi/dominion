@@ -35,4 +35,4 @@ computer_players = [
     ('Zuck', StayAtHomeSon),
 ]
 
-max_player_count = 2
+max_player_count = 4

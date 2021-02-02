@@ -106,6 +106,9 @@ class DominionServer(DominionServerServicer):
 
     # DominionServer proto service
     def Join(self, player_info, ctx):
+        if len(self.players) == config.max_player_count:
+            return
+
         print('Join()', player_info)
         main_queue, response_queue = self._join(player_info, ctx)
         print(f'[{player_info.name}] Waiting for message to send on queue {id(main_queue)}')
