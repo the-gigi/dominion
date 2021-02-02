@@ -251,7 +251,7 @@ class MoneyLender(BaseCard):
     Text = """
     You may trash a Copper from your hand for +$3.
     """
-    Cost = 2
+    Cost = 4
     Reaction = True
 
 
