@@ -28,8 +28,10 @@ class BaseComputerPlayer(Player):
 
     def buy_card(self, money, card_name, condition=lambda: True):
         card_class = get_card_class(card_name)
-
-        if money >= card_class.Cost and self.state.supply[card_name] > 0 and condition():
+        can_buy = money >= card_class.Cost and \
+                  self.state.supply.get(card_name, 0) > 0 and \
+                  condition()
+        if can_buy:
             ok = self.game_client.buy(card_name)
             return ok
 
