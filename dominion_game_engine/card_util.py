@@ -19,7 +19,6 @@ def choose_kingdom_cards():
     """
     return random.sample([v for v in get_card_types().values() if v.Type == 'Action'], 10)
 
-
 def serialize_card_types():
     card_types = get_card_types()
     return {name: {a: getattr(card_type, a) for a in card_attributes} for name, card_type in card_types.items()}

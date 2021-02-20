@@ -85,11 +85,9 @@ class DominionServer(DominionServerServicer):
 
         # Send 'game start' event to all players with cards and player names
         player_names = [p.name for p in self.players.values()] + [name for name, _ in computer_players]
-        card_names = [c.Name() for c in config.card_types]
         card_types = card_util.serialize_card_types()
         for pi in self.players.values():
             data = dict(event='game start',
-                        card_names=card_names,
                         card_types=card_types,
                         player_names=player_names)
             pi.main_queue.put(Message(type='on_game_event',
