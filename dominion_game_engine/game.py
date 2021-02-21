@@ -76,16 +76,23 @@ class Game(object_model.GameClient):
             print('-' * 20)
 
             self.active_player_index = (self.active_player_index + 1) % len(self.players)
+        self.handle_game_over()
 
-        winners = self.find_winners()
+    def handle_game_over(self):
+        winners, scores = self.find_winners()
         if len(winners) == 1:
             message = f'{winners[0]} won the game!!!'
         else:
             message = f'The winners are {", ".join(winners[:-1])} and {winners[-1]}!!!'
 
         print('🎉 ' + message)
+        victory_event = dict(
+            event='game over',
+            winners=winners,
+            scores=scores
+        )
         for p in self.players:
-            p[0].on_game_event(message)
+            p[0].on_game_event(victory_event)
 
     @property
     def player_state(self):
@@ -158,12 +165,14 @@ class Game(object_model.GameClient):
 
         In case of a money tie everyone is a winner and it returns a list of all names
         """
+        scores = {}
         winners = []
         current_vp = 0
         current_coins = 0
         for player_state in self.player_states:
             vp = self.count_player_points(player_state)
             coins = self.count_player_money(player_state)
+            scores[player_state.name] = (vp, coins)
             if not winners:
                 winners = [player_state.name]
                 current_vp = vp
@@ -178,7 +187,7 @@ class Game(object_model.GameClient):
                     current_coins = coins
                 elif coins == current_coins:
                     winners += [player_state.name]
-        return winners
+        return winners, scores
 
     def send_game_event(self, event):
         for player, _ in self.players:
