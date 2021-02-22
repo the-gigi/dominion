@@ -134,7 +134,7 @@ the active player's action.
 
 Dominion is organized in 3 packages:
 
-1. doiminion_game_engine
+1. dominion_game_engine
 2. grpc_networking
 3. computer_players
 
@@ -145,11 +145,11 @@ The **computer_players** package contains implemntation of AI dominion players.
 It also relies on two other Python packages (available on PyPI):
 
 1. [dominion-object-model](https://github.com/the-gigi/dominion-object-model)
-2. [dominion-grpc-client-py](https://github.com/the-gigi/dominion-grpc-client-py)
+2. [dominion-grpc-proto](https://github.com/the-gigi/dominion-grpc-proto)
 
 The **dominion-object-model** package contains abstract classes and types that are shared by the server and clients such as the Player and GameClient interfces.
 
-The **dominion-grpc-client-py** package contain the gRPC service definition of the Dominion game engine as well as generated gRPC Python client stubs that Python clients can use to connect to the server, join games and play.  
+The **dominion-grpc-proto** package contains the gRPC service definition of the Dominion game engine as well as generated gRPC Python client stubs that Python clients can use to connect to the server, join games and play.  
 
 Let's dive into each package:
 
