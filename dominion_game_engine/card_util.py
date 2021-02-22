@@ -14,10 +14,13 @@ def get_card_types():
     return {cls.__name__: cls for _, cls in inspect.getmembers(cards) if inspect.isclass(cls) and cls != cards.BaseCard}
 
 
-def choose_kingdom_cards():
+def choose_kingdom_cards(pre_selected: list):
     """Choose the 10 kingdom cards for the game
     """
-    return random.sample([v for v in get_card_types().values() if v.Type == 'Action'], 10)
+    filt = lambda v: v.Type == 'Action' and v not in pre_selected
+    candidates = [v for v in get_card_types().values() if filt(v)]
+    return pre_selected + random.sample(candidates, 10 - len(pre_selected))
+
 
 def serialize_card_types():
     card_types = get_card_types()

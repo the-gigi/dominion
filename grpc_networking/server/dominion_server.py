@@ -93,7 +93,7 @@ class DominionServer(DominionServerServicer):
             pi.main_queue.put(Message(type='on_game_event',
                                       data=json.dumps(data)))
 
-        kingdom_cards = card_util.choose_kingdom_cards()
+        kingdom_cards = card_util.choose_kingdom_cards(config.pre_selected_kingdom_cards)
         Thread(target=game_factory.start_game, args=(kingdom_cards, players_info, self)).start()
 
     def get_computer_players(self):
