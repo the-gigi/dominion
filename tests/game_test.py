@@ -326,7 +326,7 @@ class GameTest(unittest.TestCase):
         :return:
         """
         # equal points
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = self.names
         self.assertEqual(winners, expected)
 
@@ -343,7 +343,7 @@ class GameTest(unittest.TestCase):
         self.game.player_states[2].draw_deck = CardStack()
         self.game.player_states[3].discard_pile = CardStack()
         self.game.player_states[3].draw_deck = CardStack()
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = ['tester3', 'tester4']
         self.assertEqual(winners, expected)
 
@@ -360,7 +360,7 @@ class GameTest(unittest.TestCase):
         self.game.player_states[2].draw_deck = CardStack()
         self.game.player_states[3].discard_pile = CardStack()
         self.game.player_states[3].draw_deck = CardStack()
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = ['tester1']
         self.assertEqual(winners, expected)
 
@@ -378,7 +378,7 @@ class GameTest(unittest.TestCase):
         self.game.player_states[2].draw_deck = CardStack()
         self.game.player_states[3].discard_pile = CardStack()
         self.game.player_states[3].draw_deck = CardStack()
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = ['tester1', 'tester2', 'tester3', 'tester4']
         self.assertEqual(winners, expected)
 
@@ -395,7 +395,7 @@ class GameTest(unittest.TestCase):
         self.game.player_states[2].draw_deck = CardStack()
         self.game.player_states[3].discard_pile = CardStack()
         self.game.player_states[3].draw_deck = CardStack()
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = ['tester3', 'tester4']
         self.assertEqual(winners, expected)
 
@@ -412,7 +412,7 @@ class GameTest(unittest.TestCase):
         self.game.player_states[2].draw_deck = CardStack()
         self.game.player_states[3].discard_pile = CardStack()
         self.game.player_states[3].draw_deck = CardStack()
-        winners = self.game.find_winners()
+        winners, scores = self.game.find_winners()
         expected = ['tester2']
         self.assertEqual(winners, expected)
 
