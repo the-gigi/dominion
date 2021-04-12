@@ -101,7 +101,7 @@ def play_bureaucrat(game):
             return None
 
         for c in player_state.hand:
-            if isinstance(c, response):
+            if isinstance(c, type(response)):
                 return c
         return None
 
@@ -109,8 +109,16 @@ def play_bureaucrat(game):
         game.piles['Silver'] -= 1
         game.player_state.draw_deck.add_to_top([Silver()])
     for player, player_state in game.other_players:
-        response = game._respond(player, 'Bureaucrat')
-        victory = choose_victory(response)
+        victory_cards = [c for c in player_state.hand if c.Type == 'Victory']
+        if not victory_cards:
+            continue
+
+        if len(victory_cards) == 1:
+            victory = choose_victory(victory_cards[0])
+        else:
+            response = game._respond(player, 'Bureaucrat')
+            victory = None if response is None else choose_victory(get_card_class(response)())
+
         if victory is not None:
             player_state.draw_deck.add_to_top([victory])
             player_state.hand.remove(victory)
@@ -255,6 +263,7 @@ def play_library(game):
         else:
             ps.draw_cards(1)
             cards_drawn += 1
+
 
 def play_market(game):
     """
